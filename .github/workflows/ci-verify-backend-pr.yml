@@ -26,4 +26,4 @@ jobs:
         run: yarn test:backend
 
       - name: Build
-        run: yarn build:backend
+        run: yarn kbuild:backend
