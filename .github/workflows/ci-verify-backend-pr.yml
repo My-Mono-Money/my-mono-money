@@ -20,10 +20,10 @@ jobs:
         run: yarn install:backend
       
       - name: Linter checks
-        run: lint:backend
+        run: yarn lint:backend
 
       - name: Run tests
-        run: test:backend
+        run: yarn test:backend
 
       - name: Build
-        run: build:backend
+        run: yarn build:backend
