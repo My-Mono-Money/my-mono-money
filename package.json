@@ -24,7 +24,7 @@
     "lint:frontend": "cd packages/frontend && yarn lint",
     "lint:backend": "cd packages/backend && yarn lint",
     "postinstall": "npm-run-all --parallel install:frontend install:backend",
-    "install:frontend": "cd packages/frontend && yarn",
+    "install:frontend": "echo ok",
     "install:backend": "cd packages/backend && yarn"
   }
 }
