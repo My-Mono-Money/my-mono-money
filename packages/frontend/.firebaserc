@@ -1,0 +1,20 @@
+{
+  "projects": {
+    "default": "my-mono-money"
+  },
+  "targets": {
+    "my-mono-money": {
+      "hosting": {
+        "production": [
+          "my-mono-money"
+        ],
+        "staging": [
+          "my-mono-money-staging"
+        ],
+        "development": [
+          "my-mono-money-development"
+        ]
+      }
+    }
+  }
+}

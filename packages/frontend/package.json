@@ -20,6 +20,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "deploy:development": "firebase deploy --only hosting:development",
+    "deploy:staging": "firebase deploy --only hosting:staging",
+    "deploy:production": "firebase deploy --only hosting:production",
     "lint": "echo No linter configuration",
     "eject": "react-scripts eject"
   },
