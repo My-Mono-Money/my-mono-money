@@ -16,8 +16,14 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Test step
-        run: pwd && ls -lah . && tree
-
       - name: Install dependencies
         run: yarn install:backend
+      
+      - name: Linter checks
+        run: lint:backend
+
+      - name: Run tests
+        run: test:backend
+
+      - name: Build
+        run: build:backend
