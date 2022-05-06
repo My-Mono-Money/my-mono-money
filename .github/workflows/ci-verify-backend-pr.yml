@@ -14,8 +14,10 @@ jobs:
     name: Verify backend pull request
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
+
       - name: Test step
-        run: echo Hello, Nastia!
+        run: pwd && ls -lah . && tree
 
       - name: Install dependencies
         run: yarn install:backend
