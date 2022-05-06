@@ -1,1 +1,1 @@
-web: cd packages/backend && yarn start
+web: yarn start:backend:prod
