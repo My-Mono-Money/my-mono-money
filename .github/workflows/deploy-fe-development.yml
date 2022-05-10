@@ -14,3 +14,4 @@ jobs:
     uses: ./.github/workflows/reusable-deploy-frontend.yml
     with:
       target: development
+    secrets: inherit
