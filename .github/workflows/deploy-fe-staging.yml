@@ -5,7 +5,7 @@ name: Deploy to Firebase Hosting staging
 'on':
   push:
     branches:
-      - MMM-13-setup-cd-frontend-staging
+      - staging
     paths:
       - 'packages/frontend/**'
 
