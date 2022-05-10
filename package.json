@@ -12,8 +12,8 @@
     "start:frontend": "cd packages/frontend && yarn start",
     "start:backend": "cd packages/backend && yarn start:dev",
     "start:backend:prod": "cd packages/backend && yarn start:prod",
-    "build": "npm-run-all --parallel build:frontend build:backend",
-    "build:frontend": "echo not ok",
+    "build": "npm-run-all --parallel build:backend",
+    "build:frontend": "cd packages/frontend && yarn build",
     "build:backend": "cd packages/backend && yarn build",
     "deploy:frontend:development": "cd packages/frontend && yarn deploy:development",
     "deploy:frontend:staging": "cd packages/frontend && yarn deploy:staging",
@@ -24,8 +24,8 @@
     "lint": "npm-run-all --parallel lint:frontend lint:backend",
     "lint:frontend": "cd packages/frontend && yarn lint",
     "lint:backend": "cd packages/backend && yarn lint",
-    "postinstall": "npm-run-all --parallel install:frontend install:backend",
-    "install:frontend": "echo not ok",
+    "postinstall": "npm-run-all --parallel install:backend",
+    "install:frontend": "cd packages/frontend && yarn",
     "install:backend": "cd packages/backend && yarn"
   }
 }
