@@ -5,26 +5,12 @@ name: Deploy to Firebase Hosting development
 'on':
   push:
     branches:
-      - dev
+      - MMM-13-setup-cd-frontend-staging
     paths:
       - 'packages/frontend/**'
 
 jobs:
   build_and_deploy:
-    runs-on: ubuntu-latest
-    steps:
-      # checkout repo
-      - uses: actions/checkout@v2
-      # install dependencies
-      - run: yarn install:frontend
-      # build step
-      - run: yarn build:frontend
-      # deploy step
-      - uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_MY_MONO_MONEY }}'
-          channelId: live
-          projectId: my-mono-money
-          target: development
-          entryPoint: packages/frontend
+    uses: ./.github/workflows/reusable/deploy-frontend.yml
+    with:
+      target: development
