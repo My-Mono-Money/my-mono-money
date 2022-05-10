@@ -27,3 +27,4 @@ jobs:
           channelId: live
           projectId: my-mono-money
           target: my-mono-money-development
+          entryPoint: packages/frontend
