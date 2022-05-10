@@ -15,8 +15,10 @@ jobs:
     steps:
       # checkout repo
       - uses: actions/checkout@v2
+      # install dependencies
+      - run: yarn install:frontend
       # build step
-      - run: npm run build:frontend
+      - run: yarn build:frontend
       # deploy step
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
