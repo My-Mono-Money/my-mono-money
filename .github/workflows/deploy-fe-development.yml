@@ -11,6 +11,6 @@ name: Deploy to Firebase Hosting development
 
 jobs:
   build_and_deploy:
-    uses: ./.github/workflows/reusable/deploy-frontend.yml
+    uses: ./.github/workflows/reusable-deploy-frontend.yml
     with:
       target: development

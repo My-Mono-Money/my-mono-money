@@ -8,7 +8,7 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Hello, reusable workflow!
+          Hello, reusable workflow (try 2)!
         </p>
         <a
           className="App-link"
