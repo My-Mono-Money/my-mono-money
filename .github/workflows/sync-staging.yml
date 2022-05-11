@@ -1,0 +1,11 @@
+name: Manual sync staging
+on:
+  workflow_dispatch:
+
+jobs:
+  sync_staging:
+    uses: ./.github/workflows/reusable-sync-branches.yml
+    with:
+      source_branch: dev
+      target_branch: staging
+    secrets: inherit
