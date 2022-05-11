@@ -1,0 +1,66 @@
+name: Verify Pull Request
+
+on: pull+request
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  Verify-PR:
+    name: Verify pull request
+    # JOB to run change detection
+    changes:
+      runs-on: ubuntu-latest
+      outputs:
+        backend: ${{ steps.filter.outputs.backend }}
+        frontend: ${{ steps.filter.outputs.frontend }}
+      steps:
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            backend:
+              - 'packages/backend/**'
+            frontend:
+              - 'packages/frontend/**'
+
+  # JOB to build and test backend code
+  backend:
+    needs: changes
+    if: ${{ needs.changes.outputs.backend == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: yarn install:backend
+
+      - name: Linter checks
+        run: yarn lint:backend
+
+      - name: Run tests
+        run: yarn test:backend
+
+      - name: Build
+        run: yarn build:backend
+
+  # JOB to build and test frontend code
+  frontend:
+    needs: changes
+    if: ${{ needs.changes.outputs.frontend == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: yarn install:frontend
+
+      - name: Linter checks
+        run: yarn lint:frontend
+
+      - name: Run tests
+        run: yarn test:frontend
+
+      - name: Build
+        run: yarn build:frontend
