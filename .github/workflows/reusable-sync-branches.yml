@@ -9,7 +9,6 @@ on:
         required: true
         type: string
 
-# try 4
 jobs:
   sync_branches:
     runs-on: ubuntu-latest
