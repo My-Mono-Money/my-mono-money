@@ -1,6 +1,6 @@
 name: Verify Pull Request
 
-on: pull+request
+on: pull_request
 
 defaults:
   run:
