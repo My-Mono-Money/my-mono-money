@@ -1,0 +1,29 @@
+name: Verify frontend Pull Request
+
+on:
+  pull_request:
+    paths:
+      - 'packages/frontend/**'
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  Verify-frontend-PR:
+    name: Verify frontend pull request
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: yarn install:frontend
+      
+      - name: Linter checks
+        run: yarn lint:frontend
+
+      - name: Run tests
+        run: yarn test:frontend
+
+      - name: Build
+        run: yarn build:frontend
