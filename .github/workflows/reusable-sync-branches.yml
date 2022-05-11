@@ -9,7 +9,7 @@ on:
         required: true
         type: string
 
-# try 2
+# try 3
 jobs:
   sync_branches:
     runs-on: ubuntu-latest
@@ -29,4 +29,4 @@ jobs:
       # merge step
       - run: git merge --ff-only '${{ inputs.source_branch }}'
       # push step
-      - run: git push origin '${{ inputs.target_branch }}'
+      - run: git push
