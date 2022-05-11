@@ -1,13 +1,13 @@
 name: Sync branches
 on:
   workflow_call:
-  inputs:
-    source_branch: 
-      required: true
-      type: string
-    target_branch: 
-      required: true
-      type: string
+    inputs:
+      source_branch: 
+        required: true
+        type: string
+      target_branch: 
+        required: true
+        type: string
 
 
 jobs:
