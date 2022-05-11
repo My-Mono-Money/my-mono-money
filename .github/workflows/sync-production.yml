@@ -1,0 +1,11 @@
+name: Manual sync production
+on:
+  workflow_dispatch:
+
+jobs:
+  sync_production:
+    uses: ./.github/workflows/reusable-sync-branches.yml
+    with:
+      source_branch: staging
+      target_branch: master
+    secrets: inherit
