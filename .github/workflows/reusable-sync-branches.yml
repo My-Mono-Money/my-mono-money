@@ -9,13 +9,13 @@ on:
         required: true
         type: string
 
-# try 1
+# try 2
 jobs:
   sync_branches:
     runs-on: ubuntu-latest
     steps:
       # checkout repo
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v2
         with: 
           ref: '${{ inputs.source_branch }}'
       # git config
