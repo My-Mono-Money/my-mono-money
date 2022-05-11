@@ -7,22 +7,22 @@ defaults:
     shell: bash
 
 jobs:
-    # JOB to run change detection
-    changes:
-      runs-on: ubuntu-latest
-      outputs:
-        backend: ${{ steps.filter.outputs.backend }}
-        frontend: ${{ steps.filter.outputs.frontend }}
-      steps:
-      - uses: actions/checkout@v2
-      - uses: dorny/paths-filter@v2
-        id: filter
-        with:
-          filters: |
-            backend:
-              - 'packages/backend/**'
-            frontend:
-              - 'packages/frontend/**'
+  # JOB to run change detection
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      backend: ${{ steps.filter.outputs.backend }}
+      frontend: ${{ steps.filter.outputs.frontend }}
+    steps:
+    - uses: actions/checkout@v2
+    - uses: dorny/paths-filter@v2
+      id: filter
+      with:
+        filters: |
+          backend:
+            - 'packages/backend/**'
+          frontend:
+            - 'packages/frontend/**'
 
   # JOB to build and test backend code
   backend:
