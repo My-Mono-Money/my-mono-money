@@ -7,8 +7,6 @@ defaults:
     shell: bash
 
 jobs:
-  Verify-PR:
-    name: Verify pull request
     # JOB to run change detection
     changes:
       runs-on: ubuntu-latest
