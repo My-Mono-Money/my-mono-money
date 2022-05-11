@@ -1,0 +1,31 @@
+name: Sync branches
+on:
+  workflow_call:
+    inputs:
+      source_branch: 
+        required: true
+        type: string
+      target_branch: 
+        required: true
+        type: string
+
+jobs:
+  sync_branches:
+    runs-on: ubuntu-latest
+    steps:
+      # checkout repo
+      - uses: actions/checkout@v3
+        with: 
+          ref: '${{ inputs.source_branch }}'
+      # git config
+      - run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+      # git fetch
+      - run: git fetch --unshallow
+      # checkout on target_branch 
+      - run: git checkout '${{ inputs.target_branch }}'
+      # merge step
+      - run: git merge --ff-only '${{ inputs.source_branch }}'
+      # push step
+      - run: git push origin '${{ inputs.target_branch }}'
