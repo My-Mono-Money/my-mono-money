@@ -29,31 +29,25 @@ jobs:
 
   #JOB to build and deploy backend
   deploy_development_backend:
+    uses: ./.github/workflows/reusable-deploy-backend.yml
+    name: Build and deploy backend
     needs: changes
     if: ${{ needs.changes.outputs.backend == 'true' }}
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-
-      - uses: ./.github/workflows/reusable-deploy-backend.yml
-        name: Build and deploy backend
-        with:
-          target: my-mono-money-development
-        secrets: inherit
+    with:
+      target: my-mono-money-development
+    secrets: inherit
 
   #JOB to build and deploy frontend
   deploy_development_frontend:
+    uses: ./.github/workflows/reusable-deploy-frontend.yml
+    name: Build and deploy frontend
     needs: changes
     if: ${{ needs.changes.outputs.frontend == 'true' }}
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-
-      - uses: ./.github/workflows/reusable-deploy-frontend.yml
-        name: Build and deploy frontend
-        with:
-          target: development
-        secrets: inherit
+    with:
+      target: development
+    secrets: inherit
 
   #JOB to check deploy result
   deploy_development_result:
