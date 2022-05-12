@@ -14,5 +14,5 @@ jobs:
       - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "https://my-mono-money-development.herokuapp.com/" #Must be unique in Heroku
+          heroku_app_name: "my-mono-money-development" #Must be unique in Heroku
           heroku_email: "ao.salenko@gmail.com"
