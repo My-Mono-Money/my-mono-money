@@ -1,0 +1,57 @@
+name: Deploy development
+on:
+  push:
+    branches:
+      - dev
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  # JOB to run change detection
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      backend: ${{ steps.filter.outputs.backend }}
+      frontend: ${{ steps.filter.outputs.frontend }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            backend:
+              - 'packages/backend/**'
+            frontend:
+              - 'packages/frontend/**'
+
+  #JOB to build and deploy backend
+  deploy_development_backend:
+    uses: ./.github/workflows/reusable-deploy-backend.yml
+    name: Build and deploy backend
+    needs: changes
+    if: ${{ needs.changes.outputs.backend == 'true' }}
+    with:
+      target: my-mono-money-development
+    secrets: inherit
+
+  #JOB to build and deploy frontend
+  deploy_development_frontend:
+    uses: ./.github/workflows/reusable-deploy-frontend.yml
+    name: Build and deploy frontend
+    needs: changes
+    if: ${{ needs.changes.outputs.frontend == 'true' }}
+    with:
+      target: development
+    secrets: inherit
+
+  #JOB to check deploy result
+  deploy_development_result:
+    name: Deploy development result
+    needs: [deploy_development_frontend, deploy_development_backend]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Successful deploy
+        run: echo Successful deploy
