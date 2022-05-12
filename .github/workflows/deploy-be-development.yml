@@ -15,4 +15,4 @@ jobs:
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "https://my-mono-money-development.herokuapp.com/" #Must be unique in Heroku
-          heroku_email: "ao.salenko@gmail.com
+          heroku_email: "ao.salenko@gmail.com"
