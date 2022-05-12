@@ -5,7 +5,7 @@ name: Deploy to Heroku hosting development
 'on':
   push:
     branches:
-      - MMM-21-setup-cd-backend-development
+      - dev
     paths:
       - 'packages/backend/**'
 
