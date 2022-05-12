@@ -63,3 +63,13 @@ jobs:
 
       - name: Build
         run: yarn build:frontend
+
+  pr_verified:
+    name: Pull request verified
+    needs: [frontend, backend]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Successful pr
+        run: echo Successful pr
