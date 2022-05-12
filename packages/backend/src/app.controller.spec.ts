@@ -15,9 +15,9 @@ describe('AppController', () => {
   });
 
   describe('root', () => {
-    it('should return "Hello development joined with frontend!"', () => {
+    it('should return "Hello development joined with frontend! (try 2)"', () => {
       expect(appController.getHello()).toBe(
-        'Hello development joined with frontend!',
+        'Hello development joined with frontend! (try 2)',
       );
     });
   });
