@@ -2,7 +2,7 @@ name: Deploy development
 on:
   push:
     branches:
-      - MMM-22-joined-deploy-development
+      - dev
 
 defaults:
   run:
