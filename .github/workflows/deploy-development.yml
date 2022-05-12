@@ -33,7 +33,6 @@ jobs:
     name: Build and deploy backend
     needs: changes
     if: ${{ needs.changes.outputs.backend == 'true' }}
-    runs-on: ubuntu-latest
     with:
       target: my-mono-money-development
     secrets: inherit
@@ -44,7 +43,6 @@ jobs:
     name: Build and deploy frontend
     needs: changes
     if: ${{ needs.changes.outputs.frontend == 'true' }}
-    runs-on: ubuntu-latest
     with:
       target: development
     secrets: inherit
