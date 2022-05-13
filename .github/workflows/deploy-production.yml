@@ -2,7 +2,7 @@ name: Deploy production
 on:
   push:
     branches:
-      - master
+      - MMM-24-joined-deploy-production
 
 defaults:
   run:
