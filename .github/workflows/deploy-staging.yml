@@ -2,7 +2,7 @@ name: Deploy staging
 on:
   push:
     branches:
-      - dev
+      - MMM-23-joined-deploy-staging
 
 defaults:
   run:
