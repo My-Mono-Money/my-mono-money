@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { typeOrmConfig } from './configs/typeorm.config';
+import { ApiModule } from './layers/api/api.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { typeOrmConfig } from './configs/typeorm.config';
         return configService.get('typeorm');
       },
     }),
+    ApiModule,
   ],
   controllers: [AppController],
   providers: [AppService],
