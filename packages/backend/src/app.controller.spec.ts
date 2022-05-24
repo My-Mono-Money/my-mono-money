@@ -15,9 +15,9 @@ describe('AppController', () => {
   });
 
   describe('root', () => {
-    it('should return "Hello production (test actions!)!"', () => {
+    it('should return "Hello production (test actions! try 1)!"', () => {
       expect(appController.getHello()).toBe(
-        'Hello production (test actions!)!',
+        'Hello production (test actions! try 1)!',
       );
     });
   });
