@@ -4,9 +4,11 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  Unique,
 } from 'typeorm';
 
 @Entity()
+@Unique(['email'])
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -22,6 +24,9 @@ export class User {
 
   @Column()
   lastName: string;
+
+  @Column({ default: false })
+  isEmailVerified: boolean;
 
   @CreateDateColumn()
   createdAt: Date;
