@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { authConfig } from './configs/auth.config';
 import { sendinblueConfig } from './configs/sendinblue.config';
 import { typeOrmConfig } from './configs/typeorm.config';
 import { ApiModule } from './layers/api/api.module';
@@ -10,7 +11,7 @@ import { ApiModule } from './layers/api/api.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      load: [typeOrmConfig, sendinblueConfig],
+      load: [typeOrmConfig, sendinblueConfig, authConfig],
       envFilePath: ['.env.local'],
     }),
     TypeOrmModule.forRootAsync({
