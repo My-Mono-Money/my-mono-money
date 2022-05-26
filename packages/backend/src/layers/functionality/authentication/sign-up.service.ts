@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { UserService } from 'src/layers/storage/services/user.service';
 import { SendEmailService } from '../send-email/send-email.service';
+import { confirmEmailTemplate } from '../send-email/templates/confirm-email.email-template';
 import { IUserSignUp } from './interfaces/user-signup-dto.interface';
 
 @Injectable()
@@ -24,16 +25,8 @@ export class SignUpService {
         passwordHash,
       },
       {
-        transactionCallback: async () => {
-          await this.sendEmailService.sendEmail({
-            to: {
-              email: user.email,
-              name: `${user.firstName} ${user.lastName}`,
-            },
-            subject: 'Confirm your email address',
-            content:
-              'Please, follow the <a href="https://my-mono-money.app/">link</a> to confirm email',
-          });
+        afterSave: async () => {
+          await this.sendEmailService.sendEmail(confirmEmailTemplate({ user }));
         },
       },
     );
