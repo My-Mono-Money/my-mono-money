@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/layers/storage/services/user.service';
 import { SendEmailService } from '../send-email/send-email.service';
 import { confirmEmailTemplate } from '../send-email/templates/confirm-email.email-template';
 import { IUserSignUp } from './interfaces/user-signup-dto.interface';
+import { GenerateJwtService } from './jwt/generate-jwt.service';
 
 @Injectable()
 export class SignUpService {
   constructor(
     private userService: UserService,
     private sendEmailService: SendEmailService,
-    private jwtService: JwtService,
+    private generateJwtService: GenerateJwtService,
   ) {}
 
   async signUp(user: IUserSignUp) {
@@ -18,7 +18,9 @@ export class SignUpService {
      * Instead of this we need to do real hash
      */
     const passwordHash = user.password;
-    const accessToken = await this.generateJwtToken(user);
+    const verifyEmailToken = await this.generateJwtService.generateVerifyEmail(
+      user,
+    );
 
     return await this.userService.save(
       {
@@ -30,15 +32,10 @@ export class SignUpService {
       {
         afterSave: async () => {
           await this.sendEmailService.sendEmail(
-            confirmEmailTemplate({ user, accessToken }),
+            confirmEmailTemplate({ user, verifyEmailToken }),
           );
         },
       },
     );
-  }
-
-  async generateJwtToken(user: IUserSignUp) {
-    const payload = { userEmail: user.email };
-    return this.jwtService.sign(payload);
   }
 }

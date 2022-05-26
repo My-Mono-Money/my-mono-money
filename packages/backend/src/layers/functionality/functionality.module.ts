@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { IntegrationsModule } from '../integrations/integrations.module';
 import { StorageModule } from '../storage/storage.module';
+import { GenerateJwtService } from './authentication/jwt/generate-jwt.service';
 import { SignUpService } from './authentication/sign-up.service';
 import { SendEmailService } from './send-email/send-email.service';
 
@@ -18,7 +19,7 @@ import { SendEmailService } from './send-email/send-email.service';
       },
     }),
   ],
-  providers: [SignUpService, SendEmailService],
+  providers: [SignUpService, SendEmailService, GenerateJwtService],
   exports: [SignUpService, SendEmailService],
 })
 export class FunctionalityModule {}
