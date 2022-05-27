@@ -1,17 +1,23 @@
-import { User } from 'src/layers/storage/entities/user.entity';
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class Seed1652810503756 implements MigrationInterface {
   name = 'Seed1652810503756';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.manager.save(
-      queryRunner.manager.create<User>(User, {
-        email: 'ao.salenko+johnny.depp@gmail.com',
-        firstName: 'Джонні',
-        lastName: 'Депп',
-        passwordHash: 'dummy pasword',
-      }),
+    await queryRunner.query(
+      `INSERT INTO
+        "user" (
+          "email",
+          "password_hash",
+          "first_name",
+          "last_name"
+        )
+        VALUES (
+          'ao.salenko+johnny.depp@gmail.com',
+          'dummy pasword',
+          'Джонні',
+          'Депп'
+        )`,
     );
   }
 
