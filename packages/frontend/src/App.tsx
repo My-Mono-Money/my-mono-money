@@ -20,6 +20,11 @@ function App() {
           },
         },
       },
+      MuiTextField: {
+        defaultProps: {
+          size: 'small',
+        },
+      },
     },
   });
 
