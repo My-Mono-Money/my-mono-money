@@ -1,8 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
+import axios, { AxiosError } from 'axios';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Box, Button, TextField, Typography } from '@mui/material';
+import {
+  Alert,
+  AlertTitle,
+  Box,
+  Button,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { SignUpValidationSchema } from './sign-up.validation-schema';
 
 interface IFormData {
@@ -13,20 +21,42 @@ interface IFormData {
   confirmPassword: string;
 }
 
+interface IErrorResponse {
+  message: string;
+}
+
 const SignUp: React.FC = () => {
-  const validationSchema = SignUpValidationSchema;
+  const [submittingError, setSubmittingError] = useState<string>();
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<IFormData>({
-    resolver: yupResolver(validationSchema),
+    resolver: yupResolver(SignUpValidationSchema),
     mode: 'onBlur',
   });
 
-  const onSubmit = (data: IFormData) => {
-    console.log(JSON.stringify(data, null, 2));
-    alert('Всьо топчік 🐈 ');
+  const onSubmit = async ({
+    firstName,
+    lastName,
+    email,
+    password,
+  }: IFormData) => {
+    try {
+      await axios.post('/auth/sign-up', {
+        firstName,
+        lastName,
+        email,
+        password,
+      });
+    } catch (err) {
+      const axiosError = err as unknown as AxiosError<IErrorResponse>;
+      if (axiosError.response?.data.message === 'duplicated-entity-error') {
+        setSubmittingError(`Користувач з поштою "${email}" уже зареєстрований`);
+      } else {
+        setSubmittingError(`Будь-ласка, спробуйте повторити пізніше`);
+      }
+    }
   };
 
   return (
@@ -45,8 +75,15 @@ const SignUp: React.FC = () => {
       <Typography variant="h5" fontWeight={500}>
         Реєстрація
       </Typography>
+      {submittingError && (
+        <Alert severity="warning">
+          <AlertTitle>Сталася помилка</AlertTitle>
+          {submittingError}
+        </Alert>
+      )}
       <TextField
         id="firstName"
+        disabled={isSubmitting}
         label="Імʼя"
         margin="normal"
         color="primary"
@@ -56,6 +93,7 @@ const SignUp: React.FC = () => {
       />
       <TextField
         id="lastName"
+        disabled={isSubmitting}
         label="Прізвище"
         margin="normal"
         {...register('lastName')}
@@ -64,6 +102,7 @@ const SignUp: React.FC = () => {
       />
       <TextField
         id="email"
+        disabled={isSubmitting}
         label="Пошта"
         margin="normal"
         type="email"
@@ -73,6 +112,7 @@ const SignUp: React.FC = () => {
       />
       <TextField
         id="password"
+        disabled={isSubmitting}
         label="Пароль"
         type="password"
         margin="normal"
@@ -82,6 +122,7 @@ const SignUp: React.FC = () => {
       />
       <TextField
         id="confirmPassword"
+        disabled={isSubmitting}
         label="Повторіть пароль"
         type="password"
         margin="normal"
@@ -89,7 +130,7 @@ const SignUp: React.FC = () => {
         error={errors.confirmPassword ? true : false}
         helperText={errors.confirmPassword?.message}
       />
-      <Button size="large" sx={{ mt: 3 }} type="submit">
+      <Button disabled={isSubmitting} size="large" sx={{ mt: 3 }} type="submit">
         Продовжити
       </Button>
       <Box
