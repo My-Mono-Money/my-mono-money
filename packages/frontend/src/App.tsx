@@ -1,28 +1,39 @@
-import React from 'react';
-import { AccessAlarm, ThreeDRotation } from '@mui/icons-material';
-import logo from './logo.svg';
-import './App.css';
-import { Typography } from '@mui/material';
+import React, { Suspense } from 'react';
+import { ThemeProvider } from '@mui/material';
+import { createTheme } from '@mui/material/styles';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+
+const SignInPage = React.lazy(() => import('./pages/sign-in/sign-in.page'));
+const SignUpPage = React.lazy(() => import('./pages/sign-up/sign-up.page'));
 
 function App() {
+  const theme = createTheme({
+    components: {
+      MuiButton: {
+        defaultProps: {
+          variant: 'contained',
+        },
+        styleOverrides: {
+          root: {
+            borderRadius: 28,
+          },
+        },
+      },
+    },
+  });
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Typography>Hello MUI</Typography>
-        <AccessAlarm />
-        <ThreeDRotation />
-        <p>Hello production (test actions! try 1)!</p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <ThemeProvider theme={theme}>
+        <Suspense fallback={<div>Завантаження...</div>}>
+          <Routes>
+            <Route index element={<Navigate to="sign-in" replace />} />
+            <Route path="sign-in" element={<SignInPage />} />
+            <Route path="sign-up" element={<SignUpPage />} />
+          </Routes>
+        </Suspense>
+      </ThemeProvider>
+    </BrowserRouter>
   );
 }
 
