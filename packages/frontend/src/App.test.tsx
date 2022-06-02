@@ -1,9 +1,15 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import {
+  render,
+  screen,
+  waitForElementToBeRemoved,
+} from '@testing-library/react';
 import App from './App';
 
-test('renders learn react link', () => {
+test('loader is working', async () => {
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
+
+  const linkElement = screen.getByText(/Завантаження/i);
   expect(linkElement).toBeInTheDocument();
+  await waitForElementToBeRemoved(linkElement);
 });
