@@ -1,43 +1,39 @@
-import { Box, Button, TextField, Typography } from '@mui/material';
-import { Link } from 'react-router-dom';
 import React from 'react';
+import { Link } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Box, Button, TextField, Typography } from '@mui/material';
+import { SignUpValidationSchema } from './sign-up.validation-schema';
 
-const LeftSide = () => (
-  <Box
-    sx={{
-      display: 'flex',
-      flexDirection: 'column',
-      pt: '27px',
-      px: '70px',
-      color: 'whitesmoke',
-      background:
-        'linear-gradient(164deg, rgba(97,123,227,1) 0%, rgba(97,121,227,1) 15%, rgba(111,37,220,1) 70%, rgba(112,28,219,1) 100%)',
-    }}
-  >
-    <Typography variant="h6" letterSpacing={3}>
-      My Mono Money
-    </Typography>
+interface IFormData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
 
+const SignUp: React.FC = () => {
+  const validationSchema = SignUpValidationSchema;
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IFormData>({
+    resolver: yupResolver(validationSchema),
+    mode: 'onBlur',
+  });
+
+  const onSubmit = (data: IFormData) => {
+    console.log(JSON.stringify(data, null, 2));
+    alert('Всьо топчік 🐈 ');
+  };
+
+  return (
     <Box
-      sx={{
-        pt: '100px',
-      }}
-    >
-      <Typography variant="h3" fontWeight={600}>
-        Найкращий застосунок, для ведення домашньої бухгалтерії
-      </Typography>
-    </Box>
-  </Box>
-);
-
-const RightSide = () => (
-  <Box
-    sx={{
-      display: 'flex',
-      pt: 7.5,
-    }}
-  >
-    <Box
+      component="form"
+      noValidate
+      onSubmit={handleSubmit(onSubmit)}
       sx={{
         display: 'flex',
         flexDirection: 'column',
@@ -49,17 +45,51 @@ const RightSide = () => (
       <Typography variant="h5" fontWeight={500}>
         Реєстрація
       </Typography>
-      <TextField label="Імʼя" size="small" margin="normal" color="primary" />
-      <TextField label="Прізвище" size="small" margin="normal" />
-      <TextField label="Пошта" size="small" margin="normal" />
-      <TextField label="Пароль" type="password" size="small" margin="normal" />
       <TextField
+        id="firstName"
+        label="Імʼя"
+        margin="normal"
+        color="primary"
+        {...register('firstName')}
+        error={errors.firstName ? true : false}
+        helperText={errors.firstName?.message}
+      />
+      <TextField
+        id="lastName"
+        label="Прізвище"
+        margin="normal"
+        {...register('lastName')}
+        error={errors.lastName ? true : false}
+        helperText={errors.lastName?.message}
+      />
+      <TextField
+        id="email"
+        label="Пошта"
+        margin="normal"
+        type="email"
+        {...register('email')}
+        error={errors.email ? true : false}
+        helperText={errors.email?.message}
+      />
+      <TextField
+        id="password"
+        label="Пароль"
+        type="password"
+        margin="normal"
+        {...register('password')}
+        error={errors.password ? true : false}
+        helperText={errors.password?.message}
+      />
+      <TextField
+        id="confirmPassword"
         label="Повторіть пароль"
         type="password"
-        size="small"
         margin="normal"
+        {...register('confirmPassword')}
+        error={errors.confirmPassword ? true : false}
+        helperText={errors.confirmPassword?.message}
       />
-      <Button size="large" sx={{ mt: 3 }}>
+      <Button size="large" sx={{ mt: 3 }} type="submit">
         Продовжити
       </Button>
       <Box
@@ -75,24 +105,6 @@ const RightSide = () => (
         </Typography>
       </Box>
     </Box>
-  </Box>
-);
-
-const SignUp: React.FC = () => {
-  return (
-    <>
-      <Box
-        sx={{
-          display: 'grid',
-          gridAutoFlow: 'column',
-          gridAutoColumns: '1fr',
-          height: '100%',
-        }}
-      >
-        <LeftSide />
-        <RightSide />
-      </Box>
-    </>
   );
 };
 
