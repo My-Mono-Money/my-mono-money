@@ -30,6 +30,7 @@ export class SignUpService {
         firstName: user.firstName,
         lastName: user.lastName,
         passwordHash,
+        isEmailVerified: false,
       },
       {
         afterSave: async () => {
