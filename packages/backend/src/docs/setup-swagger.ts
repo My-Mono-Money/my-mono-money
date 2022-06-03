@@ -7,6 +7,17 @@ export const setupSwagger = (app: INestApplication) => {
     .setDescription('We stand with Ukraine 🇺🇦')
     .setVersion('1.0')
     .addTag('Authentication')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'JWT',
+        description: 'Enter JWT token',
+        in: 'header',
+      },
+      'jwt-auth',
+    )
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

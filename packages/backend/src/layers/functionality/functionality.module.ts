@@ -5,12 +5,16 @@ import { IntegrationsModule } from '../integrations/integrations.module';
 import { StorageModule } from '../storage/storage.module';
 import { HashPasswordService } from './authentication/hashing/hash-password.service';
 import { GenerateJwtService } from './authentication/jwt/generate-jwt.service';
+import { JwtAuthGuard } from './authentication/jwt/jwt-auth.guard';
+import { JwtStrategy } from './authentication/jwt/jwt.strategy';
 import { SignUpService } from './authentication/sign-up.service';
+import { VerifyEmailService } from './authentication/verify-email.service';
 import { SendEmailService } from './send-email/send-email.service';
 
 @Module({
   imports: [
     StorageModule,
+    ConfigModule,
     IntegrationsModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
@@ -22,10 +26,13 @@ import { SendEmailService } from './send-email/send-email.service';
   ],
   providers: [
     SignUpService,
+    JwtAuthGuard,
+    JwtStrategy,
     SendEmailService,
     GenerateJwtService,
     HashPasswordService,
+    VerifyEmailService,
   ],
-  exports: [SignUpService, SendEmailService],
+  exports: [SignUpService, SendEmailService, VerifyEmailService],
 })
 export class FunctionalityModule {}

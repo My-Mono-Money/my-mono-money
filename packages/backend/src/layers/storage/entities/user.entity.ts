@@ -6,10 +6,11 @@ import {
   UpdateDateColumn,
   Unique,
 } from 'typeorm';
+import { ICreateUserDto } from '../interfaces/create-user-dto.interface';
 
 @Entity()
 @Unique(['email'])
-export class User {
+export class User implements ICreateUserDto {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
