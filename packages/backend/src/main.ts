@@ -2,13 +2,13 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { setupVersioning } from './common/api/setup-versioning';
 import { setupValidation } from './common/pipes/setup-validation';
-import { setupSwagger } from './docs/setup-swagger';
+import { setupDocs } from './docs/setup-docs';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   setupVersioning(app);
   setupValidation(app);
-  setupSwagger(app);
+  setupDocs(app);
 
   await app.listen(process.env.PORT || 8080);
 }

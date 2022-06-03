@@ -1,7 +1,9 @@
 import { INestApplication } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { DocsModule } from './docs.module';
+import { ArchInsightsService } from './services/arch-insights.service';
 
-export const setupSwagger = (app: INestApplication) => {
+const setupSwagger = (app: INestApplication) => {
   const config = new DocumentBuilder()
     .setTitle('My mono money API try 1')
     .setDescription('We stand with Ukraine 🇺🇦')
@@ -21,5 +23,12 @@ export const setupSwagger = (app: INestApplication) => {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('docs', app, document);
+  SwaggerModule.setup('docs/api', app, document);
+};
+
+export const setupDocs = (app: INestApplication) => {
+  const archService = app.select(DocsModule).get(ArchInsightsService);
+  archService.setApp(app);
+
+  setupSwagger(app);
 };

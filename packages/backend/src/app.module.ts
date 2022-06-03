@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import { authConfig } from './configs/auth.config';
 import { sendinblueConfig } from './configs/sendinblue.config';
 import { typeOrmConfig } from './configs/typeorm.config';
+import { DocsModule } from './docs/docs.module';
 import { ApiModule } from './layers/api/api.module';
 
 @Module({
@@ -22,6 +23,7 @@ import { ApiModule } from './layers/api/api.module';
       },
     }),
     ApiModule,
+    DocsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
