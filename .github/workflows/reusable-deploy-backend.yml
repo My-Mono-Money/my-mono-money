@@ -17,11 +17,6 @@ jobs:
       # start test
       - run: yarn test:backend:coverage
         name: Run tests
-      # publish coverage artifact
-      - uses: actions/upload-artifact@v3
-        with:
-          name: backend-coverage
-          path: packages/backend/coverage/lcov-report
       - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
         with:
           heroku_api_key: "${{ secrets.HEROKU_API_KEY }}"

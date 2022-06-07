@@ -18,11 +18,6 @@ jobs:
       # start test
       - run: yarn test:frontend:coverage
         name: Run tests
-      # publish coverage artifact
-      - uses: actions/upload-artifact@v3
-        with:
-          name: frontend-coverage
-          path: packages/frontend/coverage/lcov-report
       # build step
       - run: yarn build:frontend
       # deploy step
