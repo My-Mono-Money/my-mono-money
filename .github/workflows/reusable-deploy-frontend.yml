@@ -18,6 +18,12 @@ jobs:
       # start test
       - run: yarn test:frontend:coverage
         name: Run tests
+      # publish coverage
+      - uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: packages/frontend/coverage
+          flags: frontend
       # build step
       - run: yarn build:frontend
       # deploy step

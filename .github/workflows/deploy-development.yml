@@ -32,7 +32,7 @@ jobs:
     uses: ./.github/workflows/reusable-deploy-backend.yml
     name: Build and deploy backend
     needs: changes
-    if: ${{ needs.changes.outputs.backend == 'true' }}
+    # if: ${{ needs.changes.outputs.backend == 'true' }}
     with:
       target: my-mono-money-development
     secrets: inherit
@@ -42,7 +42,7 @@ jobs:
     uses: ./.github/workflows/reusable-deploy-frontend.yml
     name: Build and deploy frontend
     needs: changes
-    if: ${{ needs.changes.outputs.frontend == 'true' }}
+    # if: ${{ needs.changes.outputs.frontend == 'true' }}
     with:
       target: development
     secrets: inherit

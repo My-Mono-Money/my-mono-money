@@ -17,7 +17,14 @@ jobs:
       # start test
       - run: yarn test:backend:coverage
         name: Run tests
-      - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
+      # publish coverage
+      - uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: packages/backend/coverage
+          flags: backend
+      # deploy to heroku
+      - uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: "${{ secrets.HEROKU_API_KEY }}"
           heroku_app_name: "${{ inputs.target }}" 
