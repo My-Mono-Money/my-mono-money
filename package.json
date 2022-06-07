@@ -21,6 +21,8 @@
     "test": "npm-run-all --parallel test:frontend test:backend",
     "test:frontend": "cd packages/frontend && yarn test",
     "test:backend": "cd packages/backend && yarn test",
+    "test:frontend:coverage": "cd packages/frontend && yarn test:coverage",
+    "test:backend:coverage": "cd packages/backend && yarn test:coverage",
     "lint": "npm-run-all --parallel lint:frontend lint:backend",
     "lint:frontend": "cd packages/frontend && yarn lint",
     "lint:backend": "cd packages/backend && yarn lint",
