@@ -62,9 +62,6 @@ jobs:
         run: yarn lint:frontend
 
       - name: Run tests
-        run: yarn test:frontend
-
-      - name: Run test coverage
         run: yarn test:frontend:coverage
 
       - name: Code Coverage Summary Report
