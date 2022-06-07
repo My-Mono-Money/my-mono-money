@@ -70,6 +70,14 @@ jobs:
           filename: packages/frontend/coverage/cobertura-coverage.xml
           badge: true
           format: markdown
+          output: file
+
+      - name: Add Coverage PR Comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        if: github.event_name == 'pull_request'
+        with:
+          recreate: true
+          path: code-coverage-results.md
 
       - name: Build
         run: yarn build:frontend

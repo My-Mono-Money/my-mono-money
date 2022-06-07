@@ -7,6 +7,7 @@ import AuthLayout from './layouts/auth.layout';
 const SignInPage = React.lazy(() => import('./pages/sign-in/sign-in.page'));
 const SignUpPage = React.lazy(() => import('./pages/sign-up/sign-up.page'));
 
+// try 3
 function App() {
   const theme = createTheme({
     components: {
