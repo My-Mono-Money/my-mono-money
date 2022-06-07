@@ -29,11 +29,32 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:coverage": "react-scripts test --coverage --watchAll=false",
     "deploy:development": "firebase deploy --only hosting:development",
     "deploy:staging": "firebase deploy --only hosting:staging",
     "deploy:production": "firebase deploy --only hosting:production",
     "lint": "eslint --fix --ext .ts,.tsx src/",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "ts-coverage": "typescript-coverage-report"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{ts,tsx}",
+      "!<rootDir>/node_modules/"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 90,
+        "functions": 90,
+        "lines": 90,
+        "statements": 90
+      }
+    },
+    "coverageReporters": [
+      "text",
+      "lcov",
+      "cobertura"
+    ]
   },
   "eslintConfig": {
     "extends": [

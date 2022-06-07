@@ -41,6 +41,9 @@ jobs:
       - name: Run tests
         run: yarn test:backend
 
+      - name: Run test coverage
+        run: yarn test:backend:coverage
+
       - name: Build
         run: yarn build:backend
 
@@ -60,6 +63,16 @@ jobs:
 
       - name: Run tests
         run: yarn test:frontend
+
+      - name: Run test coverage
+        run: yarn test:frontend:coverage
+
+      - name: Code Coverage Summary Report
+        uses: irongut/CodeCoverageSummary@v1.2.0
+        with:
+          filename: packages/frontend/coverage/cobertura-coverage.xml
+          badge: true
+          format: markdown
 
       - name: Build
         run: yarn build:frontend
