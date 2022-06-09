@@ -50,6 +50,7 @@
     "typeorm-naming-strategies": "^4.1.0"
   },
   "devDependencies": {
+    "@golevelup/ts-jest": "^0.3.3",
     "@nestjs/cli": "^8.0.0",
     "@nestjs/schematics": "^8.0.0",
     "@nestjs/testing": "^8.4.5",
@@ -81,7 +82,10 @@
       "json",
       "ts"
     ],
-    "rootDir": "src",
+    "modulePaths": [
+      "<rootDir>"
+    ],
+    "rootDir": "./",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
@@ -102,7 +106,14 @@
       "lcov",
       "cobertura"
     ],
-    "coverageDirectory": "../coverage",
+    "coverageDirectory": "./coverage",
+    "coveragePathIgnorePatterns": [
+      "/dist/",
+      "/node_modules/",
+      "/test-utils/",
+      "/migrations/",
+      "/configs/"
+    ],
     "testEnvironment": "node"
   }
 }
