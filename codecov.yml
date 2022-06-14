@@ -3,14 +3,14 @@ coverage:
     project:
       default:
         target: auto
-      demo:
+      backend:
         target: auto
         flags:
-          - demo
-      index:
+          - backend
+      frontend:
         target: auto
         flags:
-          - index
+          - frontend
 comment:
   layout: "reach, diff, flags, files"
   behavior: default
@@ -20,11 +20,11 @@ comment:
   branches: null
 
 flags:
-  demo:
+  backend:
     paths:
       - src/packages/backend/coverage/cobertura-coverage.xml
     carryforward: false
-  index:
+  frontend:
     paths:
       - src/packages/frontend/coverage/cobertura-coverage.xml
     carryforward: false
