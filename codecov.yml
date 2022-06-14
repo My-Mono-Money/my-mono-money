@@ -23,8 +23,8 @@ flags:
   demo:
     paths:
       - src/packages/backend/coverage/cobertura-coverage.xml
-    carryforward: true
+    carryforward: false
   index:
     paths:
       - src/packages/frontend/coverage/cobertura-coverage.xml
-    carryforward: true
+    carryforward: false
