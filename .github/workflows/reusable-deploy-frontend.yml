@@ -27,10 +27,10 @@ jobs:
       # build step
       - run: yarn build:frontend
       # deploy step
-      - uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_MY_MONO_MONEY }}'
-          channelId: live
-          projectId: my-mono-money
-          target: '${{ inputs.target }}'
-          entryPoint: packages/frontend
+      # - uses: FirebaseExtended/action-hosting-deploy@v0
+      #   with:
+      #     firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_MY_MONO_MONEY }}'
+      #     channelId: live
+      #     projectId: my-mono-money
+      #     target: '${{ inputs.target }}'
+      #     entryPoint: packages/frontend
