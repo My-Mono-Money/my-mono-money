@@ -22,10 +22,13 @@ export class VerifyEmailController {
   @ApiBearerAuth('jwt-auth')
   @ApiTags('Authentication')
   async verifyEmail(@Req() request: IRequestWithUser) {
-    await this.verifyEmailService.verifyEmail(request.user.email);
+    const accessToken = await this.verifyEmailService.verifyEmail(
+      request.user.email,
+    );
 
     return {
       isSuccessful: true,
+      accessToken,
     };
   }
 }
