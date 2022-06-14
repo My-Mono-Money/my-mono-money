@@ -23,8 +23,8 @@ flags:
   backend:
     paths:
       - src/packages/backend/coverage/cobertura-coverage.xml
-    carryforward: false
+    carryforward: true
   frontend:
     paths:
       - src/packages/frontend/coverage/cobertura-coverage.xml
-    carryforward: false
+    carryforward: true
