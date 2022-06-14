@@ -22,9 +22,9 @@ comment:
 flags:
   demo:
     paths:
-      - src/packages/backend/coverage
-    carryforward: false
+      - src/packages/backend/coverage/cobertura-coverage.xml
+    carryforward: true
   index:
     paths:
-      - src/packages/frontend/coverage
-    carryforward: false
+      - src/packages/frontend/coverage/cobertura-coverage.xml
+    carryforward: true
