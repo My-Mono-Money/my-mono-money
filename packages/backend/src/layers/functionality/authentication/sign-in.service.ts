@@ -16,6 +16,10 @@ export class SignInService {
   async signInByEmailWithPassword(user: ISignInByEmailWithPassword) {
     const userByEmail = await this.userService.getByEmail(user.email);
 
+    if (!userByEmail) {
+      throw new UnauthorizedError();
+    }
+
     const isPasswordCorrect = await this.hashPasswordService.comparePassword({
       password: user.password,
       hash: userByEmail.passwordHash,
