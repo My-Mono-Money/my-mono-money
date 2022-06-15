@@ -1,6 +1,14 @@
-import { Box, Button, TextField, Typography } from '@mui/material';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import React from 'react';
+import axios, { AxiosError } from 'axios';
+import {
+  Alert,
+  AlertTitle,
+  Box,
+  Button,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { SignInValidationSchema } from './sign-in.validation-schema';
@@ -10,7 +18,12 @@ interface IFormData {
   password: string;
 }
 
+interface IErrorResponse {
+  message: string;
+}
+
 const SignIn: React.FC = () => {
+  const [submittingError, setSubmittingError] = useState<string>();
   const {
     register,
     handleSubmit,
@@ -20,7 +33,21 @@ const SignIn: React.FC = () => {
     mode: 'onBlur',
   });
 
-  const onSubmit = () => console.log('Усе чікі пікі');
+  const onSubmit = async ({ email, password }: IFormData) => {
+    try {
+      await axios.post('/auth/sign-in', {
+        email,
+        password,
+      });
+    } catch (err) {
+      const axiosError = err as unknown as AxiosError<IErrorResponse>;
+      if (axiosError.response?.data.message === 'unauthorized-error') {
+        setSubmittingError('Неправильний пароль або пошта');
+      } else {
+        setSubmittingError(`Будь-ласка, спробуйте повторити пізніше`);
+      }
+    }
+  };
 
   return (
     <Box
@@ -38,6 +65,12 @@ const SignIn: React.FC = () => {
       <Typography variant="h5" fontWeight={500}>
         Вхід у кабінет
       </Typography>
+      {submittingError && (
+        <Alert severity="warning">
+          <AlertTitle>Сталася помилка</AlertTitle>
+          {submittingError}
+        </Alert>
+      )}
       <TextField
         id="email"
         disabled={isSubmitting}

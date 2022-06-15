@@ -15,12 +15,12 @@ const mockedAccessToken =
 const checkFormDisabling = async () => {
   expect(document.querySelector('[name=email]')).toBeDisabled();
   expect(document.querySelector('[name=password]')).toBeDisabled();
-  expect(screen.getByText('Продовжити')).toBeDisabled();
+  expect(screen.getByText('Увійти')).toBeDisabled();
 
   await waitFor(() => {
     expect(document.querySelector('[name=email]')).toBeEnabled();
     expect(document.querySelector('[name=password]')).toBeEnabled();
-    expect(screen.getByText('Продовжити')).toBeEnabled();
+    expect(screen.getByText('Увійти')).toBeEnabled();
   });
 };
 
@@ -97,7 +97,7 @@ describe('Sign in page', () => {
     });
   });
 
-  describe.skip('Integration with api', () => {
+  describe('Integration with api', () => {
     test('User successfully signed in', async () => {
       fillSignInFormCorrectly();
 
@@ -119,7 +119,7 @@ describe('Sign in page', () => {
 
       mockedAxios.post.mockRejectedValue({
         response: {
-          data: { statusCode: 401, massage: 'incorrect-password-or-email' },
+          data: { statusCode: 401, message: 'unauthorized-error' },
         },
       });
 
