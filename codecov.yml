@@ -15,9 +15,9 @@ coverage:
 flags:
   backend:
     paths:
-      - src/packages/backend
+      - src/packages/backend/*
     carryforward: true
   frontend:
     paths:
-      - src/packages/frontend
+      - src/packages/frontend/*
     carryforward: true
