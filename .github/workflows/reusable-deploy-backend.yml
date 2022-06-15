@@ -24,8 +24,8 @@ jobs:
           files: packages/backend/coverage/cobertura-coverage.xml
           flags: backend
       # deploy to heroku
-      # - uses: akhileshns/heroku-deploy@v3.12.12
-      #   with:
-      #     heroku_api_key: "${{ secrets.HEROKU_API_KEY }}"
-      #     heroku_app_name: "${{ inputs.target }}" 
-      #     heroku_email: "${{ secrets.HEROKU_EMAIL }}"
+      - uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: "${{ secrets.HEROKU_API_KEY }}"
+          heroku_app_name: "${{ inputs.target }}" 
+          heroku_email: "${{ secrets.HEROKU_EMAIL }}"
