@@ -23,7 +23,7 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: packages/frontend/coverage/cobertura-coverage.xml
-          # flags: frontend
+          flags: frontend
       # build step
       # - run: yarn build:frontend
       # deploy step
