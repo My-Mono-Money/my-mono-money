@@ -1,3 +1,17 @@
+coverage:
+  status:
+    project:
+      default:
+        target: 90% #overall project/ repo coverage
+      frontend:
+        target: 60%
+        flags:
+          - frontend
+      backend:
+        target: 100%
+        flags:
+          - backend
+
 flags:
   backend:
     paths:
