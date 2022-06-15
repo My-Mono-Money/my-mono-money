@@ -36,7 +36,7 @@ const fillSignInFormIncorrectly = () =>
     userEvent.type(screen.getByLabelText('Пароль'), 'JohnyLoveRom2022');
   });
 
-describe.skip('Sign in page', () => {
+describe('Sign in page', () => {
   beforeEach(() => {
     render(<SignIn />, { wrapper: MemoryRouter });
   });
@@ -52,7 +52,7 @@ describe.skip('Sign in page', () => {
   test('Sign in form renders', async () => {
     expect(screen.getByLabelText('Пошта')).toBeInTheDocument();
     expect(screen.getByLabelText('Пароль')).toBeInTheDocument();
-    expect(screen.getByText('Продовжити')).toBeInTheDocument();
+    expect(screen.getByText('Увійти')).toBeInTheDocument();
   });
 
   test('Sign up link renders', async () => {
@@ -68,7 +68,7 @@ describe.skip('Sign in page', () => {
   describe('Validation works correctly', () => {
     test('User presses immediately submit', async () => {
       act(() => {
-        userEvent.click(screen.getByText('Продовжити'));
+        userEvent.click(screen.getByText('Увійти'));
       });
       expect((await screen.findAllByText('Це поле обовʼязкове')).length).toBe(
         2,
@@ -97,7 +97,7 @@ describe.skip('Sign in page', () => {
     });
   });
 
-  describe('Integration with api', () => {
+  describe.skip('Integration with api', () => {
     test('User successfully signed in', async () => {
       fillSignInFormCorrectly();
 
@@ -108,7 +108,7 @@ describe.skip('Sign in page', () => {
       });
 
       act(() => {
-        userEvent.click(screen.getByText('Продовжити'));
+        userEvent.click(screen.getByText('Увійти'));
       });
 
       await checkFormDisabling();
@@ -124,7 +124,7 @@ describe.skip('Sign in page', () => {
       });
 
       act(() => {
-        userEvent.click(screen.getByText('Продовжити'));
+        userEvent.click(screen.getByText('Увійти'));
       });
 
       await checkFormDisabling();
@@ -144,7 +144,7 @@ describe.skip('Sign in page', () => {
       });
 
       act(() => {
-        userEvent.click(screen.getByText('Продовжити'));
+        userEvent.click(screen.getByText('Увійти'));
       });
 
       await checkFormDisabling();
