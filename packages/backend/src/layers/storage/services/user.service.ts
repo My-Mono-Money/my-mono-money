@@ -32,10 +32,9 @@ export class UserService {
 
   async updateByEmail(email: string, user: IUpdateUserDto) {
     try {
-      const repository = this.connection.getRepository(User);
       const where = { email };
 
-      return repository.update(where, user);
+      return await this.connection.manager.update(User, where, user);
     } catch (e) {
       handleStorageError(e);
     }
@@ -43,9 +42,7 @@ export class UserService {
 
   async getByEmail(email: string) {
     try {
-      const repository = this.connection.getRepository(User);
-
-      return repository.findOne({
+      return await this.connection.manager.findOne(User, {
         where: {
           email,
         },

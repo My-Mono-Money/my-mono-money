@@ -46,9 +46,9 @@ describe('Sign Up controller', () => {
   it('Email already existing', async () => {
     expect.assertions(2);
 
-    mockedManager.save.mockImplementationOnce(() => {
-      throw databaseErrors.keyAlreadyExists('email');
-    });
+    mockedManager.save.mockRejectedValueOnce(
+      databaseErrors.keyAlreadyExists('email'),
+    );
 
     try {
       await signUpController.signUp({
@@ -68,9 +68,7 @@ describe('Sign Up controller', () => {
   it('Unknown database error', async () => {
     expect.assertions(2);
 
-    mockedManager.save.mockImplementationOnce(() => {
-      throw new Error(`Some another error`);
-    });
+    mockedManager.save.mockRejectedValueOnce(new Error(`Some another error`));
 
     try {
       await signUpController.signUp({
@@ -90,10 +88,8 @@ describe('Sign Up controller', () => {
   it("Email hasn't been sent", async () => {
     expect.assertions(1);
 
-    mockedSendInBlueService.sendTransactionalEmail.mockImplementationOnce(
-      () => {
-        throw new Error('Some sendinblue error');
-      },
+    mockedSendInBlueService.sendTransactionalEmail.mockRejectedValueOnce(
+      new Error('Some sendinblue error'),
     );
 
     try {

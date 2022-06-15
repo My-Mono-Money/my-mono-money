@@ -16,5 +16,9 @@ export const createMockedConnection = (mockedManager: EntityManager) => {
     mockedTransactionImplementation as any,
   );
 
+  Object.assign(mockedConnection, {
+    manager: mockedManager,
+  });
+
   return mockedConnection;
 };

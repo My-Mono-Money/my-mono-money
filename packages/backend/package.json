@@ -93,14 +93,6 @@
     "collectCoverageFrom": [
       "**/*.(t|j)s"
     ],
-    "coverageThreshold": {
-      "global": {
-        "branches": 0,
-        "functions": 0,
-        "lines": 0,
-        "statements": 0
-      }
-    },
     "coverageReporters": [
       "text",
       "lcov",
@@ -108,11 +100,20 @@
     ],
     "coverageDirectory": "./coverage",
     "coveragePathIgnorePatterns": [
-      "/dist/",
-      "/node_modules/",
-      "/test-utils/",
-      "/migrations/",
-      "/configs/"
+      "<rootDir>/coverage/",
+      "<rootDir>/dist/",
+      "<rootDir>/node_modules/",
+      "<rootDir>/src/app.module.ts",
+      "<rootDir>/src/common/api/setup-versioning.ts",
+      "<rootDir>/src/common/pipes",
+      "<rootDir>/src/configs/",
+      "<rootDir>/src/database/migrations/",
+      "<rootDir>/src/docs/",
+      "<rootDir>/src/layers/api/api.module.ts",
+      "<rootDir>/src/main.ts",
+      "<rootDir>/src/test-utils/",
+      "<rootDir>/src/typeorm-cli.config.ts",
+      "<rootDir>/test"
     ],
     "testEnvironment": "node"
   }
