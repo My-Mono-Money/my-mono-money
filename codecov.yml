@@ -1,30 +1,9 @@
-coverage:
-  status:
-    project:
-      default:
-        target: auto
-      backend:
-        target: auto
-        flags:
-          - backend
-      frontend:
-        target: auto
-        flags:
-          - frontend
-comment:
-  layout: "reach, diff, flags, files"
-  behavior: default
-  require_changes: false  
-  require_base: yes
-  require_head: yes       
-  branches: null
-
 flags:
   backend:
     paths:
-      - src/packages/backend/coverage/cobertura-coverage.xml
+      - src/packages/backend
     carryforward: true
   frontend:
     paths:
-      - src/packages/frontend/coverage/cobertura-coverage.xml
+      - src/packages/frontend
     carryforward: true
