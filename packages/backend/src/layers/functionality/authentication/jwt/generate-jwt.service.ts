@@ -22,7 +22,7 @@ export class GenerateJwtService {
       id: user.id,
       email: user.email,
       firstName: user.firstName,
-      lasrName: user.lastName,
+      lastName: user.lastName,
     };
 
     return this.jwtService.sign(payload);
