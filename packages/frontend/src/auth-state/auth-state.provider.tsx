@@ -30,7 +30,7 @@ export const AuthStateProvider: React.FC<IAuthStateProviderProps> = ({
   }, [setAuthState]);
 
   useEffect(() => {
-    setAuthState({ isAuthResolved: true });
+    setTimeout(() => setAuthState({ isAuthResolved: true }), 0);
   }, []);
 
   return (
