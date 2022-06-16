@@ -12,6 +12,7 @@ import {
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { SignInValidationSchema } from './sign-in.validation-schema';
+import { useAuthState } from '../../auth-state/use-auth-state.hook';
 
 interface IFormData {
   email: string;
@@ -23,6 +24,7 @@ interface IErrorResponse {
 }
 
 const SignIn: React.FC = () => {
+  const { setToken } = useAuthState();
   const [submittingError, setSubmittingError] = useState<string>();
   const {
     register,
@@ -35,10 +37,11 @@ const SignIn: React.FC = () => {
 
   const onSubmit = async ({ email, password }: IFormData) => {
     try {
-      await axios.post('/auth/sign-in', {
+      const response = await axios.post('/auth/sign-in', {
         email,
         password,
       });
+      setToken(response.data.accessToken);
     } catch (err) {
       const axiosError = err as unknown as AxiosError<IErrorResponse>;
       if (axiosError.response?.data.message === 'unauthorized-error') {

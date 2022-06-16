@@ -1,12 +1,16 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 import { ThemeProvider } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import AuthLayout from './layouts/auth.layout';
-import ForgotPassword from './pages/forgot-password/forgot-password';
-
-const SignInPage = React.lazy(() => import('./pages/sign-in/sign-in.page'));
-const SignUpPage = React.lazy(() => import('./pages/sign-up/sign-up.page'));
+import { AuthStateProvider } from './auth-state/auth-state.provider';
+import { Private } from './auth-state/route-wrappers/private';
+import { WaitForAuthResolve } from './auth-state/route-wrappers/wait-for-auth-resolve';
+import { OnlyPublic } from './auth-state/route-wrappers/only-public';
+import ForgotPasswordPage from './pages/forgot-password/forgot-password.page';
+import SignInPage from './pages/sign-in/sign-in.page';
+import SignUpPage from './pages/sign-up/sign-up.page';
+import StatementsPage from './pages/statements/statements.page';
 
 function App() {
   const theme = createTheme({
@@ -29,19 +33,33 @@ function App() {
     },
   });
 
+  const publicRoutes = (
+    <Route element={<OnlyPublic />}>
+      <Route element={<AuthLayout />}>
+        <Route path="sign-in" element={<SignInPage />} />
+        <Route path="sign-up" element={<SignUpPage />} />
+        <Route path="forgot-password" element={<ForgotPasswordPage />} />
+      </Route>
+    </Route>
+  );
+
+  const privateRoutes = (
+    <Route element={<Private />}>
+      <Route index element={<StatementsPage />} />
+    </Route>
+  );
+
   return (
     <BrowserRouter>
       <ThemeProvider theme={theme}>
-        <Suspense fallback={<div>Завантаження...</div>}>
+        <AuthStateProvider>
           <Routes>
-            <Route element={<AuthLayout />}>
-              <Route index element={<Navigate to="sign-in" replace />} />
-              <Route path="sign-in" element={<SignInPage />} />
-              <Route path="sign-up" element={<SignUpPage />} />
-              <Route path="forgot-password" element={<ForgotPassword />} />
+            <Route element={<WaitForAuthResolve />}>
+              {publicRoutes}
+              {privateRoutes}
             </Route>
           </Routes>
-        </Suspense>
+        </AuthStateProvider>
       </ThemeProvider>
     </BrowserRouter>
   );
