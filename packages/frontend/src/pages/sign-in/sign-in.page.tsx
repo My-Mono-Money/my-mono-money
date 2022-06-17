@@ -101,13 +101,14 @@ const SignIn: React.FC = () => {
         sx={{
           display: 'flex',
           flexDirection: 'row',
+          justifyContent: 'space-between',
           pt: 2,
         }}
       >
         <Typography>
           <Link to="/sign-up">Створити аккаунт</Link>
         </Typography>
-        <Typography pl={2}>
+        <Typography>
           <Link to="/forgot-password">Забули пароль?</Link>
         </Typography>
       </Box>

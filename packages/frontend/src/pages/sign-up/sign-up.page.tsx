@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios, { AxiosError } from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
@@ -21,17 +21,26 @@ interface IFormData {
   confirmPassword: string;
 }
 
+type IHistoryState = Omit<IFormData, 'confirmPassword'>;
+
 interface IErrorResponse {
   message: string;
 }
 
 const SignUp: React.FC = () => {
   const [submittingError, setSubmittingError] = useState<string>();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const state = location.state as IHistoryState;
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<IFormData>({
+    defaultValues: {
+      ...state,
+      confirmPassword: state?.password,
+    },
     resolver: yupResolver(SignUpValidationSchema),
     mode: 'onBlur',
   });
@@ -48,6 +57,22 @@ const SignUp: React.FC = () => {
         lastName,
         email,
         password,
+      });
+      navigate('/sign-up', {
+        replace: true,
+        state: {
+          email,
+          firstName,
+          lastName,
+          password,
+        },
+      });
+      navigate('/verify-email', {
+        state: {
+          email,
+          firstName,
+          lastName,
+        },
       });
     } catch (err) {
       const axiosError = err as unknown as AxiosError<IErrorResponse>;
