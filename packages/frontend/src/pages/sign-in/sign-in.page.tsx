@@ -13,6 +13,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { SignInValidationSchema } from './sign-in.validation-schema';
 import { useAuthState } from '../../auth-state/use-auth-state.hook';
+import PasswordField from '../../common/components/password-field/password-field.component';
 
 interface IFormData {
   email: string;
@@ -84,7 +85,7 @@ const SignIn: React.FC = () => {
         error={errors.email ? true : false}
         helperText={errors.email?.message}
       />
-      <TextField
+      <PasswordField
         id="password"
         disabled={isSubmitting}
         label="Пароль"
