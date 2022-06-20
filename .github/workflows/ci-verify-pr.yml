@@ -13,6 +13,7 @@ jobs:
     outputs:
       backend: ${{ steps.filter.outputs.backend }}
       frontend: ${{ steps.filter.outputs.frontend }}
+      mock-monobank-api: ${{ steps.filter.outputs.mock-monobank-api}}
     steps:
     - uses: actions/checkout@v2
     - uses: dorny/paths-filter@v2
@@ -23,6 +24,8 @@ jobs:
             - 'packages/backend/**'
           frontend:
             - 'packages/frontend/**'
+          mock-monobank-api:
+            - 'packages/mock-monobank-api/**'
 
   # JOB to build and test backend code
   backend:
@@ -102,9 +105,23 @@ jobs:
       - name: Build
         run: yarn build:frontend
 
+  # JOB to lint mock-monobank-api code
+  mock-monobank-api:
+    needs: changes
+    if: ${{ needs.changes.outputs.mock-monobank-api == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: yarn install:mock-monobank-api
+
+      - name: Linter checks
+        run: yarn lint:mock-monobank-api
+
   pr_verified:
     name: Pull request verified
-    needs: [frontend, backend]
+    needs: [frontend, backend, mock-monobank-api]
     runs-on: ubuntu-latest
     steps:
       - name: Successful pr
