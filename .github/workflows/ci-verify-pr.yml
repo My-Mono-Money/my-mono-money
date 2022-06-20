@@ -106,17 +106,17 @@ jobs:
         run: yarn build:frontend
 
   mock-monobank-api:
-  needs: changes
-    if: ${{ needs.changes.outputs.mock-monobank-api == 'true' }}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
+    needs: changes
+      if: ${{ needs.changes.outputs.mock-monobank-api == 'true' }}
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v2
 
-      - name: Install dependencies
-        run: yarn install:mock-monobank-api
+        - name: Install dependencies
+          run: yarn install:mock-monobank-api
 
-      - name: Linter checks
-        run: yarn lint:mock-monobank-api
+        - name: Linter checks
+          run: yarn lint:mock-monobank-api
 
   pr_verified:
     name: Pull request verified
