@@ -12,6 +12,7 @@ import {
   Typography,
 } from '@mui/material';
 import { SignUpValidationSchema } from './sign-up.validation-schema';
+import PasswordField from '../../common/components/password-field/password-field.component';
 
 interface IFormData {
   firstName: string;
@@ -135,17 +136,15 @@ const SignUp: React.FC = () => {
         error={errors.email ? true : false}
         helperText={errors.email?.message}
       />
-      <TextField
+      <PasswordField
         id="password"
         disabled={isSubmitting}
         label="Пароль"
-        type="password"
-        margin="normal"
         {...register('password')}
         error={errors.password ? true : false}
         helperText={errors.password?.message}
       />
-      <TextField
+      <PasswordField
         id="confirmPassword"
         disabled={isSubmitting}
         label="Повторіть пароль"
