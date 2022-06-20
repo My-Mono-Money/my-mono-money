@@ -27,8 +27,10 @@
     "lint": "npm-run-all --parallel lint:frontend lint:backend",
     "lint:frontend": "cd packages/frontend && yarn lint",
     "lint:backend": "cd packages/backend && yarn lint",
+    "lint:mock-monobank-api": "cd packages/mock-monobank-api && yarn lint",
     "postinstall": "npm-run-all --parallel install:backend",
     "install:frontend": "cd packages/frontend && yarn",
-    "install:backend": "cd packages/backend && yarn"
+    "install:backend": "cd packages/backend && yarn",
+    "install:mock-monobank-api": "cd packages/mock-monobank-api && yarn"
   }
 }
