@@ -13,7 +13,7 @@ jobs:
     outputs:
       backend: ${{ steps.filter.outputs.backend }}
       frontend: ${{ steps.filter.outputs.frontend }}
-      mock-monobank-api: ${{ step.filter.outputs.mock-monobank-api}}
+      mock-monobank-api: ${{ steps.filter.outputs.mock-monobank-api}}
     steps:
     - uses: actions/checkout@v2
     - uses: dorny/paths-filter@v2
