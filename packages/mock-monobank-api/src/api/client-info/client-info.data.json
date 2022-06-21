@@ -1,0 +1,34 @@
+{
+  "clientId": "1234567890",
+  "name": "Депп Джонні",
+  "webHookUrl": "",
+  "permissions": "qwer",
+  "accounts": [
+    {
+      "id": "164ec65b-2ec7-4243-bd0",
+      "sendId": "kdurhdn7s",
+      "currencyCode": 980,
+      "cashbackType": "UAH",
+      "balance": 111111,
+      "creditLimit": 0,
+      "maskedPan": [
+        "999999******9999"
+      ],
+      "type": "white",
+      "iban": "UA098765432123456789098765432"
+    },
+    {
+      "id": "164ec65b-2ec7-4243-bd0",
+      "sendId": "0odyenhd69",
+      "currencyCode": 980,
+      "cashbackType": "UAH",
+      "balance": 11111111,
+      "creditLimit": 11111111,
+      "maskedPan": [
+        "11111******1111"
+      ],
+      "type": "black",
+      "iban": "UA098765432123456789098765432"
+    }
+  ]
+}
