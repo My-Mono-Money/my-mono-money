@@ -1,5 +1,6 @@
 import { Controller, Get, Headers } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import clientInfoData from './client-info.data.json';
 import { ClientInfoResponse } from './client-info.response';
 
 @Controller('/personal')
@@ -12,6 +13,6 @@ export class ClientInfoController {
   })
   @ApiTags('Genuine Monobank')
   clientInfo(@Headers('X-Token') xToken: string) {
-    return `Hello client info`;
+    return JSON.stringify(clientInfoData, null, 2);
   }
 }
