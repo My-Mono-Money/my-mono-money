@@ -1,6 +1,7 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { StatementResponse } from './statement.response';
+import statementData from '../statement/statement.data.json';
 
 @Controller('/personal')
 export class StatementController {
@@ -24,6 +25,6 @@ export class StatementController {
   })
   @ApiTags('Genuine Monobank')
   statement(@Param() params): string {
-    return `Hello statement ${params.accountId}`;
+    return JSON.stringify(statementData, null, 2);
   }
 }

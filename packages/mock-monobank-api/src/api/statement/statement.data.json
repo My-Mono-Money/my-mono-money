@@ -1,0 +1,72 @@
+[
+  {
+      "id": "qwertyuiopasdfgh",
+      "time": 1653668258,
+      "description": "Скасування. Bolt",
+      "mcc": 4121,
+      "originalMcc": 4121,
+      "amount": 3115,
+      "operationAmount": 5000,
+      "currencyCode": 980,
+      "commissionRate": 0,
+      "cashbackAmount": 0,
+      "balance": 34580,
+      "hold": false
+  },
+  {
+      "id": "qwertyuiopasdfgh",
+      "time": 1653665830,
+      "description": "Bolt",
+      "mcc": 4121,
+      "originalMcc": 4121,
+      "amount": -5000,
+      "operationAmount": -5000,
+      "currencyCode": 980,
+      "commissionRate": 0,
+      "cashbackAmount": 0,
+      "balance": 31465,
+      "hold": false
+  },
+  {
+      "id": "qwertyuiopasdfgh",
+      "time": 1653474448,
+      "description": "Поповнення «Kalush & Prytula for Ukrainian Army 🇺🇦»",
+      "mcc": 4829,
+      "originalMcc": 4829,
+      "amount": -20000,
+      "operationAmount": -20000,
+      "currencyCode": 980,
+      "commissionRate": 0,
+      "cashbackAmount": 0,
+      "balance": 36465,
+      "hold": true
+  },
+  {
+      "id": "qwertyuiopasdfgh",
+      "time": 1653212714,
+      "description": "Поповнення «На дрон для Кракена»",
+      "mcc": 4829,
+      "originalMcc": 4829,
+      "amount": -20000,
+      "operationAmount": -20000,
+      "currencyCode": 980,
+      "commissionRate": 0,
+      "cashbackAmount": 0,
+      "balance": 56465,
+      "hold": true
+  },
+  {
+      "id": "qwertyuiopasdfgh",
+      "time": 1652683355,
+      "description": "Поповнення «На підтримку ЗСУ»",
+      "mcc": 4829,
+      "originalMcc": 4829,
+      "amount": -20000,
+      "operationAmount": -20000,
+      "currencyCode": 980,
+      "commissionRate": 0,
+      "cashbackAmount": 0,
+      "balance": 76465,
+      "hold": true
+  }
+]
