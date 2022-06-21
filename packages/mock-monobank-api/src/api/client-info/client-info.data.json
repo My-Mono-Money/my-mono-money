@@ -1,34 +1,34 @@
 {
-  "clientId": "1234567890",
-  "name": "Депп Джонні",
+  "clientId": "0d2BJHRfbC",
+  "name": "Evan Simon",
   "webHookUrl": "",
-  "permissions": "qwer",
+  "permissions": "psfj",
   "accounts": [
     {
-      "id": "164ec65b-2ec7-4243-bd0",
-      "sendId": "kdurhdn7s",
+      "id": "bxk4FWmUq9Q6nh44ja09Zw",
+      "sendId": "jm46pcwqdB",
       "currencyCode": 980,
       "cashbackType": "UAH",
-      "balance": 111111,
+      "balance": 461459,
       "creditLimit": 0,
       "maskedPan": [
-        "999999******9999"
+        "403256******0780"
       ],
       "type": "white",
-      "iban": "UA098765432123456789098765432"
+      "iban": "UA432852225228103907162668143"
     },
     {
-      "id": "164ec65b-2ec7-4243-bd0",
-      "sendId": "0odyenhd69",
+      "id": "LFb1rVVWcAB2unjh9uxbek",
+      "sendId": "HXBeKyJBdU",
       "currencyCode": 980,
       "cashbackType": "UAH",
-      "balance": 11111111,
-      "creditLimit": 11111111,
+      "balance": 7070719,
+      "creditLimit": 8400000,
       "maskedPan": [
-        "11111******1111"
+        "287397******8705"
       ],
       "type": "black",
-      "iban": "UA098765432123456789098765432"
+      "iban": "UA716851411330532977284298474"
     }
   ]
 }
