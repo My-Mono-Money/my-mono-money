@@ -7,6 +7,8 @@ const PATH_TO_FILE = path.resolve(
   '../api/client-info/client-info.data.json',
 );
 
+const uahCurrencyCode = 980;
+
 fs.writeFileSync(
   PATH_TO_FILE,
   JSON.stringify(
@@ -19,7 +21,7 @@ fs.writeFileSync(
         {
           id: chance().string({ length: 22, alpha: true, numeric: true }),
           sendId: chance().string({ length: 10, alpha: true, numeric: true }),
-          currencyCode: 980,
+          currencyCode: uahCurrencyCode,
           cashbackType: 'UAH',
           balance: chance().natural({ min: 100000, max: 1000000 }),
           creditLimit: 0,
@@ -35,7 +37,7 @@ fs.writeFileSync(
         {
           id: chance().string({ length: 22, alpha: true, numeric: true }),
           sendId: chance().string({ length: 10, alpha: true, numeric: true }),
-          currencyCode: 980,
+          currencyCode: uahCurrencyCode,
           cashbackType: 'UAH',
           balance: chance().natural({ min: 100000, max: 10000000 }),
           creditLimit:

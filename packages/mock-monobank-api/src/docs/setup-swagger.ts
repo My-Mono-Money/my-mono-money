@@ -6,7 +6,7 @@ export const setupSwagger = (app: INestApplication) => {
     .setTitle('Mock Monobank API')
     .setDescription('We stand with Ukraine 🇺🇦')
     .setVersion('1.0')
-    .addTag('Genuine Monobank')
+    .addTag('Fake Monobank')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

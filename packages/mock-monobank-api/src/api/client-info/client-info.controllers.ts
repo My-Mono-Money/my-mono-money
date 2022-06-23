@@ -11,7 +11,7 @@ export class ClientInfoController {
     description: 'Hello client info',
     type: ClientInfoResponse,
   })
-  @ApiTags('Genuine Monobank')
+  @ApiTags('Fake Monobank')
   clientInfo(@Headers('X-Token') xToken: string) {
     return JSON.stringify(clientInfoData, null, 2);
   }

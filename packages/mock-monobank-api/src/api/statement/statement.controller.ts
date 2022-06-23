@@ -1,8 +1,13 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { StatementResponse } from './statement.response';
-import statementData from '../statement/statement.data.json';
+import statementsData from './statement.data.json';
 
+interface IStatementParams {
+  accountId: string;
+  fromTime: string;
+  toTime: string;
+}
 @Controller('/personal')
 export class StatementController {
   @Get('/statement/:accountId/:fromTime/:toTime')
@@ -23,8 +28,16 @@ export class StatementController {
     description: 'Hello statement',
     type: StatementResponse,
   })
-  @ApiTags('Genuine Monobank')
-  statement(@Param() params): string {
-    return JSON.stringify(statementData, null, 2);
+  @ApiTags('Fake Monobank')
+  statement(@Param() { accountId, fromTime, toTime }: IStatementParams) {
+    const allCardStatement = statementsData.statementsByCard.find(
+      (item) => item.cardId === accountId,
+    ).items;
+
+    const filteredByTime = allCardStatement.filter(
+      (item) => Number(fromTime) <= item.time && item.time <= Number(toTime),
+    );
+
+    return JSON.stringify(filteredByTime, null, 2);
   }
 }
