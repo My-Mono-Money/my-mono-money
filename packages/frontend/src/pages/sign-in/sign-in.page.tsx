@@ -42,6 +42,9 @@ const SignIn: React.FC = () => {
         email,
         password,
       });
+      if (!response.data.isSuccessful) {
+        throw new Error("Can't recognize response as successful");
+      }
       setToken(response.data.accessToken);
     } catch (err) {
       const axiosError = err as unknown as AxiosError<IErrorResponse>;

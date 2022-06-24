@@ -53,12 +53,15 @@ const SignUp: React.FC = () => {
     password,
   }: IFormData) => {
     try {
-      await axios.post('/auth/sign-up', {
+      const response = await axios.post('/auth/sign-up', {
         firstName,
         lastName,
         email,
         password,
       });
+      if (!response.data.isSuccessful) {
+        throw new Error("Can't recognize response as successful");
+      }
       navigate('/sign-up', {
         replace: true,
         state: {
