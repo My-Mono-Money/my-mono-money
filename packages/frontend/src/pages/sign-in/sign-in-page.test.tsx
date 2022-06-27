@@ -153,5 +153,23 @@ describe('Sign in page', () => {
         await screen.findByText('Будь-ласка, спробуйте повторити пізніше'),
       ).toBeInTheDocument();
     });
+
+    test("Can't recognize response as successful", async () => {
+      fillSignInFormCorrectly();
+
+      mockedAxios.post.mockResolvedValueOnce({
+        data: { isSuccessful: false },
+      });
+
+      act(() => {
+        userEvent.click(screen.getByText('Увійти'));
+      });
+
+      await checkFormDisabling();
+
+      expect(
+        await screen.findByText('Будь-ласка, спробуйте повторити пізніше'),
+      ).toBeInTheDocument();
+    });
   });
 });
