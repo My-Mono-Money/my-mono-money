@@ -30,7 +30,7 @@ jobs:
       # build step
       - run: yarn build:frontend
         env:
-          REACT_APP_BACKEND_URL: {{ inputs.backend_url }}
+          REACT_APP_BACKEND_URL: '{{ inputs.backend_url }}'
       # deploy step
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
