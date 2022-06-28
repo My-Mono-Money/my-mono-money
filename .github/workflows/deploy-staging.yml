@@ -46,7 +46,7 @@ jobs:
     if: ${{ needs.changes.outputs.frontend == 'true' }}
     with:
       target: staging
-      backend_url: ${{ secrets.BACKEND_URL_STAGING }}
+      environment: staging
     secrets: inherit
 
   #JOB to check deploy result
