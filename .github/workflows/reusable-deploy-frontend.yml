@@ -7,7 +7,7 @@ on:
         type: string
       environment:
         required: true
-        type: environment
+        type: string
 
 jobs:
   build_and_deploy:
