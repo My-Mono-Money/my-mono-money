@@ -5,6 +5,9 @@ on:
       target:
         required: true
         type: string
+      backend_url:
+        required: true
+        type: string
 
 jobs:
   build_and_deploy:
@@ -26,6 +29,8 @@ jobs:
           flags: frontend
       # build step
       - run: yarn build:frontend
+        env:
+          REACT_APP_BACKEND_URL: {{ inputs.backend_url }}
       # deploy step
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
