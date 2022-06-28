@@ -45,6 +45,7 @@ jobs:
     if: ${{ needs.changes.outputs.frontend == 'true' }}
     with:
       target: development
+      backend_url: {{ secrets.BACKEND_URL_DEVELOPMENT }}
     secrets: inherit
 
   #JOB to check deploy result

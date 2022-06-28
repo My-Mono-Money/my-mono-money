@@ -3,16 +3,21 @@ import { IUserSignUp } from '../../authentication/interfaces/user-signup-dto.int
 interface IConfirmEmailTemplate {
   user: IUserSignUp;
   verifyEmailToken: string;
+  frontendUrl: string;
 }
 
 export const confirmEmailTemplate = ({
   user,
   verifyEmailToken,
-}: IConfirmEmailTemplate) => ({
-  to: {
-    email: user.email,
-    name: `${user.firstName} ${user.lastName}`,
-  },
-  subject: 'Confirm your email address',
-  content: `Please, follow the <a href="https://my-mono-money.app/confirm-email?code=${verifyEmailToken}">link</a> to confirm email`,
-});
+  frontendUrl,
+}: IConfirmEmailTemplate) => {
+  console.log('inTemplate', frontendUrl);
+  return {
+    to: {
+      email: user.email,
+      name: `${user.firstName} ${user.lastName}`,
+    },
+    subject: 'Confirm your email address',
+    content: `Please, follow the <a href="${frontendUrl}/confirm-email?code=${verifyEmailToken}">link</a> to confirm email`,
+  };
+};

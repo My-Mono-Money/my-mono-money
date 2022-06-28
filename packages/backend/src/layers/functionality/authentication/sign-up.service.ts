@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { UserService } from 'src/layers/storage/services/user.service';
 import { SendEmailService } from '../send-email/send-email.service';
 import { confirmEmailTemplate } from '../send-email/templates/confirm-email.email-template';
@@ -13,6 +14,7 @@ export class SignUpService {
     private sendEmailService: SendEmailService,
     private generateJwtService: GenerateJwtService,
     private hashPasswordService: HashPasswordService,
+    private configService: ConfigService,
   ) {}
 
   async signUp(user: IUserSignUp) {
@@ -23,6 +25,8 @@ export class SignUpService {
     const verifyEmailToken = await this.generateJwtService.generateVerifyEmail(
       user,
     );
+    const frontendUrl = this.configService.get('app.frontendUrl');
+    console.log('frontendUrlSignUP', frontendUrl);
 
     return await this.userService.save(
       {
@@ -35,7 +39,7 @@ export class SignUpService {
       {
         afterSave: async () => {
           await this.sendEmailService.sendEmail(
-            confirmEmailTemplate({ user, verifyEmailToken }),
+            confirmEmailTemplate({ user, verifyEmailToken, frontendUrl }),
           );
         },
       },
