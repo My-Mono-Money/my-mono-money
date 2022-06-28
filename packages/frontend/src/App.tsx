@@ -12,7 +12,7 @@ import SignInPage from './pages/sign-in/sign-in.page';
 import SignUpPage from './pages/sign-up/sign-up.page';
 import StatementsPage from './pages/statements/statements.page';
 import { VerifyEmail } from './pages/verify-email/verify-email.page';
-// try 2
+// try 3
 function App() {
   const theme = createTheme({
     components: {
