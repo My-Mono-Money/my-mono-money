@@ -29,8 +29,8 @@ jobs:
 
   #JOB to build and deploy backend
   deploy_development_backend:
-    environment: development
     uses: ./.github/workflows/reusable-deploy-backend.yml
+    environment: development
     name: Build and deploy backend
     needs: changes
     # if: ${{ needs.changes.outputs.backend == 'true' }}
@@ -40,8 +40,8 @@ jobs:
 
   #JOB to build and deploy frontend
   deploy_development_frontend:
-    environment: development
     uses: ./.github/workflows/reusable-deploy-frontend.yml
+    environment: development
     name: Build and deploy frontend
     needs: changes
     # if: ${{ needs.changes.outputs.frontend == 'true' }}
