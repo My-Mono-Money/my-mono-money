@@ -12,7 +12,7 @@ on:
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
-    environmnet: '${{ inputs.environment }}'
+    environment: '${{ inputs.environment }}'
     steps:
       # checkout repo
       - uses: actions/checkout@v2
