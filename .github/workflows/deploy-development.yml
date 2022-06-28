@@ -2,7 +2,7 @@ name: Deploy development
 on:
   push:
     branches:
-      - dev
+      - MMM-78-config-links-backend-and-frontend
 
 defaults:
   run:
@@ -29,6 +29,7 @@ jobs:
 
   #JOB to build and deploy backend
   deploy_development_backend:
+    environment: development
     uses: ./.github/workflows/reusable-deploy-backend.yml
     name: Build and deploy backend
     needs: changes
@@ -39,13 +40,13 @@ jobs:
 
   #JOB to build and deploy frontend
   deploy_development_frontend:
+    environment: development
     uses: ./.github/workflows/reusable-deploy-frontend.yml
     name: Build and deploy frontend
     needs: changes
     if: ${{ needs.changes.outputs.frontend == 'true' }}
     with:
       target: development
-      backend_url: ${{ secrets.BACKEND_URL_DEVELOPMENT }}
     secrets: inherit
 
   #JOB to check deploy result
