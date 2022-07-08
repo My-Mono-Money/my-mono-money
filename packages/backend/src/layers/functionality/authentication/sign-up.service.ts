@@ -26,7 +26,6 @@ export class SignUpService {
       user,
     );
     const frontendUrl = this.configService.get('app.frontendUrl');
-    console.log('frontendUrlSignUP', frontendUrl);
 
     return await this.userService.save(
       {

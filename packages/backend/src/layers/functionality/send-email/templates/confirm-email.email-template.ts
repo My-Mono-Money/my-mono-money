@@ -11,7 +11,6 @@ export const confirmEmailTemplate = ({
   verifyEmailToken,
   frontendUrl,
 }: IConfirmEmailTemplate) => {
-  console.log('inTemplate', frontendUrl);
   return {
     to: {
       email: user.email,
