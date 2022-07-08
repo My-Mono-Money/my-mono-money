@@ -4,6 +4,7 @@ import { handleStorageError } from 'src/common/errors/utils/handle-storage-error
 import { ICreateUserDto } from '../interfaces/create-user-dto.interface';
 import { User } from '../entities/user.entity';
 import { IUpdateUserDto } from '../interfaces/update-user-dto.interface';
+import { Space } from '../entities/space.entity';
 
 interface ISaveUserOptions {
   afterSave?: () => Promise<void>;
@@ -16,14 +17,18 @@ export class UserService {
   async save(user: ICreateUserDto, { afterSave }: ISaveUserOptions = {}) {
     try {
       return await this.connection.transaction(async (manager) => {
-        const entity = manager.create<User>(User, user);
-        const result = await manager.save(entity);
+        const userEntity = manager.create<User>(User, user);
+        const savedUser = await manager.save(userEntity);
+        const spaceEntity = manager.create<Space>(Space, {
+          owner: savedUser,
+        });
+        await manager.save(spaceEntity);
 
         if (afterSave) {
           await afterSave();
         }
 
-        return result;
+        return savedUser;
       });
     } catch (e) {
       handleStorageError(e);
