@@ -17,7 +17,7 @@ export class MonobankToken implements ICreateMonobankTokenDto {
 
   @ManyToOne(() => Space)
   @JoinColumn()
-  spaceId: Space;
+  space: Space;
 
   @Column()
   token: string;

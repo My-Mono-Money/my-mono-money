@@ -1,6 +1,6 @@
 import { ICreateSpaceDto } from './create-spase-dto.interface';
 
 export interface ICreateMonobankTokenDto {
-  spaceId: ICreateSpaceDto;
+  space: ICreateSpaceDto;
   token: string;
 }
