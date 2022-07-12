@@ -56,4 +56,19 @@ export class UserService {
       handleStorageError(e);
     }
   }
+
+  async getSpaceByEmail(email: string) {
+    const userId = (await this.getByEmail(email)).id;
+    try {
+      return await this.connection.manager.findOne<Space>(Space, {
+        where: {
+          owner: {
+            id: userId,
+          },
+        },
+      });
+    } catch (e) {
+      handleStorageError(e);
+    }
+  }
 }

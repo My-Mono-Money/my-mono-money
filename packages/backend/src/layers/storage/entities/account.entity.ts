@@ -1,16 +1,10 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import { ICreateAccountDto } from '../interfaces/create-account-dto.interface';
 import { MonobankToken } from './monobank-token.entity';
 
 @Entity()
 export class Account implements ICreateAccountDto {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn()
   id: string;
 
   @ManyToOne(() => MonobankToken)

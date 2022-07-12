@@ -1,4 +1,4 @@
-import { ICreateSpaceDto } from './create-spase-dto.interface';
+import { ICreateSpaceDto } from './create-space-dto.interface';
 
 export interface ICreateMonobankTokenDto {
   space: ICreateSpaceDto;

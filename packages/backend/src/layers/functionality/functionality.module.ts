@@ -11,6 +11,7 @@ import { SignInService } from './authentication/sign-in.service';
 import { SignUpService } from './authentication/sign-up.service';
 import { VerifyEmailService } from './authentication/verify-email.service';
 import { SendEmailService } from './send-email/send-email.service';
+import { SaveTokenService } from './tokens/save-token.service';
 
 @Module({
   imports: [
@@ -34,7 +35,14 @@ import { SendEmailService } from './send-email/send-email.service';
     GenerateJwtService,
     HashPasswordService,
     VerifyEmailService,
+    SaveTokenService,
   ],
-  exports: [SignUpService, SendEmailService, VerifyEmailService, SignInService],
+  exports: [
+    SignUpService,
+    SendEmailService,
+    VerifyEmailService,
+    SignInService,
+    SaveTokenService,
+  ],
 })
 export class FunctionalityModule {}
