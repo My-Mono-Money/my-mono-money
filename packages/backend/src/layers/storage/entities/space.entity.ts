@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { ICreateSpaceDto } from '../interfaces/create-spase-dto.interface';
+import { ICreateSpaceDto } from '../interfaces/create-space-dto.interface';
 import { User } from './user.entity';
 
 @Entity()
