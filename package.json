@@ -13,6 +13,7 @@
     "start:backend": "cd packages/backend && yarn start:dev",
     "start:mock-monobank-api": "cd packages/mock-monobank-api && yarn start:dev",
     "start:backend:prod": "cd packages/backend && yarn typeorm migration:run && yarn start:prod",
+    "start:worker": "cd packages/backend && yarn start:worker",
     "build": "npm-run-all --parallel build:backend",
     "build:frontend": "cd packages/frontend && yarn build",
     "build:backend": "cd packages/backend && yarn build",

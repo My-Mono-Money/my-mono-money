@@ -14,4 +14,4 @@ import { SaveTokenController } from './tokens/save-token/save-token.controller';
     SaveTokenController,
   ],
 })
-export class ApiModule {}
+export class ApiLayerModule {}
