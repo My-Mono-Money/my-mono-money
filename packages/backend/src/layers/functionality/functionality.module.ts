@@ -10,6 +10,8 @@ import { JwtStrategy } from './authentication/jwt/jwt.strategy';
 import { SignInService } from './authentication/sign-in.service';
 import { SignUpService } from './authentication/sign-up.service';
 import { VerifyEmailService } from './authentication/verify-email.service';
+import { DebugAccessGuard } from './debug/debug-access.guard';
+import { SendTestEmailService } from './debug/send-test-email.service';
 import { SendEmailService } from './send-email/send-email.service';
 import { SaveTokenService } from './tokens/save-token.service';
 
@@ -36,6 +38,8 @@ import { SaveTokenService } from './tokens/save-token.service';
     HashPasswordService,
     VerifyEmailService,
     SaveTokenService,
+    SendTestEmailService,
+    DebugAccessGuard,
   ],
   exports: [
     SignUpService,
@@ -43,6 +47,8 @@ import { SaveTokenService } from './tokens/save-token.service';
     VerifyEmailService,
     SignInService,
     SaveTokenService,
+    SendTestEmailService,
+    DebugAccessGuard,
   ],
 })
 export class FunctionalityModule {}
