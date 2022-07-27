@@ -1,3 +1,4 @@
+import { BullModule } from '@nestjs/bull';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -21,6 +22,13 @@ import { ApiLayerModule } from './layers/api-layer/api-layer.module';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
         return configService.get('typeorm');
+      },
+    }),
+    BullModule.forRoot({
+      redis: {
+        host: 'localhost',
+        port: 6379,
+        password: 'redis',
       },
     }),
     ApiLayerModule,

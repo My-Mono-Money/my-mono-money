@@ -5,7 +5,7 @@ import { ArchInsightsService } from './services/arch-insights.service';
 
 const setupSwagger = (app: INestApplication) => {
   const config = new DocumentBuilder()
-    .setTitle('My mono money API try 1')
+    .setTitle('My mono money API')
     .setDescription('We stand with Ukraine 🇺🇦')
     .setVersion('1.0')
     .addTag('Authentication')
@@ -19,6 +19,16 @@ const setupSwagger = (app: INestApplication) => {
         in: 'header',
       },
       'jwt-auth',
+    )
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        name: 'Debug',
+        description: 'Enter debug token',
+        in: 'header',
+      },
+      'debug-token',
     )
     .build();
 

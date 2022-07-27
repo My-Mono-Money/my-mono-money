@@ -12,6 +12,9 @@ const blackListModules = [
   'TypeOrmCoreModule',
   'AXIOS_INSTANCE_TOKEN',
   'JWT_MODULE_OPTIONS',
+  // TODO: investigate better solutions for it
+  'BullModule',
+  'DiscoveryModule',
 ];
 
 @Injectable()

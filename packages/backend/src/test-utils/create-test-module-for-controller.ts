@@ -8,6 +8,9 @@ import { config } from './config';
 import { createMockedConnection } from './mocks/mocked-connection';
 import { createMockedManager } from './mocks/mocked-manager';
 import { createMockedSendInBlueService } from './mocks/mocked-sendinblue-service';
+import { createMock } from '@golevelup/ts-jest';
+import { Queue } from 'bull';
+import { getQueueToken } from '@nestjs/bull';
 
 export const createTestModuleForController = async (
   controllers: ModuleMetadata['controllers'],
@@ -26,6 +29,8 @@ export const createTestModuleForController = async (
       ],
       controllers,
     })
+      .overrideProvider(getQueueToken('email'))
+      .useValue(createMock<Queue>())
       .overrideProvider(SendinblueService)
       .useValue(mockedSendInBlueService)
       .useMocker((token) => {
