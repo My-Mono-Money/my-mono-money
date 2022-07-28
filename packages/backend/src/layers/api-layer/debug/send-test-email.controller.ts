@@ -24,7 +24,7 @@ export class SendTestEmailController {
   async sendTestEmail(
     @Body() { email }: SendTestEmailBody,
   ): Promise<SendTestEmailResponse> {
-    await this.sendTestEmailService.sendTestEmail({ email });
+    await this.sendTestEmailService.addToQueue({ email });
 
     return {
       isSuccessful: true,
