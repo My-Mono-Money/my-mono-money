@@ -9,6 +9,13 @@ const PATH_TO_FILE = path.resolve(
 
 const uahCurrencyCode = 980;
 
+const generateNumberString = (length) => {
+  return chance().string({
+    length: length,
+    numeric: true,
+  });
+};
+
 fs.writeFileSync(
   PATH_TO_FILE,
   JSON.stringify(
@@ -45,13 +52,10 @@ fs.writeFileSync(
               chance().natural({ min: 100000, max: 10000000 }) / 100000,
             ) * 100000,
           maskedPan: [
-            `${chance().string({
-              length: 6,
-              numeric: true,
-            })}******${chance().string({ length: 4, numeric: true })}`,
+            `${generateNumberString(6)}******${generateNumberString(4)}`,
           ],
           type: 'black',
-          iban: `UA${chance().string({ length: 27, numeric: true })}`,
+          iban: `UA${generateNumberString(27)}`,
         },
       ],
     },

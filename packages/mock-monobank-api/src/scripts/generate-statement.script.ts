@@ -52,6 +52,26 @@ const getAmount = () => {
   return Number(`${plusOrMinus}${randomAmount}`);
 };
 
+const generationSymbols = () => {
+  return chance().string({
+    length: 4,
+    alpha: true,
+    numeric: true,
+    casing: 'upper',
+  });
+};
+
+const generateNumberString = (length) => {
+  return chance().string({
+    length: length,
+    numeric: true,
+  });
+};
+
+const generateReceiptId = () => {
+  return `${generationSymbols()}-${generationSymbols()}-${generationSymbols()}-${generationSymbols()}`;
+};
+
 const generateTransaction = () => {
   const amount = getAmount();
   const mcc = getMccCode();
@@ -63,12 +83,17 @@ const generateTransaction = () => {
     }),
     mcc: mcc,
     originalMcc: mcc,
+    hold: chance().bool(),
     amount: amount,
     operationAmount: amount,
     currencyCode: uahCurrencyCode,
     commissionRate: 0,
     cashbackAmount: 0,
-    hold: chance().bool(),
+    comment: chance().sentence({ words: chance().natural({ min: 1, max: 3 }) }),
+    receiptId: generateReceiptId(),
+    invoiceId: `${generateNumberString(4)}.в.${generateNumberString(2)}`,
+    counterEdrpou: `${generateNumberString(10)}`,
+    counterIban: `UA${generateNumberString(27)}`,
   };
 };
 
