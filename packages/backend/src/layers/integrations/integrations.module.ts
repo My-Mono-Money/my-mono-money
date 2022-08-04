@@ -8,9 +8,12 @@ import { QueueService } from './queue/queue.service';
 
 @Module({
   imports: [
-    BullModule.registerQueue({
-      name: 'email',
-    }),
+    BullModule.registerQueue(
+      {
+        name: 'email',
+      },
+      { name: 'statement' },
+    ),
     ConfigModule,
     HttpModule,
   ],
