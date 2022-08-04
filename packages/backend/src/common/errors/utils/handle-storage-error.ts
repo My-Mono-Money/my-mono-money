@@ -1,3 +1,4 @@
+import { Logger } from '@nestjs/common';
 import { QueryFailedError } from 'typeorm';
 import { DuplicatedEntityError } from '../duplicated-entity.error';
 import { UnknownError } from '../unknown.error';
@@ -12,6 +13,7 @@ const isDuplicatedEntityError = (error: Error | QueryFailedError) => {
 };
 
 export const handleStorageError = (error: Error | QueryFailedError) => {
+  Logger.error(error);
   if (isDuplicatedEntityError(error)) {
     throw new DuplicatedEntityError();
   }

@@ -31,6 +31,8 @@ export const createTestModuleForController = async (
     })
       .overrideProvider(getQueueToken('email'))
       .useValue(createMock<Queue>())
+      .overrideProvider(getQueueToken('statement'))
+      .useValue(createMock<Queue>())
       .overrideProvider(SendinblueService)
       .useValue(mockedSendInBlueService)
       .useMocker((token) => {
