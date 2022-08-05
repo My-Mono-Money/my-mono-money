@@ -1,7 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { MonobankService } from 'src/layers/integrations/monobank/monobank.service';
 import { StatementService } from 'src/layers/storage/services/statement.service';
-import { subMonths, getUnixTime } from 'date-fns';
+import {
+  getUnixTime,
+  startOfMonth,
+  eachMonthOfInterval,
+  addMonths,
+  startOfYear,
+} from 'date-fns';
 import { ConfigService } from '@nestjs/config';
 
 interface IGetStatement {
@@ -12,9 +18,26 @@ function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-const fromInTimestamp = (month) => {
-  const result = subMonths(new Date(), month);
-  return String(getUnixTime(result));
+const fromInTimestamp = () => {
+  const startInterval = startOfYear(new Date());
+  const endInterval = startOfMonth(new Date());
+  const monthsInYear = eachMonthOfInterval({
+    start: startInterval,
+    end: endInterval,
+  });
+
+  return monthsInYear.map((item) => String(getUnixTime(item)));
+};
+
+const toInTimestamp = () => {
+  const startInterval = addMonths(startOfYear(new Date()), 1);
+  const endInterval = startOfMonth(addMonths(new Date(), 1));
+  const monthsInYear = eachMonthOfInterval({
+    start: startInterval,
+    end: endInterval,
+  });
+
+  return monthsInYear.map((item) => String(getUnixTime(item)));
 };
 
 @Injectable()
@@ -29,27 +52,27 @@ export class GetMonobankStatementService {
     const accountList = await this.statementService.getAccountByTokenId(
       tokenId,
     );
-    const from = fromInTimestamp(1);
-    const to = String(getUnixTime(new Date()));
+    const from = fromInTimestamp();
+    const to = toInTimestamp();
     const transactions = [];
     for (let i = 0; i < accountList.length; i++) {
-      const statementPart = await this.monobankService.getStatement({
-        accountId: accountList[i].id,
-        token: accountList[i].token.token,
-        from,
-        to,
-      });
-      if (i !== accountList.length - 1) {
+      for (let j = 0; j < from.length; j++) {
+        const statementPart = await this.monobankService.getStatement({
+          accountId: accountList[i].id,
+          token: accountList[i].token.token,
+          from: from[j],
+          to: to[j],
+        });
         await delay(this.configService.get('app.monobankRequestDelay'));
+        transactions.push(
+          ...statementPart.data.map((item) => ({
+            ...item,
+            account: {
+              id: accountList[i].id,
+            },
+          })),
+        );
       }
-      transactions.push(
-        ...statementPart.data.map((item) => ({
-          ...item,
-          account: {
-            id: accountList[i].id,
-          },
-        })),
-      );
     }
     await this.statementService.saveStatement({ transactions });
   }
