@@ -13,6 +13,7 @@ import { VerifyEmailService } from './authentication/verify-email.service';
 import { DebugAccessGuard } from './debug/debug-access.guard';
 import { SendTestEmailService } from './debug/send-test-email.service';
 import { SendEmailService } from './send-email/send-email.service';
+import { GetFilteredStatementService } from './statement/get-filtered-statement.service';
 import { GetMonobankStatementService } from './statement/get-monobank-statement.service';
 import { SaveTokenService } from './tokens/save-token.service';
 
@@ -42,6 +43,7 @@ import { SaveTokenService } from './tokens/save-token.service';
     SendTestEmailService,
     DebugAccessGuard,
     GetMonobankStatementService,
+    GetFilteredStatementService,
   ],
   exports: [
     SignUpService,
@@ -52,6 +54,7 @@ import { SaveTokenService } from './tokens/save-token.service';
     SendTestEmailService,
     DebugAccessGuard,
     GetMonobankStatementService,
+    GetFilteredStatementService,
   ],
 })
 export class FunctionalityModule {}

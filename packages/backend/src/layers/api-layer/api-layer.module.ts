@@ -5,6 +5,7 @@ import { SignInController } from './authentication/sign-in/sign-in.controller';
 import { SignUpController } from './authentication/sign-up/sign-up.controller';
 import { VerifyEmailController } from './authentication/verify-email/verify-email.controller';
 import { SendTestEmailController } from './debug/send-test-email.controller';
+import { GetFilteredStatementController } from './statement/get-filtered-statement.controller';
 import { SaveTokenController } from './tokens/save-token/save-token.controller';
 
 @Module({
@@ -15,6 +16,7 @@ import { SaveTokenController } from './tokens/save-token/save-token.controller';
     VerifyEmailController,
     SaveTokenController,
     SendTestEmailController,
+    GetFilteredStatementController,
   ],
 })
 export class ApiLayerModule {}
