@@ -90,4 +90,9 @@ export class GetFilteredStatementResponse {
     ],
   })
   items: StatementItem[];
+  paging: {
+    from: number;
+    limit: number;
+    total: number;
+  };
 }

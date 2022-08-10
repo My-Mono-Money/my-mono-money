@@ -1,4 +1,4 @@
-import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Query, Req, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { IRequestWithUser } from 'src/common/interfaces/request-with-user.interface';
 import { JwtAuthGuard } from 'src/layers/functionality/authentication/jwt/jwt-auth.guard';
@@ -25,15 +25,18 @@ export class GetFilteredStatementController {
   @ApiTags('Statement')
   async getFilteredStatement(
     @Req() request: IRequestWithUser,
+    @Query('from') from: number,
+    @Query('limit') limit: number,
   ): Promise<GetFilteredStatementResponse> {
     const { email } = request.user;
-
     const result = await this.getFilteredStatementService.getFilteredStatement({
       email,
+      from,
+      limit,
     });
 
     return {
-      items: result.map((item) => ({
+      items: result.transactions.map((item) => ({
         account: item.account.id,
         time: item.time,
         description: item.description,
@@ -52,6 +55,11 @@ export class GetFilteredStatementController {
         counterEdrpou: item.counterEdrpou,
         counterIban: item.counterIban,
       })),
+      paging: {
+        from,
+        limit,
+        total: result.transactionsCount,
+      },
     };
   }
 }
