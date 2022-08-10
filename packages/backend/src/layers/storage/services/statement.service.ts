@@ -10,6 +10,8 @@ interface ISaveStatement {
 }
 interface IGetStatement {
   spaceId: string;
+  from: number;
+  limit: number;
 }
 
 @Injectable()
@@ -41,11 +43,10 @@ export class StatementService {
     }
   }
 
-  async getStatement({ spaceId }: IGetStatement) {
+  async getStatement({ spaceId, from, limit }: IGetStatement) {
     try {
-      const transactions = await this.connection.manager.find<Transaction>(
-        Transaction,
-        {
+      const [transactions, transactionsCount] =
+        await this.connection.manager.findAndCount<Transaction>(Transaction, {
           relations: ['account', 'account.token'],
           where: {
             account: {
@@ -56,13 +57,13 @@ export class StatementService {
               },
             },
           },
-          take: 20,
+          take: limit,
+          skip: from,
           order: {
             time: 'DESC',
           },
-        },
-      );
-      return transactions;
+        });
+      return { transactions, transactionsCount };
     } catch (e) {
       handleStorageError(e);
     }
