@@ -27,12 +27,14 @@ export class GetFilteredStatementController {
     @Req() request: IRequestWithUser,
     @Query('from') from: number,
     @Query('limit') limit: number,
+    @Query('card') card: string,
   ): Promise<GetFilteredStatementResponse> {
     const { email } = request.user;
     const result = await this.getFilteredStatementService.getFilteredStatement({
       email,
       from,
       limit,
+      card,
     });
 
     return {
@@ -56,8 +58,8 @@ export class GetFilteredStatementController {
         counterIban: item.counterIban,
       })),
       paging: {
-        from,
-        limit,
+        from: Number(from),
+        limit: Number(limit),
         total: result.transactionsCount,
       },
     };
