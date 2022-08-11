@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { handleStorageError } from 'src/common/errors/utils/handle-storage-error';
-import { Connection, In } from 'typeorm';
+import { Connection, In, Between } from 'typeorm';
 import { Account } from '../entities/account.entity';
 import { Transaction } from '../entities/transaction.entity';
 import { ICreateTransactionDto } from '../interfaces/create-transaction-dto.interface';
@@ -13,6 +13,10 @@ interface IGetStatement {
   from: number;
   limit: number;
   card: string;
+  period: {
+    from: number;
+    to: number;
+  };
 }
 
 @Injectable()
@@ -44,7 +48,7 @@ export class StatementService {
     }
   }
 
-  async getStatement({ spaceId, from, limit, card }: IGetStatement) {
+  async getStatement({ spaceId, from, limit, card, period }: IGetStatement) {
     try {
       const [transactions, transactionsCount] =
         await this.connection.manager.findAndCount<Transaction>(Transaction, {
@@ -58,6 +62,7 @@ export class StatementService {
                 },
               },
             },
+            time: Between(period.from, period.to),
           },
           take: limit,
           skip: from,
