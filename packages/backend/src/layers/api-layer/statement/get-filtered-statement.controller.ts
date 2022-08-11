@@ -28,6 +28,7 @@ export class GetFilteredStatementController {
     @Query('from') from: number,
     @Query('limit') limit: number,
     @Query('card') card: string,
+    @Query('period') period: string,
   ): Promise<GetFilteredStatementResponse> {
     const { email } = request.user;
     const result = await this.getFilteredStatementService.getFilteredStatement({
@@ -35,6 +36,7 @@ export class GetFilteredStatementController {
       from,
       limit,
       card,
+      period,
     });
 
     return {
