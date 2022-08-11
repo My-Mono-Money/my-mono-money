@@ -6,6 +6,7 @@ interface IGetFilteredStatement {
   email: string;
   from: number;
   limit: number;
+  card: string;
 }
 
 @Injectable()
@@ -15,12 +16,18 @@ export class GetFilteredStatementService {
     private userService: UserService,
   ) {}
 
-  async getFilteredStatement({ email, from, limit }: IGetFilteredStatement) {
+  async getFilteredStatement({
+    email,
+    from,
+    limit,
+    card,
+  }: IGetFilteredStatement) {
     const space = await this.userService.getSpaceByEmail(email);
     return await this.statementService.getStatement({
       spaceId: space.id,
       from,
       limit,
+      card,
     });
   }
 }
