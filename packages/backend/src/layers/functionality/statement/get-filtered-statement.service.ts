@@ -19,7 +19,7 @@ interface IGetFilteredStatement {
   email: string;
   from: number;
   limit: number;
-  card: string;
+  card?: string;
   period: string;
 }
 
