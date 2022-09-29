@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, Button } from '@mui/material';
+import { Box } from '@mui/material';
 import { useAuthState } from '../../auth-state/use-auth-state.hook';
 import StatementTable from '../../common/components/statement-table/statement-table.component';
 import axios, { AxiosError } from 'axios';
@@ -38,7 +38,7 @@ const fetchStatements = async (token: string) => {
 };
 
 const Statements: React.FC = () => {
-  const { user, token, clearToken } = useAuthState();
+  const { token } = useAuthState();
   const [{ isLoading, data, error }, setStatementsState] =
     useState<IStatementsState>({
       data: [],
@@ -67,10 +67,6 @@ const Statements: React.FC = () => {
 
   return (
     <Box>
-      <Typography>
-        Привіт, {user?.firstName} {user?.lastName}
-      </Typography>
-      <Button onClick={clearToken}>Вийти</Button>
       <StatementTable data={data} />
     </Box>
   );
