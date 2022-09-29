@@ -12,6 +12,7 @@ import SignInPage from './pages/sign-in/sign-in.page';
 import SignUpPage from './pages/sign-up/sign-up.page';
 import StatementsPage from './pages/statements/statements.page';
 import { VerifyEmail } from './pages/verify-email/verify-email.page';
+import StatementLayout from './layouts/statement.layout';
 
 function App() {
   const theme = createTheme({
@@ -47,7 +48,9 @@ function App() {
 
   const privateRoutes = (
     <Route element={<Private />}>
-      <Route index element={<StatementsPage />} />
+      <Route element={<StatementLayout />}>
+        <Route index element={<StatementsPage />} />
+      </Route>
     </Route>
   );
 

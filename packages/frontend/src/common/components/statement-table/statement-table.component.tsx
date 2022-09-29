@@ -4,11 +4,11 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { IStatementItem } from '../../../types/statement-item.interface';
 
 const columns: GridColDef[] = [
-  { field: 'time', headerName: 'Дата та час', width: 100 },
+  { field: 'time', headerName: 'Дата та час', width: 150 },
   {
     field: 'description',
     headerName: 'Деталі транзакції',
-    width: 1500,
+    width: 800,
     editable: true,
   },
   {
@@ -25,8 +25,19 @@ interface StatementTableProps {
 
 const StatementTable: React.FC<StatementTableProps> = ({ data }) => {
   return (
-    <Box sx={{ height: 900, width: '100%' }}>
-      <DataGrid rows={data} columns={columns} pageSize={15} />
+    <Box
+      sx={{
+        height: 800,
+        width: '100%',
+        margin: '0 auto',
+      }}
+    >
+      <DataGrid
+        rows={data}
+        columns={columns}
+        pageSize={15}
+        sx={{ border: 'none' }}
+      />
     </Box>
   );
 };
