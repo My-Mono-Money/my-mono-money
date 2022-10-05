@@ -1,8 +1,14 @@
 import { createContext } from 'react';
 import { IAuthContext } from './auth-context.interface';
+import jwt_decode from 'jwt-decode';
+import { IUser } from './auth-state.interface';
+
+const token = sessionStorage.getItem('token') ?? undefined;
 
 export const INITIAL_AUTH_STATE = {
-  isAuthResolved: false,
+  token,
+  isAuthResolved: Boolean(token),
+  user: token ? (jwt_decode(token) as IUser) : undefined,
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   setToken: () => {},
   // eslint-disable-next-line @typescript-eslint/no-empty-function

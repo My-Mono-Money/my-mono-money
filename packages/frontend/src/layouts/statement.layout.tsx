@@ -96,9 +96,6 @@ const StatementLayout: React.FC = () => {
           margin: '0 auto',
           backgroundColor: 'white',
           borderRadius: '16px',
-          border: '1px solid',
-          borderColor: 'lightgray',
-          boxShadow: '3px 3px 3px 3px lightgray',
         }}
       >
         <Outlet />
