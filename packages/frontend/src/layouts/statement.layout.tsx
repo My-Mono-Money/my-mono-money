@@ -32,7 +32,6 @@ const Header = () => {
         justifyContent: 'space-between',
         height: '76px',
         width: '100%',
-        mb: '50px',
         backgroundColor: 'white',
       }}
     >
@@ -90,6 +89,13 @@ const StatementLayout: React.FC = () => {
   return (
     <Box>
       <Header />
+      <Box
+        id="under-header"
+        sx={{
+          height: 0,
+          mb: '50px',
+        }}
+      ></Box>
       <Box
         sx={{
           maxWidth: '1100px',
