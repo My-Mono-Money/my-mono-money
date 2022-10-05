@@ -16,6 +16,7 @@ export const AuthStateProvider: React.FC<IAuthStateProviderProps> = ({
   const setToken = useCallback(
     (token: string) => {
       const user = jwt_decode(token) as IUser;
+      sessionStorage.setItem('token', token);
       setAuthState({
         token,
         user,
@@ -27,10 +28,13 @@ export const AuthStateProvider: React.FC<IAuthStateProviderProps> = ({
 
   const clearToken = useCallback(() => {
     setAuthState({ isAuthResolved: true });
+    sessionStorage.removeItem('token');
   }, [setAuthState]);
 
   useEffect(() => {
-    setTimeout(() => setAuthState({ isAuthResolved: true }), 0);
+    if (!isAuthResolved) {
+      setTimeout(() => setAuthState({ isAuthResolved: true }), 0);
+    }
   }, []);
 
   return (
