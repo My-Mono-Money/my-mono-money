@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import {
   Box,
+  Divider,
   Skeleton,
   Table,
   TableBody,
@@ -17,16 +18,18 @@ import { usePagination } from './use-pagination.hook';
 import { useAuthState } from '../../auth-state/use-auth-state.hook';
 import { UpdatingIndicator } from '../../common/components/updating-indicator/updating-indicator.component';
 import { useDebounce } from 'use-debounce';
+import PeriodFilter from './perid-filter.component';
+import { useSearchParams } from 'react-router-dom';
 
 interface IStatementsResponse {
   items: IStatementItem[];
   paging: IPagingState;
 }
 
-const fetchStatements = async (token: string, page: number) => {
+const fetchStatements = async (token: string, page: number, period: string) => {
   try {
     const response = await axios.get<IStatementsResponse>(
-      `/statement?from=${page * 10}&limit=10&period=month:-3`,
+      `/statement?from=${page * 10}&limit=10&period=${period}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -63,6 +66,9 @@ const StatementTable: React.FC = () => {
   const [response, setResponse] = useState<IStatementsResponse>();
   const [debouncedIsLoading] = useDebounce(loading && !response, 150);
   const [debouncedIsUpdating] = useDebounce(loading && response, 500);
+  const [searchParams] = useSearchParams();
+
+  const period = searchParams.get('period') ?? 'day';
 
   const changePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -77,13 +83,13 @@ const StatementTable: React.FC = () => {
     }
 
     setLoading(true);
-    fetchStatements(token, page).then((result) => {
+    fetchStatements(token, page, period).then((result) => {
       if (result) {
         setResponse(result);
       }
       setLoading(false);
     });
-  }, [page]);
+  }, [page, period]);
 
   return (
     <>
@@ -98,6 +104,10 @@ const StatementTable: React.FC = () => {
           boxShadow: '3px 3px 3px 3px lightgray',
         }}
       >
+        <Box sx={{ p: 3, display: 'flex', flexDirection: 'row-reverse' }}>
+          <PeriodFilter />
+        </Box>
+        <Divider />
         <TableContainer>
           <Table
             aria-label="statement table"
