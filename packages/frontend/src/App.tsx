@@ -2,6 +2,8 @@ import React from 'react';
 import { ThemeProvider } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import 'react-dates/initialize';
+import 'react-dates/lib/css/_datepicker.css';
 import AuthLayout from './layouts/auth.layout';
 import { AuthStateProvider } from './auth-state/auth-state.provider';
 import { Private } from './auth-state/route-wrappers/private';

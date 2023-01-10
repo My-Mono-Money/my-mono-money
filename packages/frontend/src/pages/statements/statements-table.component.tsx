@@ -18,7 +18,7 @@ import { usePagination } from './use-pagination.hook';
 import { useAuthState } from '../../auth-state/use-auth-state.hook';
 import { UpdatingIndicator } from '../../common/components/updating-indicator/updating-indicator.component';
 import { useDebounce } from 'use-debounce';
-import PeriodFilter from './perid-filter.component';
+import PeriodFilter from './period-filter.component';
 import { useSearchParams } from 'react-router-dom';
 
 interface IStatementsResponse {
@@ -104,7 +104,7 @@ const StatementTable: React.FC = () => {
           boxShadow: '3px 3px 3px 3px lightgray',
         }}
       >
-        <Box sx={{ p: 3, display: 'flex', flexDirection: 'row-reverse' }}>
+        <Box sx={{ p: 3, display: 'flex' }}>
           <PeriodFilter />
         </Box>
         <Divider />
