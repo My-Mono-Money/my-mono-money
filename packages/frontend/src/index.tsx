@@ -1,9 +1,13 @@
 import React from 'react';
+import moment from 'moment';
+import 'moment/locale/uk';
 import ReactDOM from 'react-dom/client';
 import axios from 'axios';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+
+moment.locale('uk');
 
 axios.defaults.baseURL = process.env.REACT_APP_BACKEND_URL;
 
