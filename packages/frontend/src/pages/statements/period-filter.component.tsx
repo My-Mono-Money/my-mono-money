@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import {
-  Button,
-  Divider,
   Box,
   List,
-  ListItem,
-  ListItemText,
+  Button,
+  Divider,
   Popover,
+  ListItemText,
+  ListItemButton,
 } from '@mui/material';
 import { useSearchParams } from 'react-router-dom';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import DatePicker from '../../common/components/date-picker/date-picker.component';
+import CustomDateFilter from './custom-date-filter.component';
 
 const OPTIONS_LIST = [
   { text: 'Сьогодні', value: 'day' },
@@ -32,7 +32,7 @@ const PeriodFilter: React.FC = () => {
   const selectedOption =
     OPTIONS_LIST.find(
       (itemOption) => itemOption.value === searchParams.get('period'),
-    ) || OPTIONS_LIST[0];
+    ) || (isCustomPeriodSelected ? undefined : OPTIONS_LIST[0]);
 
   const openPopover = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -53,10 +53,13 @@ const PeriodFilter: React.FC = () => {
       searchParams.delete('period');
     }
     setSearchParams(searchParams);
+    setIsCustomPeriodSelected(false);
     closePopover();
   };
 
   const selectCustomPeriod = () => {
+    searchParams.delete('period');
+    setSearchParams(searchParams);
     setIsCustomPeriodSelected(true);
   };
 
@@ -71,7 +74,7 @@ const PeriodFilter: React.FC = () => {
         color="inherit"
         startIcon={<CalendarTodayIcon />}
       >
-        {selectedOption.text}
+        {selectedOption ? selectedOption.text : 'Оберіть період'}
       </Button>
       <Popover
         id={id}
@@ -90,27 +93,24 @@ const PeriodFilter: React.FC = () => {
           <List sx={{ p: 0 }}>
             {OPTIONS_LIST.map((itemOption, index) => (
               <React.Fragment key={index}>
-                <ListItem
-                  button
+                <ListItemButton
                   onClick={selectPeriod}
                   sx={{ px: 2, py: 1 }}
                   selected={itemOption === selectedOption}
                   data-value={itemOption.value}
                 >
                   <ListItemText primary={itemOption.text} />
-                </ListItem>
+                </ListItemButton>
                 {index % 2 === 1 && <Divider />}
               </React.Fragment>
             ))}
-            <ListItem
-              button
+            <ListItemButton
               onClick={selectCustomPeriod}
               sx={{ px: 2, py: 1 }}
               selected={isCustomPeriodSelected}
-              // data-value={itemOption.value}
             >
               <ListItemText primary={'Оберіть період'} />
-            </ListItem>
+            </ListItemButton>
           </List>
           <Box
             sx={{
@@ -121,11 +121,7 @@ const PeriodFilter: React.FC = () => {
               p: 3,
             }}
           >
-            <DatePicker />
-            <Box>
-              <Button>Прийняти</Button>
-              <Button>Скасувати</Button>
-            </Box>
+            <CustomDateFilter closePopover={closePopover} />
           </Box>
         </Box>
       </Popover>
