@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Moment } from 'moment';
+import moment, { Moment } from 'moment';
 import { Box } from '@mui/system';
 import { DayPickerRangeController, FocusedInputShape } from 'react-dates';
 import 'react-dates/initialize';
@@ -14,12 +14,26 @@ interface CustomDateFilterProps {
   closePopover: () => void;
 }
 
+const getDatesFromSearchParams = (searchParams: URLSearchParams) => {
+  if (!searchParams.get('period')?.includes('--')) {
+    return [null, null];
+  }
+
+  const parts = searchParams.get('period')?.split('--') || [];
+  return [
+    parts[0] ? moment(new Date(parts[0])) : null,
+    parts[1] ? moment(new Date(parts[1])) : null,
+  ];
+};
+
 const CustomDateFilter: React.FC<CustomDateFilterProps> = ({
   closePopover,
 }) => {
-  const [startDate, setStartDate] = useState<Moment | null>(null);
-  const [endDate, setEndDate] = useState<Moment | null>(null);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [initalStartDate, initialEndDate] =
+    getDatesFromSearchParams(searchParams);
+  const [startDate, setStartDate] = useState<Moment | null>(initalStartDate);
+  const [endDate, setEndDate] = useState<Moment | null>(initialEndDate);
   const [focusedInput, setFocusedInput] = useState<FocusedInputShape | null>(
     'startDate',
   );
@@ -38,8 +52,6 @@ const CustomDateFilter: React.FC<CustomDateFilterProps> = ({
   };
 
   const handleCancelClick = () => {
-    setStartDate(null);
-    setEndDate(null);
     closePopover();
   };
 

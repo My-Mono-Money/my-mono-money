@@ -112,17 +112,19 @@ const PeriodFilter: React.FC = () => {
               <ListItemText primary={'Оберіть період'} />
             </ListItemButton>
           </List>
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              flexDirection: 'column',
-              minWidth: '620px',
-              p: 3,
-            }}
-          >
-            <CustomDateFilter closePopover={closePopover} />
-          </Box>
+          {selectedOption?.text === undefined && (
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                flexDirection: 'column',
+                minWidth: '620px',
+                p: 3,
+              }}
+            >
+              <CustomDateFilter closePopover={closePopover} />
+            </Box>
+          )}
         </Box>
       </Popover>
     </>
