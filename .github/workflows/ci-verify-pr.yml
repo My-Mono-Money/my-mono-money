@@ -45,7 +45,7 @@ jobs:
         run: yarn test:backend:coverage
 
       - name: Code Coverage Summary Report
-        uses: irongut/CodeCoverageSummary@v1.2.0
+        uses: irongut/CodeCoverageSummary@v1.3.0
         with:
           filename: packages/backend/coverage/cobertura-coverage.xml
           badge: true
@@ -84,7 +84,7 @@ jobs:
         run: yarn test:frontend:coverage
 
       - name: Code Coverage Summary Report
-        uses: irongut/CodeCoverageSummary@v1.2.0
+        uses: irongut/CodeCoverageSummary@v1.3.0
         with:
           filename: packages/frontend/coverage/cobertura-coverage.xml
           badge: true
