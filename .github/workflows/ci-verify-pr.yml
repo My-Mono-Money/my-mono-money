@@ -52,8 +52,8 @@ jobs:
       #     format: markdown
       #     output: file
 
-      - name: Add comment header
-        run: "sed -i '1i ## Backend coverage\n' code-coverage-results.md"
+      # - name: Add comment header
+      #   run: "sed -i '1i ## Backend coverage\n' code-coverage-results.md"
 
       # - name: Add Coverage PR Comment
       #   uses: marocchino/sticky-pull-request-comment@v2
@@ -91,8 +91,8 @@ jobs:
       #     format: markdown
       #     output: file
 
-      - name: Add comment header
-        run: "sed -i '1i ## Frontend coverage\n' code-coverage-results.md"
+      # - name: Add comment header
+      #   run: "sed -i '1i ## Frontend coverage\n' code-coverage-results.md"
 
       # - name: Add Coverage PR Comment
       #   uses: marocchino/sticky-pull-request-comment@v2
