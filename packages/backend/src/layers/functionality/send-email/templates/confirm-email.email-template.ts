@@ -17,6 +17,7 @@ export const confirmEmailTemplate = ({
       name: `${user.firstName} ${user.lastName}`,
     },
     subject: 'Confirm your email address',
-    content: `Please, follow the <a href="${frontendUrl}/confirm-email?code=${verifyEmailToken}">link</a> to confirm email`,
+    // content: `Please, follow the <a href="${frontendUrl}/v1/confirm-email?code=${verifyEmailToken}">link</a> to confirm email`,
+    content: `Please, follow the <a href="${process.env.BACKEND_URL}/v1/confirm-email?code=${verifyEmailToken}">link</a> to confirm email`,
   };
 };

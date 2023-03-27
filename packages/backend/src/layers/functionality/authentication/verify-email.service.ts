@@ -12,7 +12,6 @@ export class VerifyEmailService {
 
   async verifyEmail(email: string) {
     const user = await this.userService.getByEmail(email);
-
     if (!user) {
       throw new NotFoundError();
     }

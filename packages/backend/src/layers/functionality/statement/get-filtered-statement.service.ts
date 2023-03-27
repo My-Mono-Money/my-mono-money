@@ -88,6 +88,7 @@ export class GetFilteredStatementService {
         };
       }
     };
+    console.log('space', space);
     return await this.statementService.getStatement({
       spaceId: space.id,
       from,

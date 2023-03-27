@@ -2,10 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { IVerifyEmailTokenPayload } from '../interfaces/verify-email-token-payload.interface';
 import { IAccessTokenPayload } from '../interfaces/access-token-payload.interface';
-
+import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class GenerateJwtService {
-  constructor(private jwtService: JwtService) {}
+  constructor(
+    private jwtService: JwtService,
+    private readonly configService: ConfigService,
+  ) {}
 
   async generateVerifyEmail(user: IVerifyEmailTokenPayload) {
     const payload = {

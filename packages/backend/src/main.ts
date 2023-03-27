@@ -12,7 +12,7 @@ async function bootstrapBackendApp() {
   setupVersioning(app);
   setupValidation(app);
   setupDocs(app);
-
+  app.enableCors();
   await app.listen(port);
 }
 
