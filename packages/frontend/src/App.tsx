@@ -17,6 +17,7 @@ import { VerifyEmail } from './pages/verify-email/verify-email.page';
 import StatementLayout from './layouts/statement.layout';
 
 function App() {
+  console.log('secondary')
   const theme = createTheme({
     components: {
       MuiButton: {
