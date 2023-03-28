@@ -3,6 +3,8 @@ import { AuthStateContext, INITIAL_AUTH_STATE } from './auth-state.context';
 import { IAuthState, IUser } from './auth-state.interface';
 import jwt_decode from 'jwt-decode';
 
+// FOR TEST PURPOSE
+
 interface IAuthStateProviderProps {
   children: React.ReactNode;
 }
