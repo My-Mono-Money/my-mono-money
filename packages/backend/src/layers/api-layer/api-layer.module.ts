@@ -6,6 +6,7 @@ import { SignUpController } from './authentication/sign-up/sign-up.controller';
 import { VerifyEmailController } from './authentication/verify-email/verify-email.controller';
 import { SendTestEmailController } from './debug/send-test-email.controller';
 import { GetFilteredStatementController } from './statement/get-filtered-statement.controller';
+import { GetTokenController } from './tokens/get-token/get-token.controller';
 import { SaveTokenController } from './tokens/save-token/save-token.controller';
 
 @Module({
@@ -13,8 +14,9 @@ import { SaveTokenController } from './tokens/save-token/save-token.controller';
   controllers: [
     SignInController,
     SignUpController,
-    VerifyEmailController,
+    GetTokenController,
     SaveTokenController,
+    VerifyEmailController,
     SendTestEmailController,
     GetFilteredStatementController,
   ],
