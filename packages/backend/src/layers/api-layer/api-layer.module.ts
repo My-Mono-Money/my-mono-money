@@ -7,7 +7,6 @@ import { VerifyEmailController } from './authentication/verify-email/verify-emai
 import { SendTestEmailController } from './debug/send-test-email.controller';
 import { GetFilteredStatementController } from './statement/get-filtered-statement.controller';
 import { SaveTokenController } from './tokens/save-token/save-token.controller';
-
 @Module({
   imports: [FunctionalityModule, ConfigModule],
   controllers: [

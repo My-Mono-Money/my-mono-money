@@ -13,7 +13,6 @@ export class SendTestEmailConsumer {
     concurrency: 1,
   })
   async readOperationJob(job: Job<{ email: string }>) {
-    console.log(job);
     await delay(60000);
     await this.sendTestEmailService.sendTestEmail(job.data);
   }

@@ -14,10 +14,7 @@ const fillSignUpFormCorrectly = () =>
     userEvent.type(screen.getByLabelText('Прізвище'), 'Депп');
     userEvent.type(screen.getByLabelText('Пошта'), 'johny.depp@example.com');
     userEvent.type(screen.getByLabelText('Пароль'), 'JohnyLoveRom2022!');
-    userEvent.type(
-      screen.getByLabelText('Повторіть пароль'),
-      'JohnyLoveRom2022!',
-    );
+    userEvent.type(screen.getByLabelText('Повторіть пароль'), 'JohnyLoveRom2022!');
   });
 
 const checkFormDisabling = async () => {
@@ -69,9 +66,7 @@ describe('Sign up page', () => {
       act(() => {
         userEvent.click(screen.getByText('Продовжити'));
       });
-      expect((await screen.findAllByText('Це поле обовʼязкове')).length).toBe(
-        5,
-      );
+      expect((await screen.findAllByText('Це поле обовʼязкове')).length).toBe(5);
     });
 
     test('User enters too few characters', async () => {
@@ -98,9 +93,7 @@ describe('Sign up page', () => {
         userEvent.type(screen.getByLabelText('Прізвище'), 'Depp'.repeat(10));
         userEvent.click(document.body);
       });
-      expect((await screen.findAllByText('Максимум 20 символів')).length).toBe(
-        2,
-      );
+      expect((await screen.findAllByText('Максимум 20 символів')).length).toBe(2);
     });
 
     test('User enters invalid email', async () => {
@@ -108,17 +101,12 @@ describe('Sign up page', () => {
         userEvent.type(screen.getByLabelText('Пошта'), 'johny.depp@examplecom');
         userEvent.click(document.body);
       });
-      expect(
-        await screen.findByText('Некоректний формат пошти'),
-      ).toBeInTheDocument();
+      expect(await screen.findByText('Некоректний формат пошти')).toBeInTheDocument();
     });
 
     test('User enters valid email', async () => {
       act(() => {
-        userEvent.type(
-          screen.getByLabelText('Пошта'),
-          'johny.depp@example.com',
-        );
+        userEvent.type(screen.getByLabelText('Пошта'), 'johny.depp@example.com');
         userEvent.click(document.body);
       });
       expect(await screen.queryByText('Некоректний формат пошти')).toBeNull();
@@ -129,9 +117,7 @@ describe('Sign up page', () => {
         userEvent.type(screen.getByLabelText('Пароль'), 'J');
         userEvent.click(document.body);
       });
-      expect(
-        await screen.findByText('Пароль має містити мінімум 8 символів'),
-      ).toBeInTheDocument();
+      expect(await screen.findByText('Пароль має містити мінімум 8 символів')).toBeInTheDocument();
     });
 
     test('User enters too enough characters password', async () => {
@@ -140,9 +126,7 @@ describe('Sign up page', () => {
         userEvent.click(document.body);
       });
       expect(
-        await screen.findByText(
-          'Пароль повинен містити принаймні один спеціальний символ',
-        ),
+        await screen.findByText('Пароль повинен містити принаймні один спеціальний символ'),
       ).toBeInTheDocument();
     });
 
@@ -151,9 +135,7 @@ describe('Sign up page', () => {
         userEvent.type(screen.getByLabelText('Пароль'), 'JohnyLov'.repeat(10));
         userEvent.click(document.body);
       });
-      expect(
-        await screen.findByText('Пароль має бути не більше 24 символів'),
-      ).toBeInTheDocument();
+      expect(await screen.findByText('Пароль має бути не більше 24 символів')).toBeInTheDocument();
     });
 
     test('User enters too enough characters and one special symbol password', async () => {
@@ -162,32 +144,22 @@ describe('Sign up page', () => {
         userEvent.click(document.body);
       });
       expect(
-        await screen.queryByText(
-          'Пароль повинен містити принаймні один спеціальний символ',
-        ),
+        await screen.queryByText('Пароль повинен містити принаймні один спеціальний символ'),
       ).toBeNull();
     });
 
     test('User enters different password', async () => {
       act(() => {
-        userEvent.type(
-          screen.getByLabelText('Повторіть пароль'),
-          'JohnyLove2022',
-        );
+        userEvent.type(screen.getByLabelText('Повторіть пароль'), 'JohnyLove2022');
         userEvent.click(document.body);
       });
-      expect(
-        await screen.findByText('Пароль не збігається'),
-      ).toBeInTheDocument();
+      expect(await screen.findByText('Пароль не збігається')).toBeInTheDocument();
     });
 
     test('User enters same password', async () => {
       act(() => {
         userEvent.type(screen.getByLabelText('Пароль'), 'JohnyLove2022!');
-        userEvent.type(
-          screen.getByLabelText('Повторіть пароль'),
-          'JohnyLove2022!',
-        );
+        userEvent.type(screen.getByLabelText('Повторіть пароль'), 'JohnyLove2022!');
         userEvent.click(document.body);
       });
       expect(await screen.queryByText('Пароль не збігається')).toBeNull();
@@ -227,9 +199,7 @@ describe('Sign up page', () => {
       await checkFormDisabling();
 
       expect(
-        await screen.findByText(
-          'Користувач з поштою "johny.depp@example.com" уже зареєстрований',
-        ),
+        await screen.findByText('Користувач з поштою "johny.depp@example.com" уже зареєстрований'),
       ).toBeInTheDocument();
     });
 

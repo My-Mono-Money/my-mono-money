@@ -22,15 +22,15 @@ import PeriodFilter from './period-filter.component';
 import { useSearchParams } from 'react-router-dom';
 import { fromUnixTime, format } from 'date-fns';
 
-interface IStatementsResponse {
+export interface IStatementsResponse {
   items: IStatementItem[];
   paging: IPagingState;
 }
 
-const fetchStatements = async (token: string, page: number, period: string) => {
+const fetchStatements = async (token: string, page: number, period: string, search: string) => {
   try {
     const response = await axios.get<IStatementsResponse>(
-      `/statement?from=${page * 10}&limit=10&period=${period}`,
+      `/statement?from=${page * 10}&limit=10&period=${period}&search=${search}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -86,16 +86,14 @@ const StatementTable: React.FC = () => {
   const [page, setPage] = usePagination();
   const [loading, setLoading] = useState(true);
   const [response, setResponse] = useState<IStatementsResponse>();
+  const [searchField, setSearchField] = useState('');
   const [debouncedIsLoading] = useDebounce(loading && !response, 150);
   const [debouncedIsUpdating] = useDebounce(loading && response, 500);
   const [searchParams] = useSearchParams();
 
   const period = searchParams.get('period') ?? 'day';
 
-  const changePage = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
-    page: number,
-  ) => {
+  const changePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
     setPage(page);
   };
 
@@ -103,15 +101,14 @@ const StatementTable: React.FC = () => {
     if (!token) {
       return;
     }
-
     setLoading(true);
-    fetchStatements(token, page, period).then((result) => {
+    fetchStatements(token, page, period, searchField).then((result) => {
       if (result) {
         setResponse(result);
       }
       setLoading(false);
     });
-  }, [page, period]);
+  }, [searchField, page, period]);
 
   return (
     <>
@@ -127,14 +124,11 @@ const StatementTable: React.FC = () => {
         }}
       >
         <Box sx={{ p: 3, display: 'flex' }}>
-          <PeriodFilter />
+          <PeriodFilter searchField={searchField} setSearchField={setSearchField} />
         </Box>
         <Divider />
         <TableContainer>
-          <Table
-            aria-label="statement table"
-            sx={{ borderRadius: '16px', tableLayout: 'fixed' }}
-          >
+          <Table aria-label="statement table" sx={{ borderRadius: '16px', tableLayout: 'fixed' }}>
             <TableHead>
               <TableRow>
                 <TableCell sx={{ width: '115px' }} align="left">
@@ -155,19 +149,14 @@ const StatementTable: React.FC = () => {
               {debouncedIsLoading && renderLoadingSkeleton()}
               {!debouncedIsLoading &&
                 response?.items.map((row) => {
-                  const formatTime = `${format(
-                    fromUnixTime(row.time),
-                    'dd.MM.yyyy HH:mm',
-                  )}`;
+                  const formatTime = `${format(fromUnixTime(row.time), 'dd.MM.yyyy HH:mm')}`;
                   return (
                     <TableRow key={row.id}>
                       <TableCell align="left">{formatTime}</TableCell>
                       <TableCell align="center">{row.description}</TableCell>
                       <TableCell align="right">
                         <span>{formatAmountCurrency(row.amount)}</span>
-                        <span style={{ fontSize: '0.6rem' }}>
-                          {formatAmountCents(row.amount)}
-                        </span>
+                        <span style={{ fontSize: '0.6rem' }}>{formatAmountCents(row.amount)}</span>
                       </TableCell>
                     </TableRow>
                   );

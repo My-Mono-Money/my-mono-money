@@ -3,14 +3,7 @@ import axios, { AxiosError } from 'axios';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import {
-  Alert,
-  AlertTitle,
-  Box,
-  Button,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Alert, AlertTitle, Box, Button, TextField, Typography } from '@mui/material';
 import { SignUpValidationSchema } from './sign-up.validation-schema';
 import PasswordField from '../../common/components/password-field/password-field.component';
 
@@ -46,12 +39,7 @@ const SignUp: React.FC = () => {
     mode: 'onBlur',
   });
 
-  const onSubmit = async ({
-    firstName,
-    lastName,
-    email,
-    password,
-  }: IFormData) => {
+  const onSubmit = async ({ firstName, lastName, email, password }: IFormData) => {
     try {
       const response = await axios.post('/auth/sign-up', {
         firstName,

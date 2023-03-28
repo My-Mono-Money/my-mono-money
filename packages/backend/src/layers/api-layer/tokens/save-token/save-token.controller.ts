@@ -26,10 +26,9 @@ export class SaveTokenController {
     @Body() { token }: SaveTokenBody,
     @Req() request: IRequestWithUser,
   ): Promise<SaveTokenResponse> {
-    // const { email } = request.user;
+    const { email } = request.user;
     console.log(token);
-    // console.log(email);
-    // await this.saveTokenService.save({ token, email });
+    await this.saveTokenService.save({ token, email });
 
     return {
       isSuccessful: true,

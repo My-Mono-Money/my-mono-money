@@ -21,6 +21,7 @@ interface IGetFilteredStatement {
   limit: number;
   card?: string;
   period: string;
+  search: string;
 }
 
 const day = startOfDay(new Date());
@@ -42,6 +43,7 @@ export class GetFilteredStatementService {
     limit,
     card,
     period,
+    search,
   }: IGetFilteredStatement) {
     const space = await this.userService.getSpaceByEmail(email);
     const [, offset] = period.split(':');
@@ -88,13 +90,13 @@ export class GetFilteredStatementService {
         };
       }
     };
-    console.log('space', space);
     return await this.statementService.getStatement({
       spaceId: space.id,
       from,
       limit,
       card,
       period: timestampList(period),
+      search: search,
     });
   }
 }

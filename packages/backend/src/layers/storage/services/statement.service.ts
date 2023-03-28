@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { handleStorageError } from 'src/common/errors/utils/handle-storage-error';
-import { Connection, In, Between, FindConditions } from 'typeorm';
+import { Connection, In, Between, FindConditions, ILike } from 'typeorm';
 import { Account } from '../entities/account.entity';
 import { Transaction } from '../entities/transaction.entity';
 import { ICreateTransactionDto } from '../interfaces/create-transaction-dto.interface';
@@ -17,6 +17,7 @@ interface IGetStatement {
     from: number;
     to: number;
   };
+  search?: string;
 }
 
 @Injectable()
@@ -48,7 +49,14 @@ export class StatementService {
     }
   }
 
-  async getStatement({ spaceId, from, limit, card, period }: IGetStatement) {
+  async getStatement({
+    spaceId,
+    from,
+    limit,
+    card,
+    period,
+    search,
+  }: IGetStatement) {
     try {
       const where: FindConditions<Transaction> = {
         account: {
@@ -59,6 +67,7 @@ export class StatementService {
           },
         },
         time: Between(period.from, period.to),
+        description: ILike(`%${search}%`),
       };
 
       if (card) {
