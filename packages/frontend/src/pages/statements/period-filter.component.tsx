@@ -31,13 +31,14 @@ interface ISearchProps {
   setSearchField: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const PeriodFilter: React.FC<ISearchProps> = ({ searchField, setSearchField }) => {
+const PeriodFilter: React.FC<ISearchProps> = ({ setSearchField }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [isCustomPeriodSelected, setIsCustomPeriodSelected] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const selectedOption =
-    OPTIONS_LIST.find((itemOption) => itemOption.value === searchParams.get('period')) ||
-    (isCustomPeriodSelected ? undefined : OPTIONS_LIST[0]);
+    OPTIONS_LIST.find(
+      (itemOption) => itemOption.value === searchParams.get('period'),
+    ) || (isCustomPeriodSelected ? undefined : OPTIONS_LIST[0]);
 
   const openPopover = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -70,7 +71,6 @@ const PeriodFilter: React.FC<ISearchProps> = ({ searchField, setSearchField }) =
 
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
-
   return (
     <>
       <Button
@@ -84,7 +84,9 @@ const PeriodFilter: React.FC<ISearchProps> = ({ searchField, setSearchField }) =
       </Button>
       <TextField
         label="Пошук"
-        onChange={(event) => setTimeout(() => setSearchField(event.target.value), 1000)}
+        onChange={(event) =>
+          setTimeout(() => setSearchField(event.target.value), 1000)
+        }
         sx={{
           ml: '10px',
           borderRadius: '33%',

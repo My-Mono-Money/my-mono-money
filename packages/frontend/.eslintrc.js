@@ -6,7 +6,6 @@ module.exports = {
     },
     "ecmaVersion": "latest",
     "sourceType": "module",
-    "typescript": require.resolve('typescript')
   },
   "plugins": [
     "react",
@@ -18,13 +17,12 @@ module.exports = {
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:prettier/recommended",
-    "prettier",
   ],
   "env": {
     "browser": true,
     "es2021": true,
   },
-  ignorePatterns: ['.eslintrc.cjs'],
+  ignorePatterns: ['.eslintrc.js'],
   "rules": {
   },
   settings: {

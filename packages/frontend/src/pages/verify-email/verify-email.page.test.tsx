@@ -3,7 +3,10 @@ import { render, screen } from '@testing-library/react';
 import { VerifyEmail } from './verify-email.page';
 import { MemoryRouter } from 'react-router-dom';
 
-const renderWithHistoryState = (state: Record<string, string>, Component: React.FC) => {
+const renderWithHistoryState = (
+  state: Record<string, string>,
+  Component: React.FC,
+) => {
   render(
     <MemoryRouter
       initialEntries={[

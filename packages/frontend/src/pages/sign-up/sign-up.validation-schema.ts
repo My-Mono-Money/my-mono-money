@@ -9,7 +9,9 @@ export const SignUpValidationSchema = Yup.object().shape({
     .required('Це поле обовʼязкове')
     .min(3, 'Мінімум 3 символи')
     .max(20, 'Максимум 20 символів'),
-  email: Yup.string().required('Це поле обовʼязкове').email('Некоректний формат пошти'),
+  email: Yup.string()
+    .required('Це поле обовʼязкове')
+    .email('Некоректний формат пошти'),
   password: Yup.string()
     .required('Це поле обовʼязкове')
     .min(8, 'Пароль має містити мінімум 8 символів')

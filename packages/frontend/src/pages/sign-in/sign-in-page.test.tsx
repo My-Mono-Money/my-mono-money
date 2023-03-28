@@ -60,7 +60,9 @@ describe('Sign in page', () => {
   });
 
   test('Forgot password link renders', async () => {
-    expect(document.querySelector('a[href="/forgot-password"]')).toBeInTheDocument();
+    expect(
+      document.querySelector('a[href="/forgot-password"]'),
+    ).toBeInTheDocument();
   });
 
   describe('Validation works correctly', () => {
@@ -68,7 +70,9 @@ describe('Sign in page', () => {
       act(() => {
         userEvent.click(screen.getByText('Увійти'));
       });
-      expect((await screen.findAllByText('Це поле обовʼязкове')).length).toBe(2);
+      expect((await screen.findAllByText('Це поле обовʼязкове')).length).toBe(
+        2,
+      );
     });
 
     test('User enters invalid email', async () => {
@@ -76,12 +80,17 @@ describe('Sign in page', () => {
         userEvent.type(screen.getByLabelText('Пошта'), 'johny.depp@examplecom');
         userEvent.click(document.body);
       });
-      expect(await screen.findByText('Некоректний формат пошти')).toBeInTheDocument();
+      expect(
+        await screen.findByText('Некоректний формат пошти'),
+      ).toBeInTheDocument();
     });
 
     test('User enters valid email', async () => {
       act(() => {
-        userEvent.type(screen.getByLabelText('Пошта'), 'johny.depp@example.com');
+        userEvent.type(
+          screen.getByLabelText('Пошта'),
+          'johny.depp@example.com',
+        );
         userEvent.click(document.body);
       });
       expect(await screen.queryByText('Некоректний формат пошти')).toBeNull();
@@ -120,7 +129,9 @@ describe('Sign in page', () => {
 
       await checkFormDisabling();
 
-      expect(await screen.findByText('Неправильний пароль або пошта')).toBeInTheDocument();
+      expect(
+        await screen.findByText('Неправильний пароль або пошта'),
+      ).toBeInTheDocument();
     });
 
     test('Unknown error', async () => {

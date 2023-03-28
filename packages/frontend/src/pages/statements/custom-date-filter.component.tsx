@@ -26,18 +26,25 @@ const getDatesFromSearchParams = (searchParams: URLSearchParams) => {
   ];
 };
 
-const CustomDateFilter: React.FC<CustomDateFilterProps> = ({ closePopover }) => {
+const CustomDateFilter: React.FC<CustomDateFilterProps> = ({
+  closePopover,
+}) => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [initalStartDate, initialEndDate] = getDatesFromSearchParams(searchParams);
+  const [initalStartDate, initialEndDate] =
+    getDatesFromSearchParams(searchParams);
   const [startDate, setStartDate] = useState<Moment | null>(initalStartDate);
   const [endDate, setEndDate] = useState<Moment | null>(initialEndDate);
-  const [focusedInput, setFocusedInput] = useState<FocusedInputShape | null>('startDate');
+  const [focusedInput, setFocusedInput] = useState<FocusedInputShape | null>(
+    'startDate',
+  );
 
   const handleApplyClick = () => {
     if (!startDate || !endDate) {
       return;
     }
-    const nextCustomPeriod = `${startDate?.format('YYYY.MM.DD')}--${endDate?.format('YYYY.MM.DD')}`;
+    const nextCustomPeriod = `${startDate?.format(
+      'YYYY.MM.DD',
+    )}--${endDate?.format('YYYY.MM.DD')}`;
     searchParams.set('period', nextCustomPeriod);
     searchParams.delete('page');
     setSearchParams(searchParams);
@@ -69,7 +76,11 @@ const CustomDateFilter: React.FC<CustomDateFilterProps> = ({ closePopover }) => 
           value={startDate?.format('DD.MM.YYYY') || ''}
         />
         <HorizontalRuleIcon color="action" />
-        <TextField id="end-date" variant="outlined" value={endDate?.format('DD.MM.YYYY') || ''} />
+        <TextField
+          id="end-date"
+          variant="outlined"
+          value={endDate?.format('DD.MM.YYYY') || ''}
+        />
       </Box>
       <DayPickerRangeController
         startDate={startDate}

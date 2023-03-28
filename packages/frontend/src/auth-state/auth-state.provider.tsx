@@ -7,8 +7,11 @@ interface IAuthStateProviderProps {
   children: React.ReactNode;
 }
 
-export const AuthStateProvider: React.FC<IAuthStateProviderProps> = ({ children }) => {
-  const [{ user, isAuthResolved, token }, setAuthState] = useState<IAuthState>(INITIAL_AUTH_STATE);
+export const AuthStateProvider: React.FC<IAuthStateProviderProps> = ({
+  children,
+}) => {
+  const [{ user, isAuthResolved, token }, setAuthState] =
+    useState<IAuthState>(INITIAL_AUTH_STATE);
 
   const setToken = useCallback(
     (token: string) => {
@@ -35,7 +38,9 @@ export const AuthStateProvider: React.FC<IAuthStateProviderProps> = ({ children 
   }, []);
 
   return (
-    <AuthStateContext.Provider value={{ user, isAuthResolved, token, setToken, clearToken }}>
+    <AuthStateContext.Provider
+      value={{ user, isAuthResolved, token, setToken, clearToken }}
+    >
       {children}
     </AuthStateContext.Provider>
   );
