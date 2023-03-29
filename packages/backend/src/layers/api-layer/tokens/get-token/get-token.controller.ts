@@ -2,7 +2,7 @@ import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { ApiResponse, ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { IRequestWithUser } from 'src/common/interfaces/request-with-user.interface';
 import { JwtAuthGuard } from 'src/layers/functionality/authentication/jwt/jwt-auth.guard';
-import { GetTokenService } from 'src/layers/functionality/tokens/get-token.service';
+import { TokenService } from 'src/layers/storage/services/token.service';
 import { GetTokenResponse } from './get-token.response';
 
 @Controller({
@@ -11,7 +11,7 @@ import { GetTokenResponse } from './get-token.response';
 })
 @UseGuards(JwtAuthGuard)
 export class GetTokenController {
-  constructor(private getTokenService: GetTokenService) {}
+  constructor(private tokenService: TokenService) {}
   @Get()
   @ApiResponse({
     status: 200,
@@ -22,7 +22,7 @@ export class GetTokenController {
   @ApiTags('Tokens')
   async getToken(@Req() request: IRequestWithUser): Promise<GetTokenResponse> {
     const { email } = request.user;
-    const result = await this.getTokenService.getTokenList({ email });
+    const result = await this.tokenService.getTokenList({ email });
 
     return {
       items: result.map((item) => ({
