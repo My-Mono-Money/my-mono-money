@@ -27,10 +27,15 @@ interface IStatementsResponse {
   paging: IPagingState;
 }
 
-const fetchStatements = async (token: string, page: number, period: string) => {
+const fetchStatements = async (
+  token: string,
+  page: number,
+  period: string,
+  search: string,
+) => {
   try {
     const response = await axios.get<IStatementsResponse>(
-      `/statement?from=${page * 10}&limit=10&period=${period}`,
+      `/statement?from=${page * 10}&limit=10&period=${period}&search=${search}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -86,6 +91,7 @@ const StatementTable: React.FC = () => {
   const [page, setPage] = usePagination();
   const [loading, setLoading] = useState(true);
   const [response, setResponse] = useState<IStatementsResponse>();
+  const [searchField, setSearchField] = useState('');
   const [debouncedIsLoading] = useDebounce(loading && !response, 150);
   const [debouncedIsUpdating] = useDebounce(loading && response, 500);
   const [searchParams] = useSearchParams();
@@ -105,13 +111,13 @@ const StatementTable: React.FC = () => {
     }
 
     setLoading(true);
-    fetchStatements(token, page, period).then((result) => {
+    fetchStatements(token, page, period, searchField).then((result) => {
       if (result) {
         setResponse(result);
       }
       setLoading(false);
     });
-  }, [page, period]);
+  }, [searchField, page, period]);
 
   return (
     <>
@@ -127,7 +133,7 @@ const StatementTable: React.FC = () => {
         }}
       >
         <Box sx={{ p: 3, display: 'flex' }}>
-          <PeriodFilter />
+          <PeriodFilter setSearchField={setSearchField} />
         </Box>
         <Divider />
         <TableContainer>

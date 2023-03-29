@@ -7,6 +7,7 @@ import {
   Popover,
   ListItemText,
   ListItemButton,
+  TextField,
 } from '@mui/material';
 import { useSearchParams } from 'react-router-dom';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
@@ -25,7 +26,11 @@ const OPTIONS_LIST = [
   { text: 'Минулий рік', value: 'year:-1' },
 ];
 
-const PeriodFilter: React.FC = () => {
+interface ISearchProps {
+  setSearchField: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const PeriodFilter: React.FC<ISearchProps> = ({ setSearchField }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [isCustomPeriodSelected, setIsCustomPeriodSelected] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
@@ -76,6 +81,15 @@ const PeriodFilter: React.FC = () => {
       >
         {selectedOption ? selectedOption.text : 'Оберіть період'}
       </Button>
+      <TextField
+        label="Пошук"
+        onChange={(event) =>
+          setTimeout(() => setSearchField(event.target.value), 1000)
+        }
+        sx={{
+          ml: '10px',
+        }}
+      ></TextField>
       <Popover
         id={id}
         open={open}
