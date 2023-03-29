@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { IntegrationsModule } from '../integrations/integrations.module';
+import { TokenService } from '../storage/services/token.service';
 import { StorageModule } from '../storage/storage.module';
 import { HashPasswordService } from './authentication/hashing/hash-password.service';
 import { GenerateJwtService } from './authentication/jwt/generate-jwt.service';
@@ -34,6 +35,7 @@ import { SaveTokenService } from './tokens/save-token.service';
     SignUpService,
     SignInService,
     JwtAuthGuard,
+    TokenService,
     JwtStrategy,
     SendEmailService,
     GenerateJwtService,
@@ -52,6 +54,7 @@ import { SaveTokenService } from './tokens/save-token.service';
     SignInService,
     SaveTokenService,
     SendTestEmailService,
+    TokenService,
     DebugAccessGuard,
     GetMonobankStatementService,
     GetFilteredStatementService,
