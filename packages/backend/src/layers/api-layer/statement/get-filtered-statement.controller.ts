@@ -29,6 +29,7 @@ export class GetFilteredStatementController {
     @Query('from') from: number,
     @Query('limit') limit: number,
     @Query('period') period: string,
+    @Query('search') search: string,
     @Query('card') card?: string,
   ): Promise<GetFilteredStatementResponse> {
     const { email } = request.user;
@@ -37,6 +38,7 @@ export class GetFilteredStatementController {
       from,
       limit,
       card,
+      search,
       period,
     });
 
