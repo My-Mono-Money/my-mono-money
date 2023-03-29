@@ -5,6 +5,7 @@ import { Account } from '../entities/account.entity';
 import { MonobankToken } from '../entities/monobank-token.entity';
 import { ICreateAccountDto } from '../interfaces/create-account-dto.interface';
 import { ICreateSpaceDto } from '../interfaces/create-space-dto.interface';
+import { UserService } from './user.service';
 
 interface ISaveTokenWithAccountsDto {
   token: string;
@@ -12,9 +13,16 @@ interface ISaveTokenWithAccountsDto {
   accounts: ICreateAccountDto[];
 }
 
+interface IGetTokenList {
+  email: string;
+}
+
 @Injectable()
 export class TokenService {
-  constructor(private connection: Connection) {}
+  constructor(
+    private connection: Connection,
+    private userService: UserService,
+  ) {}
 
   async saveTokenWithAccounts({
     token,
@@ -37,6 +45,21 @@ export class TokenService {
         );
 
         return savedToken;
+      });
+    } catch (e) {
+      handleStorageError(e);
+    }
+  }
+
+  async getTokenList({ email }: IGetTokenList) {
+    const space = await this.userService.getSpaceByEmail(email);
+    try {
+      return await this.connection.manager.find<MonobankToken>(MonobankToken, {
+        where: {
+          space: {
+            id: space.id,
+          },
+        },
       });
     } catch (e) {
       handleStorageError(e);

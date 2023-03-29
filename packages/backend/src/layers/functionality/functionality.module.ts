@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { IntegrationsModule } from '../integrations/integrations.module';
+import { TokenService } from '../storage/services/token.service';
 import { StorageModule } from '../storage/storage.module';
 import { HashPasswordService } from './authentication/hashing/hash-password.service';
 import { GenerateJwtService } from './authentication/jwt/generate-jwt.service';
@@ -15,7 +16,6 @@ import { SendTestEmailService } from './debug/send-test-email.service';
 import { SendEmailService } from './send-email/send-email.service';
 import { GetFilteredStatementService } from './statement/get-filtered-statement.service';
 import { GetMonobankStatementService } from './statement/get-monobank-statement.service';
-import { GetTokenService } from './tokens/get-token.service';
 import { SaveTokenService } from './tokens/save-token.service';
 
 @Module({
@@ -35,13 +35,13 @@ import { SaveTokenService } from './tokens/save-token.service';
     SignUpService,
     SignInService,
     JwtAuthGuard,
+    TokenService,
     JwtStrategy,
     SendEmailService,
     GenerateJwtService,
     HashPasswordService,
     VerifyEmailService,
     SaveTokenService,
-    GetTokenService,
     SendTestEmailService,
     DebugAccessGuard,
     GetMonobankStatementService,
@@ -53,8 +53,8 @@ import { SaveTokenService } from './tokens/save-token.service';
     VerifyEmailService,
     SignInService,
     SaveTokenService,
-    GetTokenService,
     SendTestEmailService,
+    TokenService,
     DebugAccessGuard,
     GetMonobankStatementService,
     GetFilteredStatementService,
