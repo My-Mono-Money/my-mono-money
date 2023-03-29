@@ -27,7 +27,7 @@ const OPTIONS_LIST = [
 ];
 
 interface ISearchProps {
-  setSearchField: React.Dispatch<React.SetStateAction<string>>;
+  setSearchField: (searchText: string) => void;
 }
 
 const PeriodFilter: React.FC<ISearchProps> = ({ setSearchField }) => {
