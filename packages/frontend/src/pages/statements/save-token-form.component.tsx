@@ -53,7 +53,7 @@ const SaveTokenForm: React.FC<ISaveTokenFormProps> = ({ setIsTokenSaved }) => {
 
   return (
     <>
-      <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)}>
+      <Box>
         <Card
           sx={{
             height: '700px',
@@ -91,6 +91,9 @@ const SaveTokenForm: React.FC<ISaveTokenFormProps> = ({ setIsTokenSaved }) => {
             </Typography>
             <Typography variant="h5">7. Готово!</Typography>
             <Box
+              component="form"
+              noValidate
+              onSubmit={handleSubmit(onSubmit)}
               sx={{
                 p: '10px',
                 display: 'flex',
