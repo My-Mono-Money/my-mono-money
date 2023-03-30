@@ -62,6 +62,7 @@ export class GetFilteredStatementController {
         invoiceId: item.invoiceId,
         counterEdrpou: item.counterEdrpou,
         counterIban: item.counterIban,
+        category: item.category,
       })),
       paging: {
         from: Number(from),

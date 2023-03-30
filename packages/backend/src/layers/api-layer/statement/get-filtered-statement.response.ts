@@ -51,6 +51,9 @@ class StatementItem {
 
   @ApiProperty()
   counterIban?: string;
+
+  @ApiProperty()
+  category?: string;
 }
 
 export class GetFilteredStatementResponse {
@@ -71,6 +74,7 @@ export class GetFilteredStatementResponse {
         cashbackAmount: 0,
         balance: 2644039,
         hold: true,
+        category: 'Переказ коштів',
       },
       {
         id: 'E1Wy4NZP6XSuF6YD',
@@ -86,6 +90,7 @@ export class GetFilteredStatementResponse {
         balance: 2846439,
         hold: true,
         receiptId: '4287-05CK-MH7P-168H',
+        category: 'Фаст-фуд',
       },
     ],
   })

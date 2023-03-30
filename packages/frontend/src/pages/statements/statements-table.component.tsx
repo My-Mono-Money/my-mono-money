@@ -82,6 +82,9 @@ const renderLoadingSkeleton = () => {
       <TableCell>
         <Skeleton />
       </TableCell>
+      <TableCell>
+        <Skeleton />
+      </TableCell>
     </TableRow>
   ));
 };
@@ -147,6 +150,7 @@ const StatementTable: React.FC = () => {
                   Дата та час
                 </TableCell>
                 <TableCell align="center">Деталі транзкції</TableCell>
+                <TableCell align="center">Категорія</TableCell>
                 <TableCell sx={{ width: '115px' }} align="right">
                   Сума
                 </TableCell>
@@ -169,6 +173,7 @@ const StatementTable: React.FC = () => {
                     <TableRow key={row.id}>
                       <TableCell align="left">{formatTime}</TableCell>
                       <TableCell align="center">{row.description}</TableCell>
+                      <TableCell align="center">{row.category}</TableCell>
                       <TableCell align="right">
                         <span>{formatAmountCurrency(row.amount)}</span>
                         <span style={{ fontSize: '0.6rem' }}>
