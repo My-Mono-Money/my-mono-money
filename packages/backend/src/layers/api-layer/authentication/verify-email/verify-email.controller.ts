@@ -25,7 +25,6 @@ export class VerifyEmailController {
     const accessToken = await this.verifyEmailService.verifyEmail(
       request.user.email,
     );
-
     return {
       isSuccessful: true,
       accessToken,

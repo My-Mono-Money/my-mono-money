@@ -15,6 +15,7 @@ import SignUpPage from './pages/sign-up/sign-up.page';
 import StatementsPage from './pages/statements/statements.page';
 import { VerifyEmail } from './pages/verify-email/verify-email.page';
 import StatementLayout from './layouts/statement.layout';
+import { ConfirmEmail } from './pages/confirm-email/confirm-email.page';
 
 function App() {
   const theme = createTheme({
@@ -44,6 +45,7 @@ function App() {
         <Route path="sign-up" element={<SignUpPage />} />
         <Route path="forgot-password" element={<ForgotPasswordPage />} />
         <Route path="verify-email" element={<VerifyEmail />} />
+        <Route path="confirm-email" element={<ConfirmEmail />} />
       </Route>
     </Route>
   );
