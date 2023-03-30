@@ -14,6 +14,7 @@ import {
 } from 'date-fns';
 import { StatementService } from 'src/layers/storage/services/statement.service';
 import { UserService } from 'src/layers/storage/services/user.service';
+import * as mccCodes from '../../../common/mcc-codes/mcc-codes-ua.json';
 
 interface IGetFilteredStatement {
   email: string;
@@ -90,7 +91,7 @@ export class GetFilteredStatementService {
         };
       }
     };
-    return await this.statementService.getStatement({
+    const list = await this.statementService.getStatement({
       spaceId: space.id,
       from,
       limit,
@@ -98,5 +99,17 @@ export class GetFilteredStatementService {
       search,
       period: timestampList(period),
     });
+    return {
+      ...list,
+      transactions: list.transactions.map((itemTransaction) => {
+        return {
+          ...itemTransaction,
+          category: mccCodes.find(
+            (itemCategory) =>
+              itemCategory.mcc === itemTransaction.mcc.toString(),
+          )?.shortDescription,
+        };
+      }),
+    };
   }
 }

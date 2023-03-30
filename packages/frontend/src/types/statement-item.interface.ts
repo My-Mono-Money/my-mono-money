@@ -3,4 +3,5 @@ export interface IStatementItem {
   time: number;
   description: string;
   id: string;
+  category: string;
 }
