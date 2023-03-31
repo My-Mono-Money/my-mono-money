@@ -1,7 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { notify } from '../../utils/notifications';
 import { useAuthState } from '../../auth-state/use-auth-state.hook';
@@ -44,6 +43,12 @@ const Statements: React.FC = () => {
   }, [isTokenSaved]);
 
   useEffect(() => {
+    if (isTokenSaved) {
+      notify('Котики зберегли ваш токен', '🐈');
+    }
+  }, [isTokenSaved]);
+
+  useEffect(() => {
     if (!token) {
       return;
     }
@@ -56,10 +61,7 @@ const Statements: React.FC = () => {
   return response?.items.length ? (
     <StatementTable />
   ) : (
-    <>
-      <ToastContainer />
-      <SaveTokenForm setIsTokenSaved={setIsTokenSaved} />
-    </>
+    <SaveTokenForm setIsTokenSaved={setIsTokenSaved} />
   );
 };
 
