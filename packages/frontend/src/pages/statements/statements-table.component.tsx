@@ -125,6 +125,7 @@ const StatementTable: React.FC = () => {
   return (
     <>
       {debouncedIsUpdating && <UpdatingIndicator />}
+
       <Box
         sx={{
           margin: '0 auto',

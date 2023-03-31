@@ -31,6 +31,7 @@ export const ConfirmEmail: React.FC = () => {
     fetchMailVerification(code)
       .then(({ accessToken }) => {
         setToken(accessToken);
+        navigate('/', { replace: true, state: 'confirm-email' });
       })
       .catch(() => {
         navigate('/sign-in');
