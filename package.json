@@ -32,6 +32,10 @@
     "postinstall": "npm-run-all --parallel install:backend",
     "install:frontend": "cd packages/frontend && yarn",
     "install:backend": "cd packages/backend && yarn",
-    "install:mock-monobank-api": "cd packages/mock-monobank-api && yarn"
+    "install:mock-monobank-api": "cd packages/mock-monobank-api && yarn",
+    "deploy:backend:development": "cd packages/backend && yarn build && cd ../../ && ./deploy/deploy.sh",
+    "rollup:backend:development": "cd packages/backend && yarn build && cd ../../ && ./deploy/rollup.sh",
+    "deploy:backend:staging": "yarn build:backend && deploy.sh staging",
+    "deploy:backend:production": "yarn build:backend && deploy.sh production"
   }
 }
