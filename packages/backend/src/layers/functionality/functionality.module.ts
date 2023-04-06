@@ -17,6 +17,7 @@ import { SendEmailService } from './send-email/send-email.service';
 import { GetFilteredStatementService } from './statement/get-filtered-statement.service';
 import { GetMonobankStatementService } from './statement/get-monobank-statement.service';
 import { SaveTokenService } from './tokens/save-token.service';
+import { MonobankWebHookService } from './webhook/monobank-webhook.service';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { SaveTokenService } from './tokens/save-token.service';
     GenerateJwtService,
     HashPasswordService,
     VerifyEmailService,
+    MonobankWebHookService,
     SaveTokenService,
     SendTestEmailService,
     DebugAccessGuard,
@@ -52,6 +54,7 @@ import { SaveTokenService } from './tokens/save-token.service';
     SendEmailService,
     VerifyEmailService,
     SignInService,
+    MonobankWebHookService,
     SaveTokenService,
     SendTestEmailService,
     TokenService,

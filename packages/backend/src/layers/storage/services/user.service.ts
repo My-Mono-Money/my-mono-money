@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Connection } from 'typeorm';
+import { Connection, Raw } from 'typeorm';
 import { handleStorageError } from 'src/common/errors/utils/handle-storage-error';
 import { ICreateUserDto } from '../interfaces/create-user-dto.interface';
 import { User } from '../entities/user.entity';
@@ -50,6 +50,23 @@ export class UserService {
       return await this.connection.manager.findOne(User, {
         where: {
           email,
+        },
+      });
+    } catch (e) {
+      handleStorageError(e);
+    }
+  }
+
+  async geyByEmailHash(hash: string) {
+    try {
+      return await this.connection.manager.findOne(User, {
+        where: {
+          email: Raw(
+            (alias) =>
+              `encode(sha256(${
+                alias.split('.')[1]
+              }::bytea), 'hex') = '${hash}'`,
+          ),
         },
       });
     } catch (e) {

@@ -1,6 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { createHash } from 'crypto';
 import { ICreateAccountDto } from 'src/layers/storage/interfaces/create-account-dto.interface';
 import { ICreateTransactionDto } from 'src/layers/storage/interfaces/create-transaction-dto.interface';
 
@@ -56,5 +57,32 @@ export class MonobankService {
       .toPromise();
 
     return response;
+  }
+
+  async setWebHook({ token, email }) {
+    const hash = (email: string) =>
+      createHash('sha256').update(email).digest('hex');
+    try {
+      const response = await this.httpService
+        .post(
+          `${this.configService.get('app.monobankApiUrl')}/personal/webhook`,
+          {
+            webhookUrl: `${this.configService.get(
+              'app.backendAppDomain',
+            )}/v1/integration/monobankWebHook/${hash(email)}`,
+          },
+          {
+            headers: {
+              'X-Token': token,
+            },
+          },
+        )
+        .toPromise();
+
+      return response;
+    } catch (error) {
+      console.error({ error });
+      throw error;
+    }
   }
 }
