@@ -1,9 +1,10 @@
-import { Controller, Post, Req, UseGuards } from '@nestjs/common';
+import { Controller, Post, Req, Get, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { IRequestWithUser } from 'src/common/interfaces/request-with-user.interface';
 import { JwtAuthGuard } from 'src/layers/functionality/authentication/jwt/jwt-auth.guard';
 import { VerifyEmailService } from 'src/layers/functionality/authentication/verify-email.service';
 import { VerifyEmailResponse } from './verify-email.response';
+import { EmailVerifiedGuard } from 'src/layers/functionality/authentication/verify-email.guard';
 
 @Controller({
   path: '/auth',
@@ -23,6 +24,25 @@ export class VerifyEmailController {
   @ApiTags('Authentication')
   async verifyEmail(@Req() request: IRequestWithUser) {
     const accessToken = await this.verifyEmailService.verifyEmail(
+      request.user.email,
+    );
+    return {
+      isSuccessful: true,
+      accessToken,
+    };
+  }
+
+  @Get('/check-verify-email')
+  // @UseGuards(EmailVerifiedGuard)
+  @ApiResponse({
+    status: 201,
+    description: 'Successful verify email',
+    type: VerifyEmailResponse,
+  })
+  @ApiBearerAuth('jwt-auth')
+  @ApiTags('Authentication')
+  async checkVerifyEmail(@Req() request: IRequestWithUser) {
+    const accessToken = await this.verifyEmailService.checkVerifyEmail(
       request.user.email,
     );
     return {

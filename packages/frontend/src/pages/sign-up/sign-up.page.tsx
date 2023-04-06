@@ -3,6 +3,7 @@ import axios, { AxiosError } from 'axios';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useAuthState } from '../../auth-state/use-auth-state.hook';
 import {
   Alert,
   AlertTitle,
@@ -32,6 +33,7 @@ const SignUp: React.FC = () => {
   const [submittingError, setSubmittingError] = useState<string>();
   const navigate = useNavigate();
   const location = useLocation();
+  const { setToken } = useAuthState();
   const state = location.state as IHistoryState;
   const {
     register,
@@ -59,25 +61,33 @@ const SignUp: React.FC = () => {
         email,
         password,
       });
+
       if (!response.data.isSuccessful) {
         throw new Error("Can't recognize response as successful");
       }
-      navigate('/sign-up', {
+      setToken(response.data.accessToken);
+      navigate('/', {
         replace: true,
         state: {
-          email,
-          firstName,
-          lastName,
-          password,
+          from: 'sign-up',
         },
       });
-      navigate('/verify-email', {
-        state: {
-          email,
-          firstName,
-          lastName,
-        },
-      });
+      // navigate('/sign-up', {
+      //   replace: true,
+      //   state: {
+      //     email,
+      //     firstName,
+      //     lastName,
+      //     password,
+      //   },
+      // });
+      // navigate('/verify-email', {
+      //   state: {
+      //     email,
+      //     firstName,
+      //     lastName,
+      //   },
+      // });
     } catch (err) {
       const axiosError = err as unknown as AxiosError<IErrorResponse>;
       if (axiosError.response?.data.message === 'duplicated-entity-error') {

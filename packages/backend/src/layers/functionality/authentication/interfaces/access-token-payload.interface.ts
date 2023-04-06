@@ -3,4 +3,5 @@ export interface IAccessTokenPayload {
   email: string;
   firstName: string;
   lastName: string;
+  isEmailVerified: boolean;
 }

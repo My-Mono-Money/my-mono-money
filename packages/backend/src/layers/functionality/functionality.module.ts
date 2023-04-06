@@ -17,7 +17,8 @@ import { SendEmailService } from './send-email/send-email.service';
 import { GetFilteredStatementService } from './statement/get-filtered-statement.service';
 import { GetMonobankStatementService } from './statement/get-monobank-statement.service';
 import { SaveTokenService } from './tokens/save-token.service';
-
+import { ResendEmailService } from './authentication/resend-email.service';
+import { EmailVerifiedGuard } from './authentication/verify-email.guard';
 @Module({
   imports: [
     StorageModule,
@@ -35,9 +36,11 @@ import { SaveTokenService } from './tokens/save-token.service';
     SignUpService,
     SignInService,
     JwtAuthGuard,
+    EmailVerifiedGuard,
     TokenService,
     JwtStrategy,
     SendEmailService,
+    ResendEmailService,
     GenerateJwtService,
     HashPasswordService,
     VerifyEmailService,
@@ -56,8 +59,10 @@ import { SaveTokenService } from './tokens/save-token.service';
     SendTestEmailService,
     TokenService,
     DebugAccessGuard,
+    EmailVerifiedGuard,
     GetMonobankStatementService,
     GetFilteredStatementService,
+    ResendEmailService,
   ],
 })
 export class FunctionalityModule {}

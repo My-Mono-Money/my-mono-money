@@ -1,12 +1,13 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import { notify } from '../../utils/notifications';
 import { useAuthState } from '../../auth-state/use-auth-state.hook';
 import { ITokenItem } from '../../types/token-item.interface';
 import SaveTokenForm from './save-token-form.component';
 import StatementTable from './statements-table.component';
+import { VerifyEmail } from '../verify-email/verify-email.page';
 
 interface ITokenResponse {
   items: ITokenItem[];
@@ -26,7 +27,7 @@ const fetchToken = async (token: string) => {
   }
 };
 const Statements: React.FC = () => {
-  const { token } = useAuthState();
+  const { user, token } = useAuthState();
   const [isTokenSaved, setIsTokenSaved] = useState(false);
   const [response, setResponse] = useState<ITokenResponse>();
   const location = useLocation();
@@ -57,6 +58,11 @@ const Statements: React.FC = () => {
       setTimeout(() => notify('Приємного користвання', '🙂'), 2000);
     }
   }, [location]);
+
+  if (user && !user?.isEmailVerified) {
+    // eslint-disable-next-line prettier/prettier
+    return <VerifyEmail />;
+  }
 
   return response?.items.length ? (
     <StatementTable />

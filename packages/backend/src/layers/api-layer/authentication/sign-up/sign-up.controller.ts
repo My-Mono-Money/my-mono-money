@@ -21,15 +21,17 @@ export class SignUpController {
   async signUp(
     @Body() { email, password, firstName, lastName }: SignUpBody,
   ): Promise<SignUpResponse> {
-    await this.signUpService.signUp({
+    const accessToken = await this.signUpService.signUp({
       email,
       firstName,
       lastName,
       password,
+      isEmailVerified: false,
     });
 
     return {
       isSuccessful: true,
+      accessToken,
     };
   }
 }

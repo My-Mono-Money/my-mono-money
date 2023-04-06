@@ -1,19 +1,13 @@
-import { Logout } from '@mui/icons-material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import {
-  Typography,
-  IconButton,
-  Menu,
-  MenuItem,
-  ListItemIcon,
-} from '@mui/material';
+import { Typography, IconButton, Menu } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
 import { Outlet } from 'react-router-dom';
+import LogoutUser from '../common/components/logout/logout';
 import { useAuthState } from '../auth-state/use-auth-state.hook';
 
 const Header = () => {
-  const { user, clearToken } = useAuthState();
+  const { user } = useAuthState();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -73,12 +67,7 @@ const Header = () => {
           open={Boolean(anchorEl)}
           onClose={handleClose}
         >
-          <MenuItem onClick={clearToken}>
-            <ListItemIcon>
-              <Logout fontSize="small" />
-            </ListItemIcon>
-            Logout
-          </MenuItem>
+          <LogoutUser />
         </Menu>
       </Box>
     </Box>

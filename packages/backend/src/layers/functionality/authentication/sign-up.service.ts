@@ -27,7 +27,7 @@ export class SignUpService {
     );
     const frontendUrl = this.configService.get('app.frontendUrl');
 
-    return await this.userService.save(
+    await this.userService.save(
       {
         email: user.email,
         firstName: user.firstName,
@@ -43,5 +43,6 @@ export class SignUpService {
         },
       },
     );
+    return verifyEmailToken;
   }
 }

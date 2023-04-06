@@ -35,5 +35,3 @@ lerna-debug.log*
 !.vscode/launch.json
 !.vscode/extensions.json
 
-#deploy key
-private_key.txt
