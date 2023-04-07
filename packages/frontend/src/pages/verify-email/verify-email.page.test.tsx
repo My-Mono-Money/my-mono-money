@@ -1,41 +1,49 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { VerifyEmail } from './verify-email.page';
 import { MemoryRouter } from 'react-router-dom';
+import { useAuthState } from '../../auth-state/use-auth-state.hook';
 
-const renderWithHistoryState = (
-  state: Record<string, string>,
-  Component: React.FC,
-) => {
+jest.mock('../../auth-state/use-auth-state.hook', () => ({
+  useAuthState: jest.fn(),
+}));
+
+const renderComponent = () => {
   render(
-    <MemoryRouter
-      initialEntries={[
-        {
-          state,
-        },
-      ]}
-    >
-      <Component />
+    <MemoryRouter>
+      <VerifyEmail />
     </MemoryRouter>,
   );
 };
 
 describe('Verify email page', () => {
   beforeEach(() => {
-    renderWithHistoryState(
-      {
-        email: 'boris.johnson@example.com',
-        firstName: 'Boris',
-        lastName: 'Johnson',
+    (useAuthState as jest.Mock).mockReturnValue({
+      user: {
+        email: 'test@example.com',
+        firstName: 'John',
+        lastName: 'Doe',
       },
-      VerifyEmail,
-    );
-  });
-  test('Page opens without crashes', async () => {
-    expect(screen.getByText(/Дякуємо за реєстрацію/)).toBeInTheDocument();
+      token: 'mockToken',
+      clearToken: jest.fn(),
+    });
   });
 
-  test('Sign up link renders', async () => {
-    expect(document.querySelector('a[href="/sign-up"]')).toBeInTheDocument();
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test('Page renders without crashing', () => {
+    renderComponent();
+    expect(screen.getByText(/Дякуємо за реєстрацію/i)).toBeInTheDocument();
+  });
+
+  test('Resend verification email button works', async () => {
+    renderComponent();
+    const button = screen.getByRole('button', {
+      name: /відправити лист знов/i,
+    });
+    fireEvent.click(button);
+    await waitFor(() => expect(button).toBeDisabled());
   });
 });
