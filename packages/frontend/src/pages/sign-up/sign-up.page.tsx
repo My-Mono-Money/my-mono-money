@@ -31,7 +31,6 @@ interface IErrorResponse {
 
 const SignUp: React.FC = () => {
   const [submittingError, setSubmittingError] = useState<string>();
-  const navigate = useNavigate();
   const location = useLocation();
   const { setToken } = useAuthState();
   const state = location.state as IHistoryState;
@@ -66,28 +65,6 @@ const SignUp: React.FC = () => {
         throw new Error("Can't recognize response as successful");
       }
       setToken(response.data.accessToken);
-      navigate('/', {
-        replace: true,
-        state: {
-          from: 'sign-up',
-        },
-      });
-      // navigate('/sign-up', {
-      //   replace: true,
-      //   state: {
-      //     email,
-      //     firstName,
-      //     lastName,
-      //     password,
-      //   },
-      // });
-      // navigate('/verify-email', {
-      //   state: {
-      //     email,
-      //     firstName,
-      //     lastName,
-      //   },
-      // });
     } catch (err) {
       const axiosError = err as unknown as AxiosError<IErrorResponse>;
       if (axiosError.response?.data.message === 'duplicated-entity-error') {

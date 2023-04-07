@@ -7,7 +7,6 @@ import { useAuthState } from '../../auth-state/use-auth-state.hook';
 import { ITokenItem } from '../../types/token-item.interface';
 import SaveTokenForm from './save-token-form.component';
 import StatementTable from './statements-table.component';
-import { VerifyEmail } from '../verify-email/verify-email.page';
 
 interface ITokenResponse {
   items: ITokenItem[];
@@ -27,10 +26,16 @@ const fetchToken = async (token: string) => {
   }
 };
 const Statements: React.FC = () => {
-  const { user, token } = useAuthState();
+  const { token, user } = useAuthState();
   const [isTokenSaved, setIsTokenSaved] = useState(false);
   const [response, setResponse] = useState<ITokenResponse>();
   const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!token) return;
+    if (!user?.isEmailVerified) navigate('/verify-email');
+  }, []);
 
   useEffect(() => {
     if (!token) {
@@ -55,14 +60,9 @@ const Statements: React.FC = () => {
     }
     if (location.state && location.state === 'confirm-email') {
       notify('Email верифікований', '👌');
-      setTimeout(() => notify('Приємного користвання', '🙂'), 2000);
+      setTimeout(() => notify('Приємного користування', '🙂'), 2000);
     }
   }, [location]);
-
-  if (user && !user?.isEmailVerified) {
-    // eslint-disable-next-line prettier/prettier
-    return <VerifyEmail />;
-  }
 
   return response?.items.length ? (
     <StatementTable />

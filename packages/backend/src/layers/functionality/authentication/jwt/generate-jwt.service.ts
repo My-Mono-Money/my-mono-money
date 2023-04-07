@@ -12,7 +12,6 @@ export class GenerateJwtService {
       email: user.email,
       firstName: user.firstName,
       lastName: user.lastName,
-      isEmailVerified: user.isEmailVerified,
     };
 
     return this.jwtService.sign(payload);

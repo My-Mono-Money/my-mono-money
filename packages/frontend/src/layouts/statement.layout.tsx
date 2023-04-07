@@ -3,11 +3,12 @@ import { Typography, IconButton, Menu } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import LogoutUser from '../common/components/logout/logout';
+import { Logout } from '@mui/icons-material';
+import { MenuItem, ListItemIcon } from '@mui/material';
 import { useAuthState } from '../auth-state/use-auth-state.hook';
 
 const Header = () => {
-  const { user } = useAuthState();
+  const { user, clearToken } = useAuthState();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -67,7 +68,12 @@ const Header = () => {
           open={Boolean(anchorEl)}
           onClose={handleClose}
         >
-          <LogoutUser />
+          <MenuItem onClick={clearToken}>
+            <ListItemIcon>
+              <Logout fontSize="small" />
+            </ListItemIcon>
+            Logout
+          </MenuItem>
         </Menu>
       </Box>
     </Box>

@@ -4,10 +4,10 @@ import { UserService } from 'src/layers/storage/services/user.service';
 import { SendEmailService } from '../send-email/send-email.service';
 import { confirmEmailTemplate } from '../send-email/templates/confirm-email.email-template';
 import { GenerateJwtService } from './jwt/generate-jwt.service';
-import { NotFoundError } from 'src/common/errors/not-found.error';
+import { UnverifiedEmailError } from 'src/common/errors/verified-email.error';
 
 @Injectable()
-export class ResendEmailService {
+export class ResendVerificationEmailService {
   constructor(
     private userService: UserService,
     private sendEmailService: SendEmailService,
@@ -17,6 +17,9 @@ export class ResendEmailService {
 
   async resendEmail(email: string) {
     const user = await this.userService.getByEmail(email);
+    if (user.isEmailVerified) {
+      throw new UnverifiedEmailError();
+    }
     const verifyEmailToken = await this.generateJwtService.generateVerifyEmail(
       user,
     );

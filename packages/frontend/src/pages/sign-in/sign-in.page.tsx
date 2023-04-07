@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
 import axios, { AxiosError } from 'axios';
 import {
   Alert,
@@ -28,7 +27,6 @@ interface IErrorResponse {
 const SignIn: React.FC = () => {
   const { setToken } = useAuthState();
   const [submittingError, setSubmittingError] = useState<string>();
-  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -48,11 +46,6 @@ const SignIn: React.FC = () => {
         throw new Error("Can't recognize response as successful");
       }
       setToken(response.data.accessToken);
-      navigate('/', {
-        state: {
-          from: 'sign-in',
-        },
-      });
     } catch (err) {
       const axiosError = err as unknown as AxiosError<IErrorResponse>;
       if (axiosError.response?.data.message === 'unauthorized-error') {

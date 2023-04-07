@@ -26,7 +26,6 @@ export class SignUpController {
       firstName,
       lastName,
       password,
-      isEmailVerified: false,
     });
 
     return {

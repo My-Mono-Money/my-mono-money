@@ -1,7 +1,8 @@
 import { IUserSignUp } from '../../authentication/interfaces/user-signup-dto.interface';
+import { IVerifyEmailTokenPayload } from '../../authentication/interfaces/verify-email-token-payload.interface';
 
 interface IConfirmEmailTemplate {
-  user: IUserSignUp;
+  user: IUserSignUp | IVerifyEmailTokenPayload;
   verifyEmailToken: string;
   frontendUrl: string;
 }

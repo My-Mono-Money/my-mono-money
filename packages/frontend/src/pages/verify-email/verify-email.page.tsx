@@ -1,103 +1,42 @@
 import { Box, Typography, Button } from '@mui/material';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import LogoutUser from '../../common/components/logout/logout';
+import { Link, useNavigate } from 'react-router-dom';
+import Countdown from 'react-countdown';
 import { IUser } from '../../auth-state/auth-state.interface';
 import { useAuthState } from '../../auth-state/use-auth-state.hook';
-import { CountDownLocalStorage } from '../../common/components/count-down/count-down';
-interface IHistoryState {
-  email: string;
-  firstName: string;
-  lastName: string;
-}
 
 const fetchResendMailVerification = async (code: string) => {
-  try {
-    const response = await axios.get(`/auth/resend-email`, {
-      headers: {
-        Authorization: `Bearer ${code}`,
-      },
-    });
+  const response = await axios.post(`/auth/resend-email`, null, {
+    headers: {
+      Authorization: `Bearer ${code}`,
+    },
+  });
 
-    return response.data;
-  } catch (err) {
-    throw new Error(`Failed to resend verification on email: ${err}`);
-  }
-};
-
-const fetchCheckMailVerification = async (code: string) => {
-  try {
-    const response = await axios.get(`/auth/check-verify-email`, {
-      headers: {
-        Authorization: `Bearer ${code}`,
-      },
-    });
-    return response;
-  } catch (err) {
-    throw new Error(`Failed to resend verification on email: ${err}`);
-  }
+  return response.data;
 };
 
 export const VerifyEmail: React.FC = () => {
-  const location = useLocation();
   const navigate = useNavigate();
-  const { user, token, clearToken, setToken } = useAuthState();
+  const { user, token, clearToken } = useAuthState();
   const { email, firstName, lastName } = user as IUser;
   const [emailSendedCountDown, setEmailSendedCountDown] = useState(true);
-  // const { email, firstName, lastName } = location.state as IHistorySlocation.statetate;
-  const { from } = (location.state as { from: string }) || '';
-  useEffect(() => {
-    if (localStorage.getItem('email_sended') != null || from === 'sign-up') {
-      setEmailSendedCountDown(true);
-    } else {
-      setEmailSendedCountDown(false);
-    }
-    checkUserMailVerify();
-  }, []);
+
   const emailText = (
     <Typography variant="h6" component="span" color="violet">
       {email}
     </Typography>
   );
 
-  const checkUserMailVerify = async () => {
-    if (token) {
-      let result = false;
-      await fetchCheckMailVerification(token)
-        .then((res) => {
-          if (res) {
-            setToken(res.data.accessToken);
-            localStorage.removeTtem('email_sended');
-            navigate('/');
-            result = true;
-          }
-        })
-        .catch(() => {
-          result = false;
-        });
-      return result;
-    }
-  };
-  const handleLinkClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    event.preventDefault();
-
-    clearToken();
-    navigate('/sign-up');
-  };
-
   const handleEmailSended = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     if (token) {
-      checkUserMailVerify().then((result) => {
-        if (!result) {
-          setEmailSendedCountDown(true);
-          fetchResendMailVerification(token).catch((err) => {
-            alert('Server unavailable, please try again later');
-            console.log('err', err);
-          });
-        }
-      });
+      fetchResendMailVerification(token)
+        .then(() => setEmailSendedCountDown(true))
+        .catch(() => {
+          clearToken();
+          navigate('/sign-in');
+        });
     }
   };
 
@@ -133,8 +72,23 @@ export const VerifyEmail: React.FC = () => {
           }}
         >
           <Typography>
-            <Link to="/sign-up" onClick={handleLinkClick}>
+            <Link
+              to="/sign-up"
+              onClick={() => {
+                clearToken();
+                navigate('/sign-up');
+              }}
+            >
               Неправильна пошта?
+            </Link>
+            <Link
+              to="/sign-in"
+              onClick={() => {
+                clearToken();
+                navigate('/sign-in');
+              }}
+            >
+              Вийти
             </Link>
           </Typography>
 
@@ -163,15 +117,18 @@ export const VerifyEmail: React.FC = () => {
               }}
             >
               {emailSendedCountDown && (
-                <CountDownLocalStorage
-                  seconds={60000}
-                  storageKey={'email_sended'}
-                  onComplete={() => {
-                    if (localStorage.getItem('email_sended') != null)
-                      localStorage.removeItem('email_sended');
-                    setEmailSendedCountDown(false);
+                <Countdown
+                  date={Date.now() + 59000}
+                  renderer={({ seconds }) => {
+                    return (
+                      <span>
+                        Надіслати повторно через {seconds < 10 ? '0' : ''}
+                        {seconds} секунд
+                      </span>
+                    );
                   }}
-                ></CountDownLocalStorage>
+                  onComplete={() => setEmailSendedCountDown(false)}
+                />
               )}
             </Box>
           </Box>
