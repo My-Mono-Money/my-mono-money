@@ -8,12 +8,14 @@ import { SendTestEmailController } from './debug/send-test-email.controller';
 import { GetFilteredStatementController } from './statement/get-filtered-statement.controller';
 import { GetTokenController } from './tokens/get-token/get-token.controller';
 import { SaveTokenController } from './tokens/save-token/save-token.controller';
+import { MonobankWebHookController } from './webhook/monobank-webhook.controller';
 
 @Module({
   imports: [FunctionalityModule, ConfigModule],
   controllers: [
     SignInController,
     SignUpController,
+    MonobankWebHookController,
     GetTokenController,
     SaveTokenController,
     VerifyEmailController,
