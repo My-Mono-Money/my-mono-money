@@ -3,10 +3,10 @@ import { IsNotEmpty } from 'class-validator';
 
 class MonobankWebHookStatementItem {
   @ApiProperty()
-  public time!: number;
+  public time: number;
 
   @ApiProperty()
-  public description!: string;
+  public description: string;
 
   @ApiProperty()
   public mcc: number;
@@ -53,10 +53,10 @@ class MonobankWebHookStatementItem {
 
 class MonobankWebHookData {
   @ApiProperty()
-  public account!: string;
+  public account: string;
 
   @ApiProperty()
-  public statementItem!: MonobankWebHookStatementItem;
+  public statementItem: MonobankWebHookStatementItem;
 }
 
 export class MonobankWebHookBody {
@@ -64,7 +64,7 @@ export class MonobankWebHookBody {
     example: 'StatementItem',
   })
   @IsNotEmpty()
-  public type!: string;
+  public type: string;
 
   @ApiProperty({
     example: {
@@ -86,5 +86,5 @@ export class MonobankWebHookBody {
     },
   })
   @IsNotEmpty()
-  public data!: MonobankWebHookData;
+  public data: MonobankWebHookData;
 }
