@@ -37,3 +37,4 @@ lerna-debug.log*
 
 #deploy key
 private_key.txt
+packages/backend/dist.tar.gz
