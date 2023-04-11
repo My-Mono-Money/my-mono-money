@@ -26,6 +26,7 @@ export class SaveTokenService {
       space,
       accounts,
     });
+    await this.monobankService.setWebHook({ token, email });
     await this.queueService.addToQueueStatement({ tokenId: savedToken.id });
   }
 }

@@ -9,6 +9,7 @@ import {
   startOfYear,
 } from 'date-fns';
 import { ConfigService } from '@nestjs/config';
+import { ICreateTransactionDto } from 'src/layers/storage/interfaces/create-transaction-dto.interface';
 
 interface IGetStatement {
   tokenId: string;
@@ -54,7 +55,7 @@ export class GetMonobankStatementService {
     );
     const from = fromInTimestamp();
     const to = toInTimestamp();
-    const transactions = [];
+    const transactions: ICreateTransactionDto[] = [];
     for (let i = 0; i < accountList.length; i++) {
       for (let j = 0; j < from.length; j++) {
         const statementPart = await this.monobankService.getStatement({
