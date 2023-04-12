@@ -17,8 +17,9 @@ import { SendEmailService } from './send-email/send-email.service';
 import { GetFilteredStatementService } from './statement/get-filtered-statement.service';
 import { GetMonobankStatementService } from './statement/get-monobank-statement.service';
 import { SaveTokenService } from './tokens/save-token.service';
+import { ResendVerificationEmailService } from './authentication/resend-email.service';
+import { IsEmailVerifiedGuard } from './authentication/verify-email.guard';
 import { MonobankWebHookService } from './webhook/monobank-webhook.service';
-
 @Module({
   imports: [
     StorageModule,
@@ -36,9 +37,11 @@ import { MonobankWebHookService } from './webhook/monobank-webhook.service';
     SignUpService,
     SignInService,
     JwtAuthGuard,
+    IsEmailVerifiedGuard,
     TokenService,
     JwtStrategy,
     SendEmailService,
+    ResendVerificationEmailService,
     GenerateJwtService,
     HashPasswordService,
     VerifyEmailService,
@@ -59,8 +62,10 @@ import { MonobankWebHookService } from './webhook/monobank-webhook.service';
     SendTestEmailService,
     TokenService,
     DebugAccessGuard,
+    IsEmailVerifiedGuard,
     GetMonobankStatementService,
     GetFilteredStatementService,
+    ResendVerificationEmailService,
   ],
 })
 export class FunctionalityModule {}

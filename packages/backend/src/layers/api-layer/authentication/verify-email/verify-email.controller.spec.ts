@@ -32,6 +32,7 @@ describe('Verify email controller', () => {
       firstName: 'Jhonny',
       lastName: 'Depp',
       email: 'ao.salenko+johnny.depp@gmail.com',
+      isEmailVerified: false,
     };
     const result = await verifyEmailController.verifyEmail(mockedRequest);
 

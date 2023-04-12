@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import { notify } from '../../utils/notifications';
 import { useAuthState } from '../../auth-state/use-auth-state.hook';
@@ -26,10 +26,16 @@ const fetchToken = async (token: string) => {
   }
 };
 const Statements: React.FC = () => {
-  const { token } = useAuthState();
+  const { token, user } = useAuthState();
   const [isTokenSaved, setIsTokenSaved] = useState(false);
   const [response, setResponse] = useState<ITokenResponse>();
   const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!token) return;
+    if (!user?.isEmailVerified) navigate('/verify-email');
+  }, []);
 
   useEffect(() => {
     if (!token) {
@@ -54,7 +60,7 @@ const Statements: React.FC = () => {
     }
     if (location.state && location.state === 'confirm-email') {
       notify('Email верифікований', '👌');
-      setTimeout(() => notify('Приємного користвання', '🙂'), 2000);
+      setTimeout(() => notify('Приємного користування', '🙂'), 2000);
     }
   }, [location]);
 

@@ -34,6 +34,7 @@ export class SignInService {
       email: userByEmail.email,
       firstName: userByEmail.firstName,
       lastName: userByEmail.lastName,
+      isEmailVerified: userByEmail.isEmailVerified,
     });
   }
 
@@ -45,6 +46,7 @@ export class SignInService {
       email: userByEmail.email,
       firstName: userByEmail.firstName,
       lastName: userByEmail.lastName,
+      isEmailVerified: userByEmail.isEmailVerified,
     });
   }
 }

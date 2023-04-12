@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useSearchParams } from 'react-router-dom';
+import { useDebounce } from 'use-debounce';
+import { fromUnixTime, format } from 'date-fns';
 import {
   Box,
   Divider,
@@ -17,10 +20,7 @@ import { IPagingState } from '../../types/statement-paging.interface';
 import { usePagination } from './use-pagination.hook';
 import { useAuthState } from '../../auth-state/use-auth-state.hook';
 import { UpdatingIndicator } from '../../common/components/updating-indicator/updating-indicator.component';
-import { useDebounce } from 'use-debounce';
 import PeriodFilter from './period-filter.component';
-import { useSearchParams } from 'react-router-dom';
-import { fromUnixTime, format } from 'date-fns';
 
 interface IStatementsResponse {
   items: IStatementItem[];

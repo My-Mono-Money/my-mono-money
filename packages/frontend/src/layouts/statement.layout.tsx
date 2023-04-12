@@ -1,15 +1,10 @@
-import { Logout } from '@mui/icons-material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import {
-  Typography,
-  IconButton,
-  Menu,
-  MenuItem,
-  ListItemIcon,
-} from '@mui/material';
+import { Typography, IconButton, Menu } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
 import { Outlet } from 'react-router-dom';
+import { Logout } from '@mui/icons-material';
+import { MenuItem, ListItemIcon } from '@mui/material';
 import { useAuthState } from '../auth-state/use-auth-state.hook';
 
 const Header = () => {

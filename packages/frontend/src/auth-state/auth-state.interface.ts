@@ -3,6 +3,7 @@ export interface IUser {
   email: string;
   firstName: string;
   lastName: string;
+  isEmailVerified: boolean;
 }
 
 export interface IAuthState {

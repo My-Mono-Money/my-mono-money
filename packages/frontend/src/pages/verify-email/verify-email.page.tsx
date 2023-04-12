@@ -1,66 +1,139 @@
-import { Box, Typography } from '@mui/material';
-import React from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Box, Typography, Button } from '@mui/material';
+import React, { useState } from 'react';
+import axios from 'axios';
+import { Link, useNavigate } from 'react-router-dom';
+import Countdown from 'react-countdown';
+import { IUser } from '../../auth-state/auth-state.interface';
+import { useAuthState } from '../../auth-state/use-auth-state.hook';
 
-interface IHistoryState {
-  email: string;
-  firstName: string;
-  lastName: string;
-}
+const fetchResendMailVerification = async (code: string) => {
+  const response = await axios.post(`/auth/resend-email`, null, {
+    headers: {
+      Authorization: `Bearer ${code}`,
+    },
+  });
+
+  return response.data;
+};
 
 export const VerifyEmail: React.FC = () => {
-  const location = useLocation();
   const navigate = useNavigate();
-  const { email, firstName, lastName } = location.state as IHistoryState;
+  const { user, token, clearToken } = useAuthState();
+  const { email, firstName, lastName } = user as IUser;
+  const [emailSendedCountDown, setEmailSendedCountDown] = useState(true);
+
   const emailText = (
     <Typography variant="h6" component="span" color="violet">
       {email}
     </Typography>
   );
 
-  const handleLinkClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleEmailSended = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-
-    navigate(-1);
+    if (token) {
+      fetchResendMailVerification(token)
+        .then(() => setEmailSendedCountDown(true))
+        .catch(() => {
+          clearToken();
+          navigate('/sign-in');
+        });
+    }
   };
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        pt: '100px',
-        mx: 'auto',
-        width: '500px',
-      }}
-    >
-      <Typography variant="h5" fontWeight={500}>
-        Дякуємо за реєстрацію, {firstName} {lastName}!
-      </Typography>
-
-      <Typography sx={{ py: 2 }} variant="h6" fontWeight={400}>
-        На вашу пошту {emailText} було відправленно лист з посиланням.
-      </Typography>
-
-      <Typography variant="h6" fontWeight={400}>
-        Перевірте будь ласка вашу пошту, та перейдіть за посиланням.
-      </Typography>
-
+    <>
       <Box
         sx={{
           display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          pt: 5,
+          flexDirection: 'column',
+          pt: '100px',
+          mx: 'auto',
+          width: '500px',
         }}
       >
-        <Typography>
-          <Link to="/sign-up" onClick={handleLinkClick}>
-            Неправильна пошта?
-          </Link>
+        <Typography variant="h5" fontWeight={500}>
+          Дякуємо за реєстрацію, {firstName} {lastName}!
         </Typography>
-        <Typography>Відправити лист знов</Typography>
+
+        <Typography sx={{ py: 2 }} variant="h6" fontWeight={400}>
+          На вашу пошту {emailText} було відправленно лист з посиланням.
+        </Typography>
+
+        <Typography variant="h6" fontWeight={400}>
+          Перевірте будь ласка вашу пошту, та перейдіть за посиланням.
+        </Typography>
+
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            pt: 5,
+          }}
+        >
+          <Typography>
+            <Link
+              to="/sign-up"
+              onClick={() => {
+                clearToken();
+                navigate('/sign-up');
+              }}
+            >
+              Неправильна пошта?
+            </Link>
+            <Link
+              to="/sign-in"
+              onClick={() => {
+                clearToken();
+                navigate('/sign-in');
+              }}
+            >
+              Вийти
+            </Link>
+          </Typography>
+
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              width: '300px',
+            }}
+          >
+            <Button
+              variant="outlined"
+              onClick={handleEmailSended}
+              disabled={emailSendedCountDown}
+            >
+              Відправити лист знов
+            </Button>
+            <Box
+              sx={{
+                mt: '5px',
+                mb: '10px',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: '100%',
+              }}
+            >
+              {emailSendedCountDown && (
+                <Countdown
+                  date={Date.now() + 59000}
+                  renderer={({ seconds }) => {
+                    return (
+                      <span>
+                        Надіслати повторно через {seconds < 10 ? '0' : ''}
+                        {seconds} секунд
+                      </span>
+                    );
+                  }}
+                  onComplete={() => setEmailSendedCountDown(false)}
+                />
+              )}
+            </Box>
+          </Box>
+        </Box>
       </Box>
-    </Box>
+    </>
   );
 };

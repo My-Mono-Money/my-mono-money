@@ -40,15 +40,20 @@ function App() {
   });
 
   const publicRoutes = (
-    <Route element={<OnlyPublic />}>
-      <Route element={<AuthLayout />}>
-        <Route path="sign-in" element={<SignInPage />} />
-        <Route path="sign-up" element={<SignUpPage />} />
-        <Route path="forgot-password" element={<ForgotPasswordPage />} />
-        <Route path="verify-email" element={<VerifyEmail />} />
-        <Route path="confirm-email" element={<ConfirmEmail />} />
+    <>
+      <Route element={<OnlyPublic />}>
+        <Route element={<AuthLayout />}>
+          <Route path="sign-in" element={<SignInPage />} />
+          <Route path="sign-up" element={<SignUpPage />} />
+          <Route path="forgot-password" element={<ForgotPasswordPage />} />
+
+          <Route path="confirm-email" element={<ConfirmEmail />} />
+        </Route>
       </Route>
-    </Route>
+      <Route element={<AuthLayout />}>
+        <Route path="verify-email" element={<VerifyEmail />} />
+      </Route>
+    </>
   );
 
   const privateRoutes = (

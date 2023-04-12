@@ -5,6 +5,7 @@ import { JwtAuthGuard } from 'src/layers/functionality/authentication/jwt/jwt-au
 import { SaveTokenService } from 'src/layers/functionality/tokens/save-token.service';
 import { SaveTokenBody } from './save-token.body';
 import { SaveTokenResponse } from './save-token.response';
+import { IsEmailVerifiedGuard } from 'src/layers/functionality/authentication/verify-email.guard';
 
 @Controller({
   path: '/tokens',
@@ -15,6 +16,7 @@ export class SaveTokenController {
   constructor(private saveTokenService: SaveTokenService) {}
 
   @Post()
+  @UseGuards(IsEmailVerifiedGuard)
   @ApiResponse({
     status: 201,
     description: 'Successful save token',

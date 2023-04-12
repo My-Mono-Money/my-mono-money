@@ -3,45 +3,30 @@ import { ConfigService } from '@nestjs/config';
 import { UserService } from 'src/layers/storage/services/user.service';
 import { SendEmailService } from '../send-email/send-email.service';
 import { confirmEmailTemplate } from '../send-email/templates/confirm-email.email-template';
-import { HashPasswordService } from './hashing/hash-password.service';
-import { IUserSignUp } from './interfaces/user-signup-dto.interface';
 import { GenerateJwtService } from './jwt/generate-jwt.service';
+import { UnverifiedEmailError } from 'src/common/errors/verified-email.error';
 
 @Injectable()
-export class SignUpService {
+export class ResendVerificationEmailService {
   constructor(
     private userService: UserService,
     private sendEmailService: SendEmailService,
     private generateJwtService: GenerateJwtService,
-    private hashPasswordService: HashPasswordService,
     private configService: ConfigService,
   ) {}
 
-  async signUp(user: IUserSignUp) {
-    const passwordHash = await this.hashPasswordService.hashPassword({
-      password: user.password,
-    });
-
+  async resendEmail(email: string) {
+    const user = await this.userService.getByEmail(email);
+    if (user.isEmailVerified) {
+      throw new UnverifiedEmailError();
+    }
     const verifyEmailToken = await this.generateJwtService.generateVerifyEmail(
       user,
     );
     const frontendUrl = this.configService.get('app.frontendUrl');
 
-    await this.userService.save(
-      {
-        email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        passwordHash,
-      },
-      {
-        afterSave: async () => {
-          await this.sendEmailService.sendEmail(
-            confirmEmailTemplate({ user, verifyEmailToken, frontendUrl }),
-          );
-        },
-      },
+    return await this.sendEmailService.sendEmail(
+      confirmEmailTemplate({ user, verifyEmailToken, frontendUrl }),
     );
-    return verifyEmailToken;
   }
 }
