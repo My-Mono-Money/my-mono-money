@@ -10,6 +10,12 @@ if [[ ! " ${AVAILABLE_ENVIRONMENT_SLOTS[*]} " =~ " ${ENVIRONMENT_SLOT} " ]]; the
   exit 1
 fi
 
+if [ ! -f dist.tar.gz ]
+then
+    echo "File dist.tar.gz not found. Run build".
+    exit 1
+fi
+
 scp dist.tar.gz "$VM_NAME:~/my-mono-money/slots/$ENVIRONMENT_SLOT"
 
 cat ./scripts/deploy/remote/unarchive.sh
