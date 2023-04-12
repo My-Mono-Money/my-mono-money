@@ -1,7 +1,7 @@
-import { ICreateAccountDto } from './create-account-dto.interface';
-
 export interface ICreateTransactionDto {
-  account: ICreateAccountDto;
+  account: {
+    id: string;
+  };
   time: number;
   description: string;
   mcc: number;

@@ -19,6 +19,7 @@ import { GetMonobankStatementService } from './statement/get-monobank-statement.
 import { SaveTokenService } from './tokens/save-token.service';
 import { ResendVerificationEmailService } from './authentication/resend-email.service';
 import { IsEmailVerifiedGuard } from './authentication/verify-email.guard';
+import { MonobankWebHookService } from './webhook/monobank-webhook.service';
 @Module({
   imports: [
     StorageModule,
@@ -44,6 +45,7 @@ import { IsEmailVerifiedGuard } from './authentication/verify-email.guard';
     GenerateJwtService,
     HashPasswordService,
     VerifyEmailService,
+    MonobankWebHookService,
     SaveTokenService,
     SendTestEmailService,
     DebugAccessGuard,
@@ -55,6 +57,7 @@ import { IsEmailVerifiedGuard } from './authentication/verify-email.guard';
     SendEmailService,
     VerifyEmailService,
     SignInService,
+    MonobankWebHookService,
     SaveTokenService,
     SendTestEmailService,
     TokenService,
