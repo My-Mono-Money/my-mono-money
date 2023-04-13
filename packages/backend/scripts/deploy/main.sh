@@ -26,3 +26,6 @@ ssh "$VM_NAME" "ENVIRONMENT_SLOT=$ENVIRONMENT_SLOT DEPLOYMENT_NAME=$DEPLOYMENT_N
 
 cat ./scripts/deploy/remote/install-deps.sh
 ssh "$VM_NAME" "ENVIRONMENT_SLOT=$ENVIRONMENT_SLOT DEPLOYMENT_NAME=$DEPLOYMENT_NAME bash -s" < ./scripts/deploy/remote/install-deps.sh
+
+cat ./scripts/deploy/remote/archive-old.sh
+ssh "$VM_NAME" "ENVIRONMENT_SLOT=$ENVIRONMENT_SLOT DEPLOYMENT_NAME=$DEPLOYMENT_NAME bash -s" < ./scripts/deploy/remote/archive-old.sh
