@@ -65,9 +65,9 @@ jobs:
             StrictHostKeyChecking no
           END
         env:
-          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_USER: webapps
           SSH_KEY: ${{ secrets.DO_WEBAPPS_KEY }}
-          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_HOST: 167.172.104.4
 
       - name: Launch Bash
       run: |
