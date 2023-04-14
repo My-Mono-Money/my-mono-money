@@ -35,7 +35,8 @@ jobs:
     needs: changes
     if: ${{ needs.changes.outputs.backend == 'true' }}
     with:
-      target: my-mono-money
+      target: production
+      environment: production
     secrets: inherit
 
   #JOB to build and deploy frontend

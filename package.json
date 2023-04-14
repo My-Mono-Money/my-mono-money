@@ -22,6 +22,8 @@
     "deploy:frontend:staging": "cd packages/frontend && yarn deploy:staging",
     "deploy:frontend:production": "cd packages/frontend && yarn deploy:production",
     "deploy:backend:development": "cd packages/backend && ./scripts/deploy/main.sh development",
+    "deploy:backend:staging": "cd packages/backend && ./scripts/deploy/main.sh staging",
+    "deploy:backend:production": "cd packages/backend && ./scripts/deploy/main.sh production",
     "test": "npm-run-all --parallel test:frontend test:backend",
     "test:frontend": "cd packages/frontend && yarn test",
     "test:backend": "cd packages/backend && yarn test",

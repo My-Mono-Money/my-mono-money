@@ -65,9 +65,20 @@ jobs:
             StrictHostKeyChecking no
           END
         env:
-          SSH_USER: webapps
+          SSH_USER: ${{ secrets.SSH_USER }}
           SSH_KEY: ${{ secrets.DO_WEBAPPS_KEY }}
-          SSH_HOST: 167.172.104.4
+          SSH_HOST: ${{ secrets.SSH_HOST }}
 
       - name: Launch Bash
-        run: yarn deploy:backend:development ${{ inputs.target }}
+      run: |
+          if [ "${{ inputs.target }}" = "development" ]; then
+            yarn deploy:backend:development
+          elif [ "${{ inputs.target }}" = "staging" ]; then
+            yarn deploy:backend:staging
+          elif [ "${{ inputs.target }}" = "production" ]; then
+            yarn deploy:backend:production
+          else
+            echo "Invalid target specified"
+            exit 1
+          fi
+        shell: bash
