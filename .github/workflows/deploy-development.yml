@@ -2,7 +2,7 @@ name: Deploy development
 on:
   push:
     branches:
-      - MMM-153-backend-deployment-new-process
+      - dev
 
 defaults:
   run:
