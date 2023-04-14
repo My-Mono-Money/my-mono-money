@@ -1,4 +1,35 @@
-name: Deploy to Heroku Hosting development
+# name: Deploy to Heroku Hosting development
+# on:
+#   workflow_call:
+#     inputs:
+#       target:
+#         required: true
+#         type: string
+
+# jobs:
+#   build_and_deploy_backend_development:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v2
+#       # install dependencies
+#       - run: yarn install:backend
+#         name: Install dependencies
+#       # start test
+#       - run: yarn test:backend:coverage
+#         name: Run tests
+#       # publish coverage
+#       - uses: codecov/codecov-action@v2
+#         with:
+#           token: ${{ secrets.CODECOV_TOKEN }}
+#           files: packages/backend/coverage/cobertura-coverage.xml
+#           flags: backend
+#       # deploy to heroku
+#       - uses: akhileshns/heroku-deploy@v3.12.12
+#         with:
+#           heroku_api_key: "${{ secrets.HEROKU_API_KEY }}"
+#           heroku_app_name: "${{ inputs.target }}"
+#           heroku_email: "${{ secrets.HEROKU_EMAIL }}"
+name: Deploy to VM
 on:
   workflow_call:
     inputs:
@@ -17,15 +48,26 @@ jobs:
       # start test
       - run: yarn test:backend:coverage
         name: Run tests
-      # publish coverage
-      - uses: codecov/codecov-action@v2
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: packages/backend/coverage/cobertura-coverage.xml
-          flags: backend
-      # deploy to heroku
-      - uses: akhileshns/heroku-deploy@v3.12.12
-        with:
-          heroku_api_key: "${{ secrets.HEROKU_API_KEY }}"
-          heroku_app_name: "${{ inputs.target }}" 
-          heroku_email: "${{ secrets.HEROKU_EMAIL }}"
+      # build project
+      - run: yarn build:backend:ci
+        name: Build project
+        
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_KEY" > ~/.ssh/do-webapps.key
+          chmod 600 ~/.ssh/do-webapps.key
+          cat >>~/.ssh/config <<END
+          Host do-webapps
+            HostName $SSH_HOST
+            User $SSH_USER
+            IdentityFile ~/.ssh/do-webapps.key
+            StrictHostKeyChecking no
+          END
+        env:
+          SSH_USER: webapps
+          SSH_KEY: ${{ secrets.DO_WEBAPPS_KEY }}
+          SSH_HOST: 167.172.104.4
+
+      - name: Launch Bash
+        run: yarn deploy:backend:development ${{ inputs.target }}
