@@ -65,12 +65,12 @@ jobs:
             StrictHostKeyChecking no
           END
         env:
-          SSH_USER: webapps
+          SSH_USER: ${{ secrets.SSH_USER }}
           SSH_KEY: ${{ secrets.DO_WEBAPPS_KEY }}
-          SSH_HOST: 167.172.104.4
+          SSH_HOST: ${{ secrets.SSH_HOST }}
 
       - name: Launch Bash
-      run: |
+        run: |
           if [ "${{ inputs.target }}" = "development" ]; then
             yarn deploy:backend:development
           elif [ "${{ inputs.target }}" = "staging" ]; then
