@@ -5,6 +5,9 @@ ENVIRONMENT_SLOT=$1
 VM_NAME="do-webapps"
 DEPLOYMENT_NAME="deployment-$(date +'%Y-%m-%d-%H-%M-%S')"
 
+set -e
+set -o pipefail
+
 if [[ ! " ${AVAILABLE_ENVIRONMENT_SLOTS[*]} " =~ " ${ENVIRONMENT_SLOT} " ]]; then
   echo "Unknown environment slot: ${ENVIRONMENT_SLOT}, available environment slots are: ${AVAILABLE_ENVIRONMENT_SLOTS[@]}"
   exit 1
