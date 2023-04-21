@@ -1,4 +1,4 @@
-# #!/bin/bash
+#!/bin/bash
 
 set -e
 
@@ -13,8 +13,15 @@ if [[ ! " ${AVAILABLE_ENVIRONMENT_SLOTS[*]} " =~ " ${ENVIRONMENT_SLOT} " ]]; the
   exit 1
 fi
 
-DATABASE_URL=$(ssh "$VM_NAME" "cd my-mono-money/slots/$ENVIRONMENT_SLOT/current && source .env.local && echo \$DATABASE_URL")
-ssh "$VM_NAME" "cd my-mono-money/slots/$ENVIRONMENT_SLOT/current"
+DATABASE_URL=$(ssh "$VM_NAME" "
+  cd my-mono-money/slots/$ENVIRONMENT_SLOT/current &&
+  source .env.local &&
+  echo \$DATABASE_URL
+")
+
+ssh "$VM_NAME" "
+  cd my-mono-money/slots/$ENVIRONMENT_SLOT/current
+"
 
 DEPLOYMENT_NAME="before-run-$(basename $(ssh $VM_NAME readlink -f my-mono-money/slots/$ENVIRONMENT_SLOT/current))"
 TAR_NAME="$DEPLOYMENT_NAME.tar.gz"
@@ -29,6 +36,19 @@ if ssh "$VM_NAME" test -f "my-mono-money/slots/$ENVIRONMENT_SLOT/$backup_dir/$TA
     TAR_NAME="$DEPLOYMENT_NAME.v$version.tar.gz"
 fi
 
-ssh "$VM_NAME" "cd my-mono-money/slots/$ENVIRONMENT_SLOT/current/ && pg_dump $DATABASE_URL > $DEPLOYMENT_NAME.sql && tar -czvf $TAR_NAME --exclude=$backup_dir $DEPLOYMENT_NAME.sql && mv $TAR_NAME ../$backup_dir/ && cd ../$backup_dir && backup_count=\$(ls -1q | wc -l) && if [ \$backup_count -gt $max_backups ]; then oldest_backup=\$(ls -t | tail -n 1) && rm \$oldest_backup; fi && cd ../current && rm $DEPLOYMENT_NAME.sql"
-
+# Create a backup of the database and move it to the backup directory
+ssh "$VM_NAME" "
+  cd my-mono-money/slots/$ENVIRONMENT_SLOT/current/ &&
+  pg_dump $DATABASE_URL > $DEPLOYMENT_NAME.sql &&
+  tar -czvf $TAR_NAME --exclude=$backup_dir $DEPLOYMENT_NAME.sql &&
+  mv $TAR_NAME ../$backup_dir/ &&
+  cd ../$backup_dir &&
+  backup_count=\$(ls -1q | wc -l) &&
+  if [ \$backup_count -gt $max_backups ]; then
+    oldest_backup=\$(ls -t | tail -n 1) &&
+    rm \$oldest_backup
+  fi &&
+  cd ../current &&
+  rm $DEPLOYMENT_NAME.sql
+"
 yarn typeorm migration:run
