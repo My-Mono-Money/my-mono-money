@@ -6,6 +6,7 @@ import { Outlet } from 'react-router-dom';
 import { Logout } from '@mui/icons-material';
 import { MenuItem, ListItemIcon } from '@mui/material';
 import { useAuthState } from '../auth-state/use-auth-state.hook';
+import PopupAddToken from '../common/components/popup-add-token/popup-add-token';
 
 const Header = () => {
   const { user, clearToken } = useAuthState();
@@ -84,6 +85,7 @@ const StatementLayout: React.FC = () => {
   return (
     <Box>
       <Header />
+      <PopupAddToken />
       <Box
         id="under-header"
         sx={{
