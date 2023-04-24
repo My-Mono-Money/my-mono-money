@@ -5,3 +5,5 @@ sudo service nginx configtest
 cd "my-mono-money/slots/$ENVIRONMENT_SLOT"
 rm current
 ln -s "$DEPLOYMENT_NAME" current
+sudo systemctl restart nginx
+pm2 start ~/ecosystem.config.js --only "my-mono-money-$ENVIRONMENT_SLOT-web" "my-mono-money-$ENVIRONMENT_SLOT-worker"
