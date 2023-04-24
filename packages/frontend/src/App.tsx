@@ -17,6 +17,7 @@ import { VerifyEmail } from './pages/verify-email/verify-email.page';
 import StatementLayout from './layouts/statement.layout';
 import { ToastContainer } from 'react-toastify';
 import { ConfirmEmail } from './pages/confirm-email/confirm-email.page';
+import Settings from './pages/settings/settings-page';
 
 function App() {
   const theme = createTheme({
@@ -60,6 +61,7 @@ function App() {
     <Route element={<Private />}>
       <Route element={<StatementLayout />}>
         <Route index element={<StatementsPage />} />
+        <Route path="settings" element={<Settings />} />
       </Route>
     </Route>
   );
