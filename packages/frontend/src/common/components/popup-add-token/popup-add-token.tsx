@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Box, Typography, Button } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useGlobalState } from '../../../global-state/use-global-state.hook';
@@ -32,7 +33,7 @@ const PopupAddToken = () => {
           justifyContent: 'center',
         }}
       >
-        Додати інший токен
+        <Link to="/settings"> Додати інший токен</Link>
       </Typography>
       <Button
         sx={{ margin: '5px' }}
