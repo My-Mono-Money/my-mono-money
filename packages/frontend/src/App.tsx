@@ -18,6 +18,7 @@ import StatementLayout from './layouts/statement.layout';
 import { ToastContainer } from 'react-toastify';
 import { ConfirmEmail } from './pages/confirm-email/confirm-email.page';
 import Settings from './pages/settings/settings-page';
+import { GlobalStateProvider } from './global-state/global-state.provider';
 
 function App() {
   const theme = createTheme({
@@ -70,13 +71,15 @@ function App() {
     <BrowserRouter>
       <ThemeProvider theme={theme}>
         <AuthStateProvider>
-          <Routes>
-            <Route element={<WaitForAuthResolve />}>
-              {publicRoutes}
-              {privateRoutes}
-            </Route>
-          </Routes>
-          <ToastContainer />
+          <GlobalStateProvider>
+            <Routes>
+              <Route element={<WaitForAuthResolve />}>
+                {publicRoutes}
+                {privateRoutes}
+              </Route>
+            </Routes>
+            <ToastContainer />
+          </GlobalStateProvider>
         </AuthStateProvider>
       </ThemeProvider>
     </BrowserRouter>
