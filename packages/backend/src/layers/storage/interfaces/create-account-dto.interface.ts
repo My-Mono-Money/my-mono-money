@@ -4,7 +4,7 @@ export interface ICreateAccountDto {
   token: ICreateMonobankTokenDto;
   sendId: string;
   currencyCode: number;
-  cashbackType: string;
+  cashbackType?: string;
   balance: number;
   creditLimit: number;
   maskedPan: string[];
