@@ -24,7 +24,6 @@
     "deploy:backend:development": "cd packages/backend && ./scripts/deploy/main.sh development",
     "deploy:backend:staging": "cd packages/backend && ./scripts/deploy/main.sh staging",
     "deploy:backend:production": "cd packages/backend && ./scripts/deploy/main.sh production",
-    "deploy:migration": "cd packages/backend && ./scripts/deploy/remote/backup-db.sh",
     "test": "npm-run-all --parallel test:frontend test:backend",
     "test:frontend": "cd packages/frontend && yarn test",
     "test:backend": "cd packages/backend && yarn test",
