@@ -17,8 +17,10 @@ export class Account implements ICreateAccountDto {
   @Column()
   currencyCode: number;
 
-  @Column()
-  cashbackType: string;
+  @Column({
+    nullable: true,
+  })
+  cashbackType?: string;
 
   @Column()
   balance: number;

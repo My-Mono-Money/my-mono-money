@@ -2,14 +2,16 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { Typography, IconButton, Menu } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
-import { Outlet } from 'react-router-dom';
-import { Logout } from '@mui/icons-material';
+import { Outlet, useNavigate } from 'react-router-dom';
+import { Logout, Settings, Home } from '@mui/icons-material';
 import { MenuItem, ListItemIcon } from '@mui/material';
 import { useAuthState } from '../auth-state/use-auth-state.hook';
+import PopupAddToken from '../common/components/popup-add-token/popup-add-token';
 
 const Header = () => {
   const { user, clearToken } = useAuthState();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const navigate = useNavigate();
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -68,6 +70,18 @@ const Header = () => {
           open={Boolean(anchorEl)}
           onClose={handleClose}
         >
+          <MenuItem onClick={() => navigate('/')}>
+            <ListItemIcon>
+              <Home fontSize="small" />
+            </ListItemIcon>
+            Home
+          </MenuItem>
+          <MenuItem onClick={() => navigate('/settings')}>
+            <ListItemIcon>
+              <Settings fontSize="small" />
+            </ListItemIcon>
+            Settings
+          </MenuItem>
           <MenuItem onClick={clearToken}>
             <ListItemIcon>
               <Logout fontSize="small" />
@@ -84,6 +98,7 @@ const StatementLayout: React.FC = () => {
   return (
     <Box>
       <Header />
+      <PopupAddToken />
       <Box
         id="under-header"
         sx={{

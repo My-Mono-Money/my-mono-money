@@ -1,3 +1,6 @@
+#!/bin/bash
+set -e
+set -o pipefail
 
 cd "my-mono-money/slots/$ENVIRONMENT_SLOT"
 ENVIRONMENT_PORT=$(cat config/.env.local | grep ^PORT= | awk -F '=' '{print $2}')

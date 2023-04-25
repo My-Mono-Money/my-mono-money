@@ -1,4 +1,6 @@
 #!/bin/bash
+set -e
+set -o pipefail
 
 cd "my-mono-money/slots/$ENVIRONMENT_SLOT"
 NUMBER=5
