@@ -64,7 +64,7 @@ const Statements: React.FC = () => {
     }
   }, [location]);
 
-  return !response?.items.length ? (
+  return response?.items.length ? (
     <StatementTable />
   ) : (
     <SaveTokenForm setIsTokenSaved={setIsTokenSaved} />
