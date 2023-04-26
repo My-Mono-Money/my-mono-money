@@ -12,7 +12,6 @@ export const AuthStateProvider: React.FC<IAuthStateProviderProps> = ({
 }) => {
   const [{ user, isAuthResolved, token }, setAuthState] =
     useState<IAuthState>(INITIAL_AUTH_STATE);
-
   const setToken = useCallback(
     (token: string) => {
       const user = jwt_decode(token) as IUser;
@@ -39,7 +38,13 @@ export const AuthStateProvider: React.FC<IAuthStateProviderProps> = ({
 
   return (
     <AuthStateContext.Provider
-      value={{ user, isAuthResolved, token, setToken, clearToken }}
+      value={{
+        user,
+        isAuthResolved,
+        token,
+        setToken,
+        clearToken,
+      }}
     >
       {children}
     </AuthStateContext.Provider>
