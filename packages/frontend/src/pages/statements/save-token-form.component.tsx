@@ -13,6 +13,7 @@ import {
 import { useAuthState } from '../../auth-state/use-auth-state.hook';
 import { SaveTokenValidationSchema } from './save-token.validation-schema';
 import { useGlobalState } from '../../global-state/use-global-state.hook';
+import InstructionAddToken from '../../common/components/instructions/instruction-add-token.component';
 
 interface IFormData {
   tokenMonobank: string;
@@ -76,23 +77,7 @@ const SaveTokenForm: React.FC<ISaveTokenFormProps> = ({ setIsTokenSaved }) => {
             <Typography sx={{ pb: '20px' }} variant="h4">
               Додайте свій monobank токен
             </Typography>
-            <Typography variant="h5">
-              1. Перейдіть на сайт api.monobank.ua
-            </Typography>
-            <Typography variant="h5">
-              2. Відкрийте застосунок monobank
-            </Typography>
-            <Typography variant="h5">
-              3. Перейдіть до розділу Ще та оберіть сканер QR - коду
-            </Typography>
-            <Typography variant="h5">
-              4. Відскануйте QR - код на сайті
-            </Typography>
-            <Typography variant="h5">5. Підтвердіть авторизацію</Typography>
-            <Typography variant="h5">
-              6. Скопіюйте токен з сайту та вставте в поле нижче
-            </Typography>
-            <Typography variant="h5">7. Готово!</Typography>
+            <InstructionAddToken />
             <Box
               component="form"
               noValidate

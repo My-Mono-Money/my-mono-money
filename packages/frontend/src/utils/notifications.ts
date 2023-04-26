@@ -1,10 +1,10 @@
 import { toast } from 'react-toastify';
 
-export function notify(text: string, icon: string) {
+export function notify(text: string, icon: string, delay = 500) {
   return toast.info(text, {
     position: 'top-center',
     icon: icon,
-    delay: 500,
+    delay: delay,
     autoClose: 2000,
     hideProgressBar: true,
     closeOnClick: true,
