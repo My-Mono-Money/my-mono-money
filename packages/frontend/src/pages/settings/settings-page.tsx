@@ -6,6 +6,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import { Box } from '@mui/material';
 import ShowTokenList from '../../common/components/settings/show-token-list';
+import AddNewToken from '../../common/components/settings/add-new-token.component';
 
 const drawerWidth = 240;
 
@@ -57,7 +58,12 @@ const Settings: React.FC = () => {
           alignItems: 'center',
         }}
       >
-        {selectedItem === 'Item 1' ? <ShowTokenList /> : null}
+        {selectedItem === 'Item 1' ? (
+          <>
+            <AddNewToken />
+            <ShowTokenList />
+          </>
+        ) : null}
         {selectedItem === 'Item 2' ? (
           <Typography variant="h5" sx={{ marginTop: '5%' }}>
             Далі буде реалізовано...
