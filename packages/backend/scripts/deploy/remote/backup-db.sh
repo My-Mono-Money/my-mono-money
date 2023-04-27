@@ -22,7 +22,7 @@ if test -f "my-mono-money/slots/$ENVIRONMENT_SLOT/$backup_dir/$TAR_NAME"; then
     TAR_NAME="$DEPLOYMENT_NAME.v$version.tar.gz"
 fi
 
-# Create a backup of the database and move it to the backup directory
+echo "Creating a backup of the database..."
 cd my-mono-money/slots/$ENVIRONMENT_SLOT/current/ &&
 pg_dump $DATABASE_URL > $DEPLOYMENT_NAME.sql &&
 tar -czvf $TAR_NAME --exclude=$backup_dir $DEPLOYMENT_NAME.sql &&
@@ -35,5 +35,4 @@ if [ $backup_count -gt $max_backups ]; then
 fi &&
 cd ../current &&
 rm $DEPLOYMENT_NAME.sql
-
-cd my-mono-money/slots/$ENVIRONMENT_SLOT/current/ && node node_modules/.bin/typeorm --config typeorm-cli.config.js migration:run
+echo "Database backup saved in archive"
