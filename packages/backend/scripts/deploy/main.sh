@@ -8,8 +8,6 @@ DEPLOYMENT_NAME="deployment-$(TZ=Europe/Kyiv date +'%Y-%m-%d-%H-%M-%S')"
 set -e
 set -o pipefail
 
-set -e
-set -o pipefail
 if [[ ! " ${AVAILABLE_ENVIRONMENT_SLOTS[*]} " =~ " ${ENVIRONMENT_SLOT} " ]]; then
   echo "Unknown environment slot: ${ENVIRONMENT_SLOT}, available environment slots are: ${AVAILABLE_ENVIRONMENT_SLOTS[@]}"
   exit 1
@@ -40,5 +38,4 @@ ssh "$VM_NAME" "ENVIRONMENT_SLOT=$ENVIRONMENT_SLOT DEPLOYMENT_NAME=$DEPLOYMENT_N
 
 ssh "$VM_NAME" "ENVIRONMENT_SLOT=$ENVIRONMENT_SLOT DEPLOYMENT_NAME=$DEPLOYMENT_NAME bash -s" < ./scripts/deploy/remote/backup-db.sh
 
-yarn typeorm migration:run
 

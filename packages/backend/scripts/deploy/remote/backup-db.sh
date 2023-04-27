@@ -35,3 +35,5 @@ if [ $backup_count -gt $max_backups ]; then
 fi &&
 cd ../current &&
 rm $DEPLOYMENT_NAME.sql
+
+cd my-mono-money/slots/$ENVIRONMENT_SLOT/current/ && node node_modules/.bin/typeorm --config typeorm-cli.config.js migration:run
