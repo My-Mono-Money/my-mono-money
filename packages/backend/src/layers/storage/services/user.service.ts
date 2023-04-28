@@ -17,12 +17,11 @@ export class UserService {
   async save(user: ICreateUserDto, { afterSave }: ISaveUserOptions = {}) {
     try {
       return await this.connection.transaction(async (manager) => {
+        const savedSpace = await manager.save(manager.create<Space>(Space, {}));
         const userEntity = manager.create<User>(User, user);
+        userEntity.ownSpace = savedSpace;
+        userEntity.defaultSpace = savedSpace;
         const savedUser = await manager.save(userEntity);
-        const spaceEntity = manager.create<Space>(Space, {
-          owner: savedUser,
-        });
-        await manager.save(spaceEntity);
 
         if (afterSave) {
           await afterSave();
@@ -75,15 +74,8 @@ export class UserService {
   }
 
   async getSpaceByEmail(email: string) {
-    const userId = (await this.getByEmail(email)).id;
     try {
-      return await this.connection.manager.findOne<Space>(Space, {
-        where: {
-          owner: {
-            id: userId,
-          },
-        },
-      });
+      return (await this.getByEmail(email)).ownSpace;
     } catch (e) {
       handleStorageError(e);
     }

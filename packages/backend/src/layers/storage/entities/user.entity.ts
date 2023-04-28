@@ -6,6 +6,8 @@ import {
   UpdateDateColumn,
   Unique,
   ManyToOne,
+  OneToOne,
+  JoinColumn,
 } from 'typeorm';
 import { ICreateUserDto } from '../interfaces/create-user-dto.interface';
 import { Space } from './space.entity';
@@ -37,6 +39,10 @@ export class User implements ICreateUserDto {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToOne(() => Space, { nullable: false })
+  @OneToOne(() => Space, { nullable: false, eager: true })
+  @JoinColumn()
+  ownSpace: Space;
+
+  @ManyToOne(() => Space, { nullable: false, eager: true })
   defaultSpace: Space;
 }

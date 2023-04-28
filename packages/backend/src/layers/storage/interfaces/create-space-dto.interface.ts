@@ -1,5 +1,2 @@
-import { ICreateUserDto } from './create-user-dto.interface';
-
-export interface ICreateSpaceDto {
-  owner: ICreateUserDto;
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface ICreateSpaceDto {}
