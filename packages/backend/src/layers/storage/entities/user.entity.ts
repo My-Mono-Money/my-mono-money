@@ -5,8 +5,10 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   Unique,
+  ManyToOne,
 } from 'typeorm';
 import { ICreateUserDto } from '../interfaces/create-user-dto.interface';
+import { Space } from './space.entity';
 
 @Entity()
 @Unique(['email'])
@@ -34,4 +36,7 @@ export class User implements ICreateUserDto {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @ManyToOne(() => Space, { nullable: false })
+  defaultSpace: Space;
 }
