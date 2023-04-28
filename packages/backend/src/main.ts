@@ -1,4 +1,5 @@
 import { NestFactory } from '@nestjs/core';
+import * as cors from 'cors';
 import { setupDocs } from './docs/setup-docs';
 import { BackendAppModule } from './backend-app.module';
 import { WorkerAppModule } from './worker-app.module';
@@ -12,7 +13,14 @@ async function bootstrapBackendApp() {
   setupVersioning(app);
   setupValidation(app);
   setupDocs(app);
-
+  app.use(
+    cors({
+      origin: [
+        process.env.ENVIRONMENT_FRONTEND_DOMAIN,
+        'http://localhost:3000',
+      ],
+    }),
+  );
   await app.listen(port);
 }
 
