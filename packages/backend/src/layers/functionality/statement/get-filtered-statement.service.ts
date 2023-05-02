@@ -17,7 +17,7 @@ import { UserService } from 'src/layers/storage/services/user.service';
 import * as mccCodes from '../../../common/mcc-codes/mcc-codes-ua.json';
 
 interface IGetFilteredStatement {
-  email: string;
+  spaceOwnerEmail: string;
   from: number;
   limit: number;
   card?: string;
@@ -39,14 +39,14 @@ export class GetFilteredStatementService {
   ) {}
 
   async getFilteredStatement({
-    email,
+    spaceOwnerEmail,
     from,
     limit,
     card,
     period,
     search,
   }: IGetFilteredStatement) {
-    const space = await this.userService.getSpaceByEmail(email);
+    const space = await this.userService.getSpaceByEmail(spaceOwnerEmail);
     const [, offset] = period.split(':');
     const numberOffset = offset ? -Number(offset) : 0;
     const timestampList = (period: string) => {

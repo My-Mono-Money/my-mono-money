@@ -21,6 +21,7 @@ import { usePagination } from './use-pagination.hook';
 import { useAuthState } from '../../auth-state/use-auth-state.hook';
 import { UpdatingIndicator } from '../../common/components/updating-indicator/updating-indicator.component';
 import PeriodFilter from './period-filter.component';
+import userEvent from '@testing-library/user-event';
 
 interface IStatementsResponse {
   items: IStatementItem[];
@@ -29,13 +30,16 @@ interface IStatementsResponse {
 
 const fetchStatements = async (
   token: string,
+  spaceOwnerId: string,
   page: number,
   period: string,
   search: string,
 ) => {
   try {
     const response = await axios.get<IStatementsResponse>(
-      `/statement?from=${page * 10}&limit=10&period=${period}&search=${search}`,
+      `/spaces/${spaceOwnerId}/statements?from=${
+        page * 10
+      }&limit=10&period=${period}&search=${search}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -90,7 +94,7 @@ const renderLoadingSkeleton = () => {
 };
 
 const StatementTable: React.FC = () => {
-  const { token } = useAuthState();
+  const { token, user } = useAuthState();
   const [page, setPage] = usePagination();
   const [loading, setLoading] = useState(true);
   const [response, setResponse] = useState<IStatementsResponse>();
@@ -109,17 +113,19 @@ const StatementTable: React.FC = () => {
   };
 
   useEffect(() => {
-    if (!token) {
+    if (!token || !user) {
       return;
     }
 
     setLoading(true);
-    fetchStatements(token, page, period, searchField).then((result) => {
-      if (result) {
-        setResponse(result);
-      }
-      setLoading(false);
-    });
+    fetchStatements(token, user.email, page, period, searchField).then(
+      (result) => {
+        if (result) {
+          setResponse(result);
+        }
+        setLoading(false);
+      },
+    );
   }, [searchField, page, period]);
 
   return (
