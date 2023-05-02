@@ -21,7 +21,6 @@ import { usePagination } from './use-pagination.hook';
 import { useAuthState } from '../../auth-state/use-auth-state.hook';
 import { UpdatingIndicator } from '../../common/components/updating-indicator/updating-indicator.component';
 import PeriodFilter from './period-filter.component';
-import userEvent from '@testing-library/user-event';
 
 interface IStatementsResponse {
   items: IStatementItem[];
