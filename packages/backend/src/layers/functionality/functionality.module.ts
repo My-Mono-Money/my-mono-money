@@ -20,6 +20,7 @@ import { SaveTokenService } from './tokens/save-token.service';
 import { ResendVerificationEmailService } from './authentication/resend-email.service';
 import { IsEmailVerifiedGuard } from './authentication/verify-email.guard';
 import { MonobankWebHookService } from './webhook/monobank-webhook.service';
+import { InviteMemberService } from './space/invite-member/invite-member.service';
 @Module({
   imports: [
     StorageModule,
@@ -49,6 +50,7 @@ import { MonobankWebHookService } from './webhook/monobank-webhook.service';
     SaveTokenService,
     SendTestEmailService,
     DebugAccessGuard,
+    InviteMemberService,
     GetMonobankStatementService,
     GetFilteredStatementService,
   ],
@@ -63,6 +65,7 @@ import { MonobankWebHookService } from './webhook/monobank-webhook.service';
     TokenService,
     DebugAccessGuard,
     IsEmailVerifiedGuard,
+    InviteMemberService,
     GetMonobankStatementService,
     GetFilteredStatementService,
     ResendVerificationEmailService,

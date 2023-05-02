@@ -5,3 +5,5 @@ export const INVALID_EMAIL_OR_PASSWORD_ERROR =
   'invalid-email-or-password-error';
 export const UNAUTHORIZED_ERROR = 'unauthorized-error';
 export const VERIFIED_EMAIL_ERROR = 'mail-verified-error';
+export const ACCESS_DENIED_ERROR = 'access-denied-error';
+export const NOT_ALLOWED_ERROR = 'not-allowed-error';
