@@ -10,17 +10,19 @@ import { GetFilteredStatementController } from './statement/get-filtered-stateme
 import { GetTokenController } from './tokens/get-token/get-token.controller';
 import { SaveTokenController } from './tokens/save-token/save-token.controller';
 import { MonobankWebHookController } from './webhook/monobank-webhook.controller';
+import { InviteMemberController } from './space/invite-member/invite-member.controller';
 
 @Module({
   imports: [FunctionalityModule, ConfigModule],
   controllers: [
     SignInController,
     SignUpController,
-    MonobankWebHookController,
     GetTokenController,
     SaveTokenController,
     VerifyEmailController,
+    InviteMemberController,
     SendTestEmailController,
+    MonobankWebHookController,
     GetFilteredStatementController,
     ResendVerificationEmailController,
   ],
