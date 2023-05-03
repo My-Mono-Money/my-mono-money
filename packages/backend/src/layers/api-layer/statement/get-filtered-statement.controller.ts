@@ -1,12 +1,11 @@
-import { Controller, Get, Query, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Query, Req, UseGuards, Param } from '@nestjs/common';
 import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { IRequestWithUser } from 'src/common/interfaces/request-with-user.interface';
 import { JwtAuthGuard } from 'src/layers/functionality/authentication/jwt/jwt-auth.guard';
 import { GetFilteredStatementService } from 'src/layers/functionality/statement/get-filtered-statement.service';
 import { GetFilteredStatementResponse } from './get-filtered-statement.response';
 
 @Controller({
-  path: '/statement',
+  path: '/spaces/:spaceOwnerEmail/statements',
   version: '1',
 })
 @UseGuards(JwtAuthGuard)
@@ -25,16 +24,15 @@ export class GetFilteredStatementController {
   @ApiTags('Statement')
   @ApiQuery({ name: 'card', required: false })
   async getFilteredStatement(
-    @Req() request: IRequestWithUser,
+    @Param('spaceOwnerEmail') spaceOwnerEmail: string,
     @Query('from') from: number,
     @Query('limit') limit: number,
     @Query('period') period: string,
     @Query('search') search: string,
     @Query('card') card?: string,
   ): Promise<GetFilteredStatementResponse> {
-    const { email } = request.user;
     const result = await this.getFilteredStatementService.getFilteredStatement({
-      email,
+      spaceOwnerEmail,
       from,
       limit,
       card,
