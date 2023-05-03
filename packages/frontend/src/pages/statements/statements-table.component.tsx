@@ -29,14 +29,14 @@ interface IStatementsResponse {
 
 const fetchStatements = async (
   token: string,
-  spaceOwnerId: string,
+  spaceOwnerEmail: string,
   page: number,
   period: string,
   search: string,
 ) => {
   try {
     const response = await axios.get<IStatementsResponse>(
-      `/spaces/${spaceOwnerId}/statements?from=${
+      `/spaces/${spaceOwnerEmail}/statements?from=${
         page * 10
       }&limit=10&period=${period}&search=${search}`,
       {
