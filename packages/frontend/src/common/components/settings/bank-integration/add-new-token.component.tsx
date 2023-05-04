@@ -12,10 +12,10 @@ import {
   DialogContent,
   DialogActions,
 } from '@mui/material';
-import InstructionAddToken from '../instructions/instruction-add-token.component';
+import InstructionAddToken from '../../instructions/instruction-add-token.component';
 import axios, { AxiosError } from 'axios';
-import { notify } from '../../../utils/notifications';
-import { useAuthState } from '../../../auth-state/use-auth-state.hook';
+import { notify } from '../../../../utils/notifications';
+import { useAuthState } from '../../../../auth-state/use-auth-state.hook';
 
 interface IFormData {
   tokenMonobank: string;
