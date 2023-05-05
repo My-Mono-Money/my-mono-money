@@ -21,6 +21,7 @@ import { ResendVerificationEmailService } from './authentication/resend-email.se
 import { IsEmailVerifiedGuard } from './authentication/verify-email.guard';
 import { MonobankWebHookService } from './webhook/monobank-webhook.service';
 import { InviteMemberService } from './space/invite-member/invite-member.service';
+import { GetSpaceMembersService } from './space/get-members/get-members.service';
 @Module({
   imports: [
     StorageModule,
@@ -51,6 +52,7 @@ import { InviteMemberService } from './space/invite-member/invite-member.service
     SendTestEmailService,
     DebugAccessGuard,
     InviteMemberService,
+    GetSpaceMembersService,
     GetMonobankStatementService,
     GetFilteredStatementService,
   ],
@@ -66,6 +68,7 @@ import { InviteMemberService } from './space/invite-member/invite-member.service
     DebugAccessGuard,
     IsEmailVerifiedGuard,
     InviteMemberService,
+    GetSpaceMembersService,
     GetMonobankStatementService,
     GetFilteredStatementService,
     ResendVerificationEmailService,
