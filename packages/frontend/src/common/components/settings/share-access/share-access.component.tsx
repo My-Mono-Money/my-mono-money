@@ -10,7 +10,7 @@ import {
   TableRow,
   TextField,
 } from '@mui/material';
-import { formatInTimeZone } from 'date-fns-tz';
+import { format } from 'date-fns';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import AlertDialog from './alert-confirm-remove.component';
@@ -97,9 +97,8 @@ const ShareAccess = () => {
           </TableHead>
           <TableBody>
             {spaceMembers?.items.map((row) => {
-              const formatTime = `${formatInTimeZone(
+              const formatTime = `${format(
                 new Date(row.updatedAt),
-                'Europe/Kiev',
                 'dd.MM.yyyy HH:mm',
               )}`;
               return (
