@@ -7,7 +7,7 @@ import { IRequestWithUser } from 'src/common/interfaces/request-with-user.interf
 import { JwtAuthGuard } from 'src/layers/functionality/authentication/jwt/jwt-auth.guard';
 
 @Controller({
-  path: '/:spaceOwnerEmail/members/invite',
+  path: '/spaces/:spaceOwnerEmail/members/invite',
   version: '1',
 })
 @UseGuards(JwtAuthGuard)
