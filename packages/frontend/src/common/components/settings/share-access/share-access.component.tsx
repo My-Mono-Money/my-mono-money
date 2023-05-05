@@ -10,7 +10,7 @@ import {
   TableRow,
   TextField,
 } from '@mui/material';
-import { format } from 'date-fns';
+import { formatInTimeZone } from 'date-fns-tz';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import AlertDialog from './alert-confirm-remove.component';
@@ -97,8 +97,9 @@ const ShareAccess = () => {
           </TableHead>
           <TableBody>
             {spaceMembers?.items.map((row) => {
-              const formatTime = `${format(
+              const formatTime = `${formatInTimeZone(
                 new Date(row.updatedAt),
+                'Europe/Kiev',
                 'dd.MM.yyyy HH:mm',
               )}`;
               return (
@@ -107,8 +108,10 @@ const ShareAccess = () => {
                     openAlertRemove={openAlertRemove}
                     setOpenAlertRemove={setOpenAlertRemove}
                   ></AlertDialog>
-                  <TableCell align="left" sx={{ display: 'flex' }}>
-                    {row.email} <Status statusCode={row.status} />
+                  <TableCell align="left">
+                    <Box sx={{ display: 'flex' }}>
+                      {row.email} <Status statusCode={row.status} />
+                    </Box>
                   </TableCell>
                   <TableCell align="center">{formatTime}</TableCell>
                   <TableCell align="right">

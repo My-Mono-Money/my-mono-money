@@ -51,6 +51,7 @@ export class SpaceService {
           where: { space: { id: spaceId } },
         },
       );
+
       return members;
     } catch (e) {
       handleStorageError(e);

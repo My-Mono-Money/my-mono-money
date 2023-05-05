@@ -15,6 +15,7 @@ export const createTypeOrmConfig: CreateTypeOrmConfig = () => ({
   cli: {
     migrationsDir: `${__dirname}/../database/migrations`,
   },
+  timezone: 'UTC',
 });
 
 export const typeOrmConfig = registerAs('typeorm', createTypeOrmConfig);

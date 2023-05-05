@@ -14,7 +14,7 @@ export class GetSpaceMembersController {
 
   @Get()
   @ApiResponse({
-    status: 201,
+    status: 200,
     description: 'Successful get members',
     type: GetSpaceMembersResponse,
   })
