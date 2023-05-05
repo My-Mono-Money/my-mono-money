@@ -13,6 +13,10 @@ interface ISaveInvitationMemberOptions {
   afterSave?: () => Promise<void>;
 }
 
+interface IGetSpaceMembersOptions {
+  spaceId: string;
+}
+
 @Injectable()
 export class SpaceService {
   constructor(private connection: Connection) {}
@@ -76,6 +80,21 @@ export class SpaceService {
           },
         ],
       });
+    } catch (e) {
+      handleStorageError(e);
+    }
+  }
+
+  async getSpaceMembers({ spaceId }: IGetSpaceMembersOptions) {
+    try {
+      const members = await this.connection.manager.find<SpaceMemberInvitation>(
+        SpaceMemberInvitation,
+        {
+          where: { space: { id: spaceId } },
+        },
+      );
+
+      return members;
     } catch (e) {
       handleStorageError(e);
     }

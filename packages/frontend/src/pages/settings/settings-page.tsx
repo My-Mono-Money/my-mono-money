@@ -3,10 +3,10 @@ import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import Typography from '@mui/material/Typography';
 import { Box } from '@mui/material';
-import ShowTokenList from '../../common/components/settings/show-token-list';
-import AddNewToken from '../../common/components/settings/add-new-token.component';
+import ShowTokenList from '../../common/components/settings/bank-integration/show-token-list';
+import AddNewToken from '../../common/components/settings/bank-integration/add-new-token.component';
+import ShareAccess from '../../common/components/settings/share-access/share-access.component';
 
 const drawerWidth = 240;
 
@@ -44,7 +44,7 @@ const Settings: React.FC = () => {
             onClick={() => handleItemClick('Item 2')}
             sx={{ '&.Mui-selected': { backgroundColor: 'primary.secondary' } }}
           >
-            <ListItemText primary="Item 2" />
+            <ListItemText primary="Спільний доступ" />
           </ListItemButton>
         </List>
       </Drawer>
@@ -64,11 +64,7 @@ const Settings: React.FC = () => {
             <ShowTokenList />
           </>
         ) : null}
-        {selectedItem === 'Item 2' ? (
-          <Typography variant="h5" sx={{ marginTop: '5%' }}>
-            Далі буде реалізовано...
-          </Typography>
-        ) : null}
+        {selectedItem === 'Item 2' ? <ShareAccess /> : null}
       </Box>
     </Box>
   );

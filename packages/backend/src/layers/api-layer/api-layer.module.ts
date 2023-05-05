@@ -12,6 +12,7 @@ import { SaveTokenController } from './tokens/save-token/save-token.controller';
 import { MonobankWebHookController } from './webhook/monobank-webhook.controller';
 import { InviteMemberController } from './space/invite-member/invite-member.controller';
 import { GetSpacesController } from './space/get-spaces/get-spaces.controller';
+import { GetSpaceMembersController } from './space/get-members/get-members.controller';
 
 @Module({
   imports: [FunctionalityModule, ConfigModule],
@@ -23,6 +24,7 @@ import { GetSpacesController } from './space/get-spaces/get-spaces.controller';
     SaveTokenController,
     VerifyEmailController,
     InviteMemberController,
+    GetSpaceMembersController,
     SendTestEmailController,
     MonobankWebHookController,
     GetFilteredStatementController,

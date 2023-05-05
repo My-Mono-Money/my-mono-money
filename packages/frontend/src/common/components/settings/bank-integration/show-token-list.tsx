@@ -9,7 +9,7 @@ import {
   TableRow,
 } from '@mui/material';
 import { format } from 'date-fns';
-import { useFetchTokenList } from '../../../api/useFetchTokenList';
+import { useFetchTokenList } from '../../../../api/useFetchTokenList';
 
 const ShowTokenList: React.FC = () => {
   const [tokenList, fetchTokenList] = useFetchTokenList();
@@ -21,7 +21,7 @@ const ShowTokenList: React.FC = () => {
   tokenList?.items[0].token;
 
   return (
-    <Box>
+    <Box sx={{ mb: '20px' }}>
       <TableContainer>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
