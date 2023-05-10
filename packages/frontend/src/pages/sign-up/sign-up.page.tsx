@@ -18,7 +18,7 @@ import PasswordField from '../../common/components/password-field/password-field
 interface IFormData {
   firstName: string;
   lastName: string;
-  email?: string;
+  email: string;
   password: string;
   confirmPassword: string;
 }

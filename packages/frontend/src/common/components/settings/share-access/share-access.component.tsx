@@ -18,11 +18,15 @@ import AlertDialog from './alert-confirm-remove.component';
 import { AddNewSharinglidationSchema } from './add-new-sharing.validation-schema';
 import Status from './status.component';
 import { useFetchSpaceMembersList } from '../../../../api/useFetchSpaceMembersList';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { useAuthState } from '../../../../auth-state/use-auth-state.hook';
 
 interface IFormData {
   email: string;
+}
+
+interface IErrorResponse {
+  message: string;
 }
 
 const ShareAccess = () => {
@@ -50,17 +54,22 @@ const ShareAccess = () => {
   };
 
   const onSubmit = async ({ email }: IFormData) => {
-    await axios.post(
-      `/spaces/${user?.email}/members/invite`,
-      { email: email },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
+    try {
+      await axios.post(
+        `/spaces/${user?.email}/members/invite`,
+        { email: email },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      },
-    );
-    await fetchSpaceMembers();
-    reset();
+      );
+      await fetchSpaceMembers();
+      reset();
+    } catch (err) {
+      const axiosError = err as unknown as AxiosError<IErrorResponse>;
+      alert(axiosError.response?.data.message);
+    }
   };
 
   return (
