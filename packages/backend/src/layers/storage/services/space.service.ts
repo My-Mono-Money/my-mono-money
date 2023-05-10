@@ -8,13 +8,15 @@ import { SpaceMemberInvitation } from '../entities/space-member-invitation.entit
 import { handleStorageError } from 'src/common/errors/utils/handle-storage-error';
 import { Space } from '../entities/space.entity';
 import { User } from '../entities/user.entity';
+import { IUpdateSpaceMemberInvitationDto } from '../interfaces/update-space-member-invitation-dto.interface';
 
-interface ISaveInvitationMemberOptions {
+interface IInvitationMemberOptions {
   afterSave?: () => Promise<void>;
 }
 
 interface IGetSpaceMembersOptions {
   spaceId: string;
+  spaceOwnerEmail: string;
 }
 
 @Injectable()
@@ -23,7 +25,7 @@ export class SpaceService {
 
   async saveInvitation(
     { email, space, status }: ICreateSpaceMemberInvitationDto,
-    { afterSave }: ISaveInvitationMemberOptions = {},
+    { afterSave }: IInvitationMemberOptions = {},
   ) {
     try {
       return await this.connection.transaction(async (manager) => {
@@ -42,6 +44,30 @@ export class SpaceService {
         }
 
         return savedInvitationMember;
+      });
+    } catch (e) {
+      handleStorageError(e);
+    }
+  }
+
+  async updateInvitationStatus(
+    { email, space, status }: IUpdateSpaceMemberInvitationDto,
+    { afterSave }: IInvitationMemberOptions = {},
+  ) {
+    try {
+      return await this.connection.transaction(async (manager) => {
+        const where = { email, space };
+        const updatedInvitationMember = manager.update<SpaceMemberInvitation>(
+          SpaceMemberInvitation,
+          where,
+          { status },
+        );
+
+        if (afterSave) {
+          await afterSave();
+        }
+
+        return updatedInvitationMember;
       });
     } catch (e) {
       handleStorageError(e);
@@ -85,16 +111,47 @@ export class SpaceService {
     }
   }
 
-  async getSpaceMembers({ spaceId }: IGetSpaceMembersOptions) {
+  async getSpaceMembers({ spaceId, spaceOwnerEmail }: IGetSpaceMembersOptions) {
     try {
       const members = await this.connection.manager.find<SpaceMemberInvitation>(
         SpaceMemberInvitation,
         {
-          where: { space: { id: spaceId } },
+          relations: ['space'],
+          where: [
+            {
+              email: spaceOwnerEmail,
+            },
+            { space: { id: spaceId } },
+          ],
         },
       );
+      const userIds = members.map((member) => member.space.id);
+      const users = await this.connection
+        .getRepository(User)
+        .createQueryBuilder('user')
+        .leftJoinAndSelect('user.ownSpace', 'space')
+        .select(['user.email', 'user.firstName', 'user.lastName', 'space.id'])
+        .where('user.ownSpace.id IN (:...userIds)', { userIds })
+        .getMany();
 
-      return members;
+      const membersWithOwner = members.map((member) => {
+        const ownerUser = users.find(
+          (user) => user.ownSpace.id === member.space.id,
+        );
+        return {
+          id: member.id,
+          email: member.email,
+          createAt: member.createdAt,
+          updatedAt: member.updatedAt,
+          status: member.status,
+          owner: {
+            email: ownerUser.email,
+            firstName: ownerUser.firstName,
+            lastName: ownerUser.lastName,
+          },
+        };
+      });
+      return membersWithOwner;
     } catch (e) {
       handleStorageError(e);
     }

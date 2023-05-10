@@ -17,6 +17,7 @@ export class GetSpaceMembersService {
     const space = await this.userService.getSpaceByEmail(spaceOwnerEmail);
     const members = await this.spaceService.getSpaceMembers({
       spaceId: space.id,
+      spaceOwnerEmail,
     });
 
     return members;

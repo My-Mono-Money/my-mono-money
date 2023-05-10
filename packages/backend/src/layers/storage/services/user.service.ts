@@ -14,13 +14,22 @@ interface ISaveUserOptions {
 export class UserService {
   constructor(private connection: Connection) {}
 
-  async save(user: ICreateUserDto, { afterSave }: ISaveUserOptions = {}) {
+  async save(
+    user: ICreateUserDto,
+    ownerSpace?: Space,
+    { afterSave }: ISaveUserOptions = {},
+  ) {
     try {
       return await this.connection.transaction(async (manager) => {
         const savedSpace = await manager.save(manager.create<Space>(Space, {}));
         const userEntity = manager.create<User>(User, user);
         userEntity.ownSpace = savedSpace;
-        userEntity.defaultSpace = savedSpace;
+        if (ownerSpace) {
+          userEntity.defaultSpace = ownerSpace;
+        } else {
+          userEntity.defaultSpace = savedSpace;
+        }
+
         const savedUser = await manager.save(userEntity);
 
         if (afterSave) {

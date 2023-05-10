@@ -18,8 +18,6 @@ const ShowTokenList: React.FC = () => {
     fetchTokenList();
   }, []);
 
-  tokenList?.items[0].token;
-
   return (
     <Box sx={{ mb: '20px' }}>
       <TableContainer>

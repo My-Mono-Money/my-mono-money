@@ -30,8 +30,18 @@ interface IErrorResponse {
 }
 
 const SignUp: React.FC = () => {
-  const [submittingError, setSubmittingError] = useState<string>();
+  //register by invitation
   const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const invitedEmail = decodeURIComponent(
+    searchParams.get('invitedEmail') || '',
+  );
+  const spaceOwnerEmail = decodeURIComponent(
+    searchParams.get('spaceOwnerEmail') || '',
+  );
+
+  const [submittingError, setSubmittingError] = useState<string>();
+
   const { setToken } = useAuthState();
   const state = location.state as IHistoryState;
   const {
@@ -42,28 +52,30 @@ const SignUp: React.FC = () => {
     defaultValues: {
       ...state,
       confirmPassword: state?.password,
+      email: invitedEmail || undefined,
     },
     resolver: yupResolver(SignUpValidationSchema),
     mode: 'onBlur',
   });
-
   const onSubmit = async ({
     firstName,
     lastName,
     email,
     password,
   }: IFormData) => {
+    if (invitedEmail) email = invitedEmail;
     try {
       const response = await axios.post('/auth/sign-up', {
         firstName,
         lastName,
         email,
+        spaceOwnerEmail,
         password,
       });
-
       if (!response.data.isSuccessful) {
         throw new Error("Can't recognize response as successful");
       }
+
       setToken(response.data.accessToken);
     } catch (err) {
       const axiosError = err as unknown as AxiosError<IErrorResponse>;
@@ -83,13 +95,15 @@ const SignUp: React.FC = () => {
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        pt: '100px',
+        pt: `${invitedEmail ? '50px' : '100px'}`,
         mx: 'auto',
         width: '285px',
       }}
     >
       <Typography variant="h5" fontWeight={500}>
-        Реєстрація
+        {invitedEmail
+          ? 'Щоб продовжити, заповніть будь ласка наступні дані про себе'
+          : 'Реєстрація'}
       </Typography>
       {submittingError && (
         <Alert severity="warning">
@@ -118,13 +132,13 @@ const SignUp: React.FC = () => {
       />
       <TextField
         id="email"
-        disabled={isSubmitting}
+        disabled={isSubmitting || invitedEmail ? true : false}
         label="Пошта"
         margin="normal"
         type="email"
         {...register('email')}
-        error={errors.email ? true : false}
-        helperText={errors.email?.message}
+        error={!invitedEmail && errors.email ? true : false}
+        helperText={!invitedEmail && errors.email?.message}
       />
       <PasswordField
         id="password"
@@ -154,10 +168,14 @@ const SignUp: React.FC = () => {
           p: 2,
         }}
       >
-        <Typography>Вже маєте аккаунт?</Typography>
-        <Typography pl={1}>
-          <Link to="/sign-in">Увійти</Link>
-        </Typography>
+        {invitedEmail ? null : (
+          <>
+            <Typography>Вже маєте аккаунт?</Typography>
+            <Typography pl={1}>
+              <Link to="/sign-in">Увійти</Link>
+            </Typography>
+          </>
+        )}
       </Box>
     </Box>
   );

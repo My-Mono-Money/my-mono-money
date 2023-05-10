@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -7,14 +7,14 @@ import { Box } from '@mui/material';
 import ShowTokenList from '../../common/components/settings/bank-integration/show-token-list';
 import AddNewToken from '../../common/components/settings/bank-integration/add-new-token.component';
 import ShareAccess from '../../common/components/settings/share-access/share-access.component';
+import { useGlobalState } from '../../global-state/use-global-state.hook';
 
 const drawerWidth = 240;
 
 const Settings: React.FC = () => {
-  const [selectedItem, setSelectedItem] = useState<string>('Item 1');
-
+  const { settingsPageSelected, setChoiceSettingsPage } = useGlobalState();
   const handleItemClick = (item: string) => {
-    setSelectedItem(item);
+    setChoiceSettingsPage(item);
   };
 
   return (
@@ -33,14 +33,14 @@ const Settings: React.FC = () => {
       >
         <List>
           <ListItemButton
-            selected={selectedItem === 'Item 1'}
+            selected={settingsPageSelected === 'Item 1'}
             onClick={() => handleItemClick('Item 1')}
             sx={{ '&.Mui-selected': { backgroundColor: 'primary.secondary' } }}
           >
             <ListItemText primary="Інтеграція Monobank" />
           </ListItemButton>
           <ListItemButton
-            selected={selectedItem === 'Item 2'}
+            selected={settingsPageSelected === 'Item 2'}
             onClick={() => handleItemClick('Item 2')}
             sx={{ '&.Mui-selected': { backgroundColor: 'primary.secondary' } }}
           >
@@ -58,13 +58,13 @@ const Settings: React.FC = () => {
           alignItems: 'center',
         }}
       >
-        {selectedItem === 'Item 1' ? (
+        {settingsPageSelected === 'Item 1' ? (
           <>
             <AddNewToken />
             <ShowTokenList />
           </>
         ) : null}
-        {selectedItem === 'Item 2' ? <ShareAccess /> : null}
+        {settingsPageSelected === 'Item 2' ? <ShareAccess /> : null}
       </Box>
     </Box>
   );

@@ -4,4 +4,9 @@ export interface ISpaceMembers {
   status: string;
   createdAt: string;
   updatedAt: string;
+  owner: {
+    email: string;
+    firstName: string;
+    lastName: string;
+  };
 }

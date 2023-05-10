@@ -47,8 +47,8 @@ function App() {
         <Route element={<AuthLayout />}>
           <Route path="sign-in" element={<SignInPage />} />
           <Route path="sign-up" element={<SignUpPage />} />
+          <Route path="accept-invite" element={<SignUpPage />} />
           <Route path="forgot-password" element={<ForgotPasswordPage />} />
-
           <Route path="confirm-email" element={<ConfirmEmail />} />
         </Route>
       </Route>

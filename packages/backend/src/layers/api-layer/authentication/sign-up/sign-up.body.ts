@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional } from 'class-validator';
 
 export class SignUpBody {
   @ApiProperty({ example: 'bober@example.com' })
@@ -17,4 +17,8 @@ export class SignUpBody {
   @ApiProperty({ example: 'Duzy' })
   @IsNotEmpty()
   public lastName!: string;
+
+  @ApiProperty({ example: 'boberOwner@example.com' })
+  @IsOptional()
+  public spaceOwnerEmail?: string;
 }

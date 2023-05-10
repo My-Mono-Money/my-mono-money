@@ -5,7 +5,11 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useGlobalState } from '../../../global-state/use-global-state.hook';
 
 const PopupAddToken = () => {
-  const { isPopupAddTokenEnable, setTogglePopupAddToken } = useGlobalState();
+  const {
+    isPopupAddTokenEnable,
+    setTogglePopupAddToken,
+    setChoiceSettingsPage,
+  } = useGlobalState();
   if (!isPopupAddTokenEnable) {
     return null;
   }
@@ -37,7 +41,10 @@ const PopupAddToken = () => {
       </Typography>
       <Button
         sx={{ margin: '5px' }}
-        onClick={() => setTogglePopupAddToken(false)}
+        onClick={() => {
+          setChoiceSettingsPage('Item 1');
+          setTogglePopupAddToken(false);
+        }}
       >
         <CloseIcon />
       </Button>
