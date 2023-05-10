@@ -12,24 +12,33 @@ interface IGlobalStateProviderProps {
 export const GlobalStateProvider: React.FC<IGlobalStateProviderProps> = ({
   children,
 }) => {
-  const [{ isPopupAddTokenEnable }, setIsPopupAddTokenEnable] =
+  const [{ isPopupAddTokenEnable, settingsPageSelected }, setGlobalState] =
     useState<IGlobalState>(INITIAL_GLOBAL_STATE);
 
   const setTogglePopupAddToken = useCallback(
     (isShow: boolean) => {
-      setIsPopupAddTokenEnable({ isPopupAddTokenEnable: isShow });
+      setGlobalState({ isPopupAddTokenEnable: isShow, settingsPageSelected });
       isShow
         ? localStorage.setItem('popupAddToken', 'true')
         : localStorage.removeItem('popupAddToken');
     },
-    [setIsPopupAddTokenEnable],
+    [setGlobalState],
   );
+
+  const setChoiceSettingsPage = (settingPage: string) => {
+    setGlobalState({
+      settingsPageSelected: settingPage,
+      isPopupAddTokenEnable,
+    });
+  };
 
   return (
     <GlobalStateContext.Provider
       value={{
+        settingsPageSelected,
         isPopupAddTokenEnable,
         setTogglePopupAddToken,
+        setChoiceSettingsPage,
       }}
     >
       {children}

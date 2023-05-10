@@ -8,9 +8,12 @@ interface StatusProps {
   statusCode: string;
 }
 const status = [
-  { name: 'Активний', icon: <CheckIcon /> },
-  { name: 'Очікування на підтвердження', icon: <PendingIcon /> },
-  { name: 'Відхилено', icon: <NotInterestedIcon /> },
+  { name: 'Активний', icon: <CheckIcon fontSize="small" /> },
+  {
+    name: 'Очікування на підтвердження',
+    icon: <PendingIcon fontSize="small" />,
+  },
+  { name: 'Відхилено', icon: <NotInterestedIcon fontSize="small" /> },
 ];
 
 const Status: React.FC<StatusProps> = ({ statusCode }) => {
@@ -36,7 +39,7 @@ const Status: React.FC<StatusProps> = ({ statusCode }) => {
         gap: '5px',
         color: color,
         float: 'left',
-        fontSize: '12px',
+        fontSize: '8px',
         ml: '10px',
         alignItems: 'center',
       }}

@@ -46,7 +46,12 @@ export class InviteMemberService {
       {
         afterSave: async () => {
           await this.sendEmailService.sendEmail(
-            invitationMemberEmailTemplate({ email, frontendUrl, user }),
+            invitationMemberEmailTemplate({
+              email,
+              frontendUrl,
+              user,
+              spaceOwnerEmail,
+            }),
           );
         },
       },

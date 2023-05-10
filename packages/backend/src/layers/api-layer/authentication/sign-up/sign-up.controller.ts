@@ -19,15 +19,18 @@ export class SignUpController {
   })
   @ApiTags('Authentication')
   async signUp(
-    @Body() { email, password, firstName, lastName }: SignUpBody,
+    @Body()
+    { email, password, firstName, lastName, spaceOwnerEmail }: SignUpBody,
   ): Promise<SignUpResponse> {
-    const accessToken = await this.signUpService.signUp({
-      email,
-      firstName,
-      lastName,
-      password,
-    });
-
+    const { accessToken } = await this.signUpService.signUp(
+      {
+        email,
+        firstName,
+        lastName,
+        password,
+      },
+      spaceOwnerEmail,
+    );
     return {
       isSuccessful: true,
       accessToken,
