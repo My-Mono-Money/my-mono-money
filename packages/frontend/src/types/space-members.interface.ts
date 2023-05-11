@@ -1,4 +1,4 @@
-export interface ISpaceMembers {
+export interface ISpaceMember {
   id: string;
   email: string;
   status: string;
