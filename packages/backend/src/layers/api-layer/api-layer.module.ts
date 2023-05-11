@@ -13,6 +13,7 @@ import { MonobankWebHookController } from './webhook/monobank-webhook.controller
 import { InviteMemberController } from './space/invite-member/invite-member.controller';
 import { GetSpacesController } from './space/get-spaces/get-spaces.controller';
 import { GetSpaceMembersController } from './space/get-members/get-members.controller';
+import { RemoveMemberController } from './space/remove-member.controller.ts/remove-member.controller';
 
 @Module({
   imports: [FunctionalityModule, ConfigModule],
@@ -29,6 +30,7 @@ import { GetSpaceMembersController } from './space/get-members/get-members.contr
     MonobankWebHookController,
     GetFilteredStatementController,
     ResendVerificationEmailController,
+    RemoveMemberController,
   ],
 })
 export class ApiLayerModule {}

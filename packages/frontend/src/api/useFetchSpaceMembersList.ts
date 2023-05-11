@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { useAuthState } from '../auth-state/use-auth-state.hook';
 import { useCallback, useState } from 'react';
-import { ISpaceMembers } from '../types/space-members.interface';
+import { ISpaceMember } from '../types/space-members.interface';
 
 interface ISpaceMembersResponse {
-  items: ISpaceMembers[];
+  items: ISpaceMember[];
 }
 
 export const useFetchSpaceMembersList = (): [

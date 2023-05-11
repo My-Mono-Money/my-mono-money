@@ -74,6 +74,26 @@ export class SpaceService {
     }
   }
 
+  async removeInvitation({ space, memberEmail }) {
+    try {
+      const invitation = await this.connection
+        .getRepository(SpaceMemberInvitation)
+        .createQueryBuilder('invitation')
+        .leftJoin('invitation.space', 'space')
+        .where('invitation.email = :memberEmail', { memberEmail })
+        .andWhere('space.id = :spaceId', { spaceId: space.id })
+        .getOne();
+
+      if (invitation) {
+        await this.connection.manager.remove(invitation);
+        return true;
+      }
+      return false;
+    } catch (e) {
+      handleStorageError(e);
+    }
+  }
+
   async getSpaceListForUserByEmail(email: string) {
     try {
       const selectOwnSpaceIdQuery = this.connection

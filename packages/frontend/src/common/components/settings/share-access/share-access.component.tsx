@@ -49,8 +49,8 @@ const ShareAccess = () => {
     fetchSpaceMembers();
   }, []);
 
-  const handleRemoveShare = (id: string) => {
-    setOpenAlertRemove(id);
+  const handleRemoveShare = (row: string) => {
+    setOpenAlertRemove(row);
   };
 
   const onSubmit = async ({ email }: IFormData) => {
@@ -137,6 +137,11 @@ const ShareAccess = () => {
                     <AlertDialog
                       openAlertRemove={openAlertRemove}
                       setOpenAlertRemove={setOpenAlertRemove}
+                      fetchSpaceMembers={fetchSpaceMembers}
+                      table={'userSpace'}
+                      spaceMembers={spaceMembers}
+                      userEmail={user?.email}
+                      token={token}
                     ></AlertDialog>
                     <TableCell align="left">
                       <Box sx={{ display: 'flex' }}>
@@ -194,6 +199,11 @@ const ShareAccess = () => {
                     <AlertDialog
                       openAlertRemove={openAlertRemove}
                       setOpenAlertRemove={setOpenAlertRemove}
+                      fetchSpaceMembers={fetchSpaceMembers}
+                      table={'otherSpace'}
+                      spaceMembers={spaceMembers}
+                      userEmail={user?.email}
+                      token={token}
                     ></AlertDialog>
                     <TableCell align="left">
                       {formatName(row.owner.firstName)}{' '}
