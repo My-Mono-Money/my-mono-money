@@ -5,6 +5,7 @@ import { ICreateUserDto } from '../interfaces/create-user-dto.interface';
 import { User } from '../entities/user.entity';
 import { IUpdateUserDto } from '../interfaces/update-user-dto.interface';
 import { Space } from '../entities/space.entity';
+import { ICreateSpaceDto } from '../interfaces/create-space-dto.interface';
 
 interface ISaveUserOptions {
   afterSave?: () => Promise<void>;
@@ -48,6 +49,18 @@ export class UserService {
       const where = { email };
 
       return await this.connection.manager.update(User, where, user);
+    } catch (e) {
+      handleStorageError(e);
+    }
+  }
+
+  async updateDefaultSpace(email: string, space: ICreateSpaceDto) {
+    try {
+      return await this.connection.transaction(async (manager) => {
+        const where = { email };
+
+        return manager.update<User>(User, where, { defaultSpace: space });
+      });
     } catch (e) {
       handleStorageError(e);
     }
