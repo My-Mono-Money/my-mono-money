@@ -15,6 +15,7 @@ import { GetSpacesController } from './space/get-spaces/get-spaces.controller';
 import { GetSpaceMembersController } from './space/get-members/get-members.controller';
 import { AcceptInviteController } from './invites/accept-invite/accept-invite.controller';
 import { GetUserController } from './user/get-user.controller';
+import { RemoveMemberController } from './space/remove-member.controller.ts/remove-member.controller';
 
 @Module({
   imports: [FunctionalityModule, ConfigModule],
@@ -33,6 +34,7 @@ import { GetUserController } from './user/get-user.controller';
     MonobankWebHookController,
     GetFilteredStatementController,
     ResendVerificationEmailController,
+    RemoveMemberController,
   ],
 })
 export class ApiLayerModule {}
