@@ -3,7 +3,7 @@ import { IAuthContext } from './auth-context.interface';
 import jwt_decode from 'jwt-decode';
 import { IUser } from './auth-state.interface';
 
-const token = sessionStorage.getItem('token') ?? undefined;
+const token = localStorage.getItem('token') ?? undefined;
 
 export const INITIAL_AUTH_STATE = {
   token,
