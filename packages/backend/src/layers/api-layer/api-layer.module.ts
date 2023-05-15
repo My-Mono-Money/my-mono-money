@@ -14,12 +14,14 @@ import { InviteMemberController } from './space/invite-member/invite-member.cont
 import { GetSpacesController } from './space/get-spaces/get-spaces.controller';
 import { GetSpaceMembersController } from './space/get-members/get-members.controller';
 import { AcceptInviteController } from './invites/accept-invite/accept-invite.controller';
+import { GetUserController } from './user/get-user.controller';
 
 @Module({
   imports: [FunctionalityModule, ConfigModule],
   controllers: [
     SignInController,
     SignUpController,
+    GetUserController,
     GetTokenController,
     GetSpacesController,
     SaveTokenController,

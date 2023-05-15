@@ -24,6 +24,7 @@ import { InviteMemberService } from './space/invite-member/invite-member.service
 import { GetSpacesService } from './space/get-spaces/get-spaces.service';
 import { GetSpaceMembersService } from './space/get-members/get-members.service';
 import { InvitesService } from './invites/invites.service';
+import { GetUserService } from './user/get-user.service';
 @Module({
   imports: [
     StorageModule,
@@ -47,6 +48,7 @@ import { InvitesService } from './invites/invites.service';
     SendEmailService,
     ResendVerificationEmailService,
     GenerateJwtService,
+    GetUserService,
     HashPasswordService,
     InvitesService,
     VerifyEmailService,
@@ -67,6 +69,7 @@ import { InvitesService } from './invites/invites.service';
     SignInService,
     MonobankWebHookService,
     SaveTokenService,
+    GetUserService,
     SendTestEmailService,
     TokenService,
     InvitesService,
