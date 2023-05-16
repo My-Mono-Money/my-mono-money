@@ -176,4 +176,17 @@ export class SpaceService {
       handleStorageError(e);
     }
   }
+
+  async getMemberInvite(email: string, spaceId: string) {
+    try {
+      return await this.connection.manager.findOne(SpaceMemberInvitation, {
+        where: {
+          email,
+          space: spaceId,
+        },
+      });
+    } catch (e) {
+      handleStorageError(e);
+    }
+  }
 }

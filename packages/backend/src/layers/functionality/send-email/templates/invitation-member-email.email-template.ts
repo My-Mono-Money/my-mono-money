@@ -16,16 +16,22 @@ export const invitationMemberEmailTemplate = ({
   function encodeForUrl(email: string) {
     return encodeURIComponent(email.replace(/\+/g, '%2B'));
   }
+  const urlForNewUser = `Please, follow the <a href="${frontendUrl}/accept-invite?invitedEmail=${encodeForUrl(
+    email,
+  )}&spaceOwnerEmail=${encodeForUrl(
+    spaceOwnerEmail,
+  )}">link</a> to accept invite`;
+
+  const urlForExistingUser = `Please, follow the <a href="${frontendUrl}/invitation?spaceOwnerEmail=${encodeForUrl(
+    spaceOwnerEmail,
+  )}">link</a> to accept invite`;
+
   return {
     to: {
       email: email,
       name: user ? `${user?.firstName} ${user?.lastName}` : undefined,
     },
     subject: 'Invitation to a shared space',
-    content: `Please, follow the <a href="${frontendUrl}/accept-invite?invitedEmail=${encodeForUrl(
-      email,
-    )}&spaceOwnerEmail=${encodeForUrl(
-      spaceOwnerEmail,
-    )}">link</a> to accept invite`,
+    content: user ? urlForExistingUser : urlForNewUser,
   };
 };

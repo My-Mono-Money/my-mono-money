@@ -23,6 +23,8 @@ import { MonobankWebHookService } from './webhook/monobank-webhook.service';
 import { InviteMemberService } from './space/invite-member/invite-member.service';
 import { GetSpacesService } from './space/get-spaces/get-spaces.service';
 import { GetSpaceMembersService } from './space/get-members/get-members.service';
+import { InvitesService } from './invites/invites.service';
+import { GetUserService } from './user/get-user.service';
 import { RemoveMemberService } from './space/remove-member.service.ts/remove-member.service';
 @Module({
   imports: [
@@ -47,7 +49,9 @@ import { RemoveMemberService } from './space/remove-member.service.ts/remove-mem
     SendEmailService,
     ResendVerificationEmailService,
     GenerateJwtService,
+    GetUserService,
     HashPasswordService,
+    InvitesService,
     VerifyEmailService,
     MonobankWebHookService,
     SaveTokenService,
@@ -67,8 +71,10 @@ import { RemoveMemberService } from './space/remove-member.service.ts/remove-mem
     SignInService,
     MonobankWebHookService,
     SaveTokenService,
+    GetUserService,
     SendTestEmailService,
     TokenService,
+    InvitesService,
     GetSpacesService,
     DebugAccessGuard,
     IsEmailVerifiedGuard,

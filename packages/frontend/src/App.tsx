@@ -19,6 +19,7 @@ import { ToastContainer } from 'react-toastify';
 import { ConfirmEmail } from './pages/confirm-email/confirm-email.page';
 import Settings from './pages/settings/settings-page';
 import { GlobalStateProvider } from './global-state/global-state.provider';
+import { InvitationPage } from './pages/invitation/invitation.page';
 
 function App() {
   const theme = createTheme({
@@ -63,6 +64,7 @@ function App() {
       <Route element={<StatementLayout />}>
         <Route index element={<StatementsPage />} />
         <Route path="settings" element={<Settings />} />
+        <Route path="invitation" element={<InvitationPage />} />
       </Route>
     </Route>
   );

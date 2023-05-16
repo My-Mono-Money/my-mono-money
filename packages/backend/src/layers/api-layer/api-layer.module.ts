@@ -13,6 +13,8 @@ import { MonobankWebHookController } from './webhook/monobank-webhook.controller
 import { InviteMemberController } from './space/invite-member/invite-member.controller';
 import { GetSpacesController } from './space/get-spaces/get-spaces.controller';
 import { GetSpaceMembersController } from './space/get-members/get-members.controller';
+import { AcceptInviteController } from './invites/accept-invite/accept-invite.controller';
+import { GetUserController } from './user/get-user.controller';
 import { RemoveMemberController } from './space/remove-member.controller.ts/remove-member.controller';
 
 @Module({
@@ -20,10 +22,12 @@ import { RemoveMemberController } from './space/remove-member.controller.ts/remo
   controllers: [
     SignInController,
     SignUpController,
+    GetUserController,
     GetTokenController,
     GetSpacesController,
     SaveTokenController,
     VerifyEmailController,
+    AcceptInviteController,
     InviteMemberController,
     GetSpaceMembersController,
     SendTestEmailController,
