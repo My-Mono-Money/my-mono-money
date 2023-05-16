@@ -7,3 +7,4 @@ export const UNAUTHORIZED_ERROR = 'unauthorized-error';
 export const VERIFIED_EMAIL_ERROR = 'mail-verified-error';
 export const ACCESS_DENIED_ERROR = 'access-denied-error';
 export const NOT_ALLOWED_ERROR = 'not-allowed-error';
+export const TOKEN_EMPTY_ERROR = 'token-list-empty-error';

@@ -5,30 +5,26 @@ import { notify } from '../../utils/notifications';
 import { useAuthState } from '../../auth-state/use-auth-state.hook';
 import SaveTokenForm from './save-token-form.component';
 import StatementTable from './statements-table.component';
-import { useFetchTokenList } from '../../api/useFetchTokenList';
+import { useFetchSpaceMembersList } from '../../api/useFetchSpaceMembersList';
 
 const Statements: React.FC = () => {
   const { token, user } = useAuthState();
   const [isTokenSaved, setIsTokenSaved] = useState(false);
-  const [tokenList, fetchTokenList] = useFetchTokenList();
+  const [spaceMembers, fetchSpaceMembers] = useFetchSpaceMembersList();
   const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (!token) return;
     if (!user?.isEmailVerified) navigate('/verify-email');
+    fetchSpaceMembers();
   }, []);
-
-  useEffect(() => {
-    if (!token) {
-      return;
-    }
-    fetchTokenList();
-  }, [isTokenSaved]);
 
   useEffect(() => {
     if (isTokenSaved) {
       notify('Котики зберегли ваш токен', '🐈');
+      fetchSpaceMembers();
+      setIsTokenSaved(false);
     }
   }, [isTokenSaved]);
 
@@ -42,7 +38,7 @@ const Statements: React.FC = () => {
     }
   }, [location]);
 
-  return tokenList?.items.length ? (
+  return spaceMembers.length >= 1 ? (
     <StatementTable />
   ) : (
     <SaveTokenForm setIsTokenSaved={setIsTokenSaved} />

@@ -7,6 +7,8 @@ import { ConfigService } from '@nestjs/config';
 import { invitationMemberEmailTemplate } from '../../send-email/templates/invitation-member-email.email-template';
 import { AccessDeniedError } from 'src/common/errors/access-denied-error';
 import { NotAllowedError } from 'src/common/errors/no-allowed-error';
+import { TokenService } from 'src/layers/storage/services/token.service';
+import { TokenEmptyError } from 'src/common/errors/token-empty-error';
 
 interface IInviteMemberData {
   email: string;
@@ -21,6 +23,7 @@ export class InviteMemberService {
     private spaceService: SpaceService,
     private sendEmailService: SendEmailService,
     private configService: ConfigService,
+    private tokenService: TokenService,
   ) {}
 
   async sendInvitation({
@@ -31,11 +34,18 @@ export class InviteMemberService {
     const space = await this.userService.getSpaceByEmail(spaceOwnerEmail);
     const user = await this.userService.getByEmail(email);
     const frontendUrl = this.configService.get('app.frontendUrl');
+    const tokenList = await this.tokenService.getTokenList({
+      email: spaceOwnerEmail,
+    });
+
     if (actorEmail !== spaceOwnerEmail) {
       throw new AccessDeniedError();
     }
     if (spaceOwnerEmail === email) {
       throw new NotAllowedError();
+    }
+    if (tokenList.length < 1) {
+      throw new TokenEmptyError();
     }
     await this.spaceService.saveInvitation(
       {

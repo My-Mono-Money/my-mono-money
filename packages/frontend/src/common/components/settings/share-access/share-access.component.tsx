@@ -20,13 +20,10 @@ import Status from './status.component';
 import { useFetchSpaceMembersList } from '../../../../api/useFetchSpaceMembersList';
 import axios, { AxiosError } from 'axios';
 import { useAuthState } from '../../../../auth-state/use-auth-state.hook';
+import { IErrorResponse } from '../../../../types/error-response.interface';
 
 interface IFormData {
   email: string;
-}
-
-interface IErrorResponse {
-  message: string;
 }
 
 const ShareAccess = () => {
@@ -124,7 +121,7 @@ const ShareAccess = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {spaceMembers?.items
+            {spaceMembers
               .filter((el) => user?.email === el.owner.email)
               .sort((a, b) => +new Date(b.updatedAt) - +new Date(a.updatedAt))
               .map((row) => {
@@ -181,7 +178,7 @@ const ShareAccess = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {spaceMembers?.items
+            {spaceMembers
               .filter((el) => user?.email !== el.owner.email)
               .filter((el) => el.status !== 'reject')
               .sort((a, b) => +new Date(b.updatedAt) - +new Date(a.updatedAt))

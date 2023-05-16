@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import { SignUpValidationSchema } from './sign-up.validation-schema';
 import PasswordField from '../../common/components/password-field/password-field.component';
+import { useGlobalState } from '../../global-state/use-global-state.hook';
 
 interface IFormData {
   firstName: string;
@@ -43,6 +44,7 @@ const SignUp: React.FC = () => {
   const [submittingError, setSubmittingError] = useState<string>();
 
   const { setToken } = useAuthState();
+  const { setTogglePopupAddToken } = useGlobalState();
   const state = location.state as IHistoryState;
   const {
     register,
@@ -75,7 +77,7 @@ const SignUp: React.FC = () => {
       if (!response.data.isSuccessful) {
         throw new Error("Can't recognize response as successful");
       }
-
+      if (invitedEmail) setTogglePopupAddToken(true);
       setToken(response.data.accessToken);
     } catch (err) {
       const axiosError = err as unknown as AxiosError<IErrorResponse>;

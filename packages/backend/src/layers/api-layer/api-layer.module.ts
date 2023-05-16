@@ -14,6 +14,7 @@ import { InviteMemberController } from './space/invite-member/invite-member.cont
 import { GetSpacesController } from './space/get-spaces/get-spaces.controller';
 import { GetSpaceMembersController } from './space/get-members/get-members.controller';
 import { RemoveMemberController } from './space/remove-member.controller.ts/remove-member.controller';
+import { ChangeDefaultUserSpaceController } from './space/change-default-user-space/change-defalut-user-space.controller';
 
 @Module({
   imports: [FunctionalityModule, ConfigModule],
@@ -31,6 +32,7 @@ import { RemoveMemberController } from './space/remove-member.controller.ts/remo
     GetFilteredStatementController,
     ResendVerificationEmailController,
     RemoveMemberController,
+    ChangeDefaultUserSpaceController,
   ],
 })
 export class ApiLayerModule {}

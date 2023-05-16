@@ -5,24 +5,18 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogTitle from '@mui/material/DialogTitle';
 import { ISpaceMember } from '../../../../types/space-members.interface';
 import axios, { AxiosError } from 'axios';
-
-interface ISpaceMembersResponse {
-  items: ISpaceMember[];
-}
+import { IErrorResponse } from '../../../../types/error-response.interface';
 
 interface IAlertRemove {
   openAlertRemove: string;
   table: string;
   setOpenAlertRemove: (memberId: string) => void;
   fetchSpaceMembers: () => void;
-  spaceMembers: ISpaceMembersResponse;
+  spaceMembers: ISpaceMember[];
   userEmail?: string;
   token?: string;
 }
 
-interface IErrorResponse {
-  message: string;
-}
 const AlertDialog = ({
   openAlertRemove,
   setOpenAlertRemove,
@@ -32,7 +26,7 @@ const AlertDialog = ({
   userEmail,
   token,
 }: IAlertRemove) => {
-  const spaceMember = spaceMembers?.items.find(
+  const spaceMember = spaceMembers?.find(
     (member: ISpaceMember) => member.id === openAlertRemove,
   );
   const handleClose = () => {

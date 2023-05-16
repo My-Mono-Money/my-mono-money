@@ -10,10 +10,11 @@ import {
 } from '@mui/material';
 import { format } from 'date-fns';
 import { useFetchTokenList } from '../../../../api/useFetchTokenList';
+import { useGlobalState } from '../../../../global-state/use-global-state.hook';
 
 const ShowTokenList: React.FC = () => {
-  const [tokenList, fetchTokenList] = useFetchTokenList();
-
+  const [, fetchTokenList] = useFetchTokenList();
+  const { tokenList } = useGlobalState();
   useEffect(() => {
     fetchTokenList();
   }, []);
@@ -29,7 +30,17 @@ const ShowTokenList: React.FC = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {tokenList?.items.map((row) => {
+            {tokenList && tokenList?.length < 1 && (
+              <TableRow sx={{ width: 'full' }}>
+                <TableCell>
+                  {' '}
+                  Щоб додати інших користувачів до свого простору, спочатку
+                  додайте монобанк токен
+                </TableCell>
+                <TableCell align="right"></TableCell>
+              </TableRow>
+            )}
+            {tokenList?.map((row) => {
               const formatTime = `${format(
                 new Date(row.createdAt),
                 'dd.MM.yyyy HH:mm',

@@ -89,4 +89,15 @@ export class UserService {
       handleStorageError(e);
     }
   }
+  async changeDefaultUserSpace(email: string, space: any) {
+    try {
+      return await this.connection.manager.update<User>(
+        User,
+        { email },
+        { defaultSpace: space },
+      );
+    } catch (e) {
+      handleStorageError(e);
+    }
+  }
 }

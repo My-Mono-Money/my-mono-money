@@ -14,6 +14,7 @@ import { useAuthState } from '../../auth-state/use-auth-state.hook';
 import { SaveTokenValidationSchema } from './save-token.validation-schema';
 import { useGlobalState } from '../../global-state/use-global-state.hook';
 import InstructionAddToken from '../../common/components/instructions/instruction-add-token.component';
+import { useFetchSpaceMembersList } from '../../api/useFetchSpaceMembersList';
 
 interface IFormData {
   tokenMonobank: string;
@@ -25,6 +26,7 @@ interface ISaveTokenFormProps {
 
 const SaveTokenForm: React.FC<ISaveTokenFormProps> = ({ setIsTokenSaved }) => {
   const { token } = useAuthState();
+  const [, fetchSpaceMembers] = useFetchSpaceMembersList();
   const { setTogglePopupAddToken } = useGlobalState();
   const {
     register,
@@ -48,8 +50,10 @@ const SaveTokenForm: React.FC<ISaveTokenFormProps> = ({ setIsTokenSaved }) => {
           },
         },
       );
-      setIsTokenSaved(true);
+
       setTogglePopupAddToken(true);
+      setIsTokenSaved(true);
+      fetchSpaceMembers();
     } catch (err) {
       console.log(err);
     }
