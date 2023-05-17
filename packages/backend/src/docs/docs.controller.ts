@@ -4,6 +4,7 @@ import * as fs from 'fs';
 import * as handlebars from 'handlebars';
 import { ArchInsightsService } from './services/arch-insights.service';
 import { IsOptional, IsString, Matches } from 'class-validator';
+import { ApiExcludeEndpoint } from '@nestjs/swagger';
 
 class DocsPageNameParams {
   @IsOptional()
@@ -15,12 +16,12 @@ class DocsPageNameParams {
 @Controller({ path: '/docs' })
 export class DocsController {
   constructor(private archService: ArchInsightsService) {}
-
+  @ApiExcludeEndpoint()
   @Get('/')
   index() {
     return this.docs();
   }
-
+  @ApiExcludeEndpoint()
   @Get('/:pageName')
   docs(@Param() params: DocsPageNameParams = {}) {
     const { pageName = 'index' } = params;
