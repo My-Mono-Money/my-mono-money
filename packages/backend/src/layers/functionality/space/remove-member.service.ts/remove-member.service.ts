@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { SpaceService } from 'src/layers/storage/services/space.service';
-import { UserService } from 'src/layers/storage/services/user.service';
+import { SpaceStorage } from 'src/layers/storage/services/space.storage';
+import { UserStorage } from 'src/layers/storage/services/user.storage';
 import { NotFoundError } from 'src/common/errors/not-found.error';
 
 interface IRemoveMemberData {
@@ -11,14 +11,14 @@ interface IRemoveMemberData {
 @Injectable()
 export class RemoveMemberService {
   constructor(
-    private userService: UserService,
-    private spaceService: SpaceService,
+    private userStorage: UserStorage,
+    private spaceStorage: SpaceStorage,
   ) {}
 
   async removeInvitation({ spaceOwnerEmail, memberEmail }: IRemoveMemberData) {
-    const space = await this.userService.getSpaceByEmail(spaceOwnerEmail);
+    const space = await this.userStorage.getSpaceByEmail(spaceOwnerEmail);
 
-    const result = await this.spaceService.removeInvitation({
+    const result = await this.spaceStorage.removeInvitation({
       memberEmail,
       space,
     });

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { handleStorageError } from 'src/common/errors/utils/handle-storage-error';
-import { UserService } from 'src/layers/storage/services/user.service';
-import { StatementService } from '../../storage/services/statement.service';
+import { UserStorage } from 'src/layers/storage/services/user.storage';
+import { StatementStorage } from '../../storage/services/statement.storage';
 
 interface IMonobankWebHookData {
   transactionInfo: {
@@ -29,17 +29,17 @@ interface IMonobankWebHookData {
 @Injectable()
 export class MonobankWebHookService {
   constructor(
-    private userService: UserService,
-    private statementService: StatementService,
+    private userStorage: UserStorage,
+    private statementStorage: StatementStorage,
   ) {}
 
   async saveTransaction({ transactionInfo, hash }: IMonobankWebHookData) {
     try {
-      const user = await this.userService.geyByEmailHash(hash);
+      const user = await this.userStorage.geyByEmailHash(hash);
       if (!user) {
         throw new Error('Немає такого користувача');
       }
-      return await this.statementService.saveStatement({
+      return await this.statementStorage.saveStatement({
         transactions: [
           {
             ...transactionInfo,

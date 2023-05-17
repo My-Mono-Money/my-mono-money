@@ -1,7 +1,7 @@
 import { DeepMocked } from '@golevelup/ts-jest';
 import { DuplicatedEntityError } from 'src/common/errors/duplicated-entity.error';
 import { UnknownError } from 'src/common/errors/unknown.error';
-import { SendinblueService } from 'src/layers/integrations/sendinblue/sendinblue.service';
+import { SendinblueIntegration } from 'src/layers/integration/sendinblue/sendinblue.integration';
 import { createTestModuleForController } from 'src/test-utils/create-test-module-for-controller';
 import { databaseErrors } from 'src/test-utils/errors/database-errors';
 import { EntityManager } from 'typeorm';
@@ -10,7 +10,7 @@ import { SignUpController } from './sign-up.controller';
 describe('Sign Up controller', () => {
   let signUpController: SignUpController;
   let mockedManager: DeepMocked<EntityManager>;
-  let mockedSendInBlueService: DeepMocked<SendinblueService>;
+  let mockedSendInBlueIntegration: DeepMocked<SendinblueIntegration>;
 
   beforeEach(async () => {
     const testBootstrapResult = await createTestModuleForController([
@@ -18,7 +18,8 @@ describe('Sign Up controller', () => {
     ]);
     const moduleRef = testBootstrapResult.module;
     mockedManager = testBootstrapResult.mocks.mockedManager;
-    mockedSendInBlueService = testBootstrapResult.mocks.mockedSendInBlueService;
+    mockedSendInBlueIntegration =
+      testBootstrapResult.mocks.mockedSendInBlueIntegration;
 
     signUpController = moduleRef.get(SignUpController);
   });
@@ -32,7 +33,9 @@ describe('Sign Up controller', () => {
     });
 
     expect(result.isSuccessful).toBe(true);
-    expect(mockedSendInBlueService.sendTransactionalEmail).toHaveBeenCalledWith(
+    expect(
+      mockedSendInBlueIntegration.sendTransactionalEmail,
+    ).toHaveBeenCalledWith(
       expect.objectContaining({
         to: {
           email: 'ao.salenko+johnny.depp@gmail.com',
@@ -60,7 +63,7 @@ describe('Sign Up controller', () => {
     } catch (e) {
       expect(e).toEqual(new DuplicatedEntityError());
       expect(
-        mockedSendInBlueService.sendTransactionalEmail,
+        mockedSendInBlueIntegration.sendTransactionalEmail,
       ).not.toHaveBeenCalled();
     }
   });
@@ -80,7 +83,7 @@ describe('Sign Up controller', () => {
     } catch (e) {
       expect(e).toEqual(new UnknownError());
       expect(
-        mockedSendInBlueService.sendTransactionalEmail,
+        mockedSendInBlueIntegration.sendTransactionalEmail,
       ).not.toHaveBeenCalled();
     }
   });
@@ -88,7 +91,7 @@ describe('Sign Up controller', () => {
   it("Email hasn't been sent", async () => {
     expect.assertions(1);
 
-    mockedSendInBlueService.sendTransactionalEmail.mockRejectedValueOnce(
+    mockedSendInBlueIntegration.sendTransactionalEmail.mockRejectedValueOnce(
       new Error('Some sendinblue error'),
     );
 

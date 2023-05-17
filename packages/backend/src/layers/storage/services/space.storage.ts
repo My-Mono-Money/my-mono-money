@@ -20,7 +20,7 @@ interface IGetSpaceMembersOptions {
 }
 
 @Injectable()
-export class SpaceService {
+export class SpaceStorage {
   constructor(private connection: Connection) {}
 
   async saveInvitation(

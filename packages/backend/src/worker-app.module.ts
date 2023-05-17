@@ -7,7 +7,7 @@ import { authConfig } from './configs/auth.config';
 import { redisConfig } from './configs/redis.config';
 import { sendinblueConfig } from './configs/sendinblue.config';
 import { typeOrmConfig } from './configs/typeorm.config';
-import { WorkerLayerModule } from './layers/worker-layer/worker-layer.module';
+import { WorkerLayerModule } from './layers/worker/worker-layer.worker';
 
 @Module({
   imports: [

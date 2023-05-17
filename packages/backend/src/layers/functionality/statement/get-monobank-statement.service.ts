@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { MonobankService } from 'src/layers/integrations/monobank/monobank.service';
-import { StatementService } from 'src/layers/storage/services/statement.service';
+import { MonobankIntegration } from 'src/layers/integration/monobank/monobank.integration';
+import { StatementStorage } from 'src/layers/storage/services/statement.storage';
 import {
   getUnixTime,
   startOfMonth,
@@ -44,13 +44,13 @@ const toInTimestamp = () => {
 @Injectable()
 export class GetMonobankStatementService {
   constructor(
-    private monobankService: MonobankService,
-    private statementService: StatementService,
+    private monobankIntegration: MonobankIntegration,
+    private statementStorage: StatementStorage,
     private configService: ConfigService,
   ) {}
 
   async getStatement({ tokenId }: IGetStatement) {
-    const accountList = await this.statementService.getAccountByTokenId(
+    const accountList = await this.statementStorage.getAccountByTokenId(
       tokenId,
     );
     const from = fromInTimestamp();
@@ -58,7 +58,7 @@ export class GetMonobankStatementService {
     const transactions: ICreateTransactionDto[] = [];
     for (let i = 0; i < accountList.length; i++) {
       for (let j = 0; j < from.length; j++) {
-        const statementPart = await this.monobankService.getStatement({
+        const statementPart = await this.monobankIntegration.getStatement({
           accountId: accountList[i].id,
           token: accountList[i].token.token,
           from: from[j],
@@ -75,6 +75,6 @@ export class GetMonobankStatementService {
         );
       }
     }
-    await this.statementService.saveStatement({ transactions });
+    await this.statementStorage.saveStatement({ transactions });
   }
 }

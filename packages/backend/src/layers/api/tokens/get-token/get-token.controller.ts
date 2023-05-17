@@ -2,8 +2,8 @@ import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { ApiResponse, ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { IRequestWithUser } from 'src/common/interfaces/request-with-user.interface';
 import { JwtAuthGuard } from 'src/layers/functionality/authentication/jwt/jwt-auth.guard';
-import { TokenService } from 'src/layers/storage/services/token.service';
 import { GetTokenResponse } from './get-token.response';
+import { TokenService } from 'src/layers/functionality/tokens/get-token.service';
 
 @Controller({
   path: '/tokens',

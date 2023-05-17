@@ -7,7 +7,7 @@ function delay(ms) {
 }
 
 @Processor('email')
-export class SendTestEmailConsumer {
+export class SendTestEmailWorker {
   constructor(private sendTestEmailService: SendTestEmailService) {}
   @Process({
     concurrency: 1,

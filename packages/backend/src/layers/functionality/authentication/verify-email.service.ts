@@ -1,23 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { NotFoundError } from 'src/common/errors/not-found.error';
-import { UserService } from 'src/layers/storage/services/user.service';
+import { UserStorage } from 'src/layers/storage/services/user.storage';
 import { SignInService } from './sign-in.service';
 
 @Injectable()
 export class VerifyEmailService {
   constructor(
-    private userService: UserService,
+    private userStorage: UserStorage,
     private signInService: SignInService,
   ) {}
 
   async verifyEmail(email: string) {
-    const user = await this.userService.getByEmail(email);
+    const user = await this.userStorage.getByEmail(email);
 
     if (!user) {
       throw new NotFoundError();
     }
 
-    await this.userService.updateByEmail(email, { isEmailVerified: true });
+    await this.userStorage.updateByEmail(email, { isEmailVerified: true });
     return await this.signInService.signInByEmail(email);
   }
 }

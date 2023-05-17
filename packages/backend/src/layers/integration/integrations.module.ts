@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
 import { ConfigModule } from '@nestjs/config';
-import { SendinblueService } from './sendinblue/sendinblue.service';
-import { MonobankService } from './monobank/monobank.service';
+import { SendinblueIntegration } from './sendinblue/sendinblue.integration';
+import { MonobankIntegration } from './monobank/monobank.integration';
 import { BullModule } from '@nestjs/bull';
-import { QueueService } from './queue/queue.service';
+import { QueueIntegration } from './queue/queue.integration';
 
 @Module({
   imports: [
@@ -17,7 +17,7 @@ import { QueueService } from './queue/queue.service';
     ConfigModule,
     HttpModule,
   ],
-  providers: [SendinblueService, MonobankService, QueueService],
-  exports: [SendinblueService, MonobankService, QueueService],
+  providers: [SendinblueIntegration, MonobankIntegration, QueueIntegration],
+  exports: [SendinblueIntegration, MonobankIntegration, QueueIntegration],
 })
 export class IntegrationsModule {}

@@ -1,5 +1,5 @@
 import { createMock } from '@golevelup/ts-jest';
-import { SendinblueService } from 'src/layers/integrations/sendinblue/sendinblue.service';
+import { SendinblueIntegration } from 'src/layers/integration/sendinblue/sendinblue.integration';
 
-export const createMockedSendInBlueService = () =>
-  createMock<SendinblueService>();
+export const createMockedSendInBlueIntegration = () =>
+  createMock<SendinblueIntegration>();

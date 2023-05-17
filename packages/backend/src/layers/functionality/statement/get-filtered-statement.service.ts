@@ -12,8 +12,8 @@ import {
   subWeeks,
   subYears,
 } from 'date-fns';
-import { StatementService } from 'src/layers/storage/services/statement.service';
-import { UserService } from 'src/layers/storage/services/user.service';
+import { StatementStorage } from 'src/layers/storage/services/statement.storage';
+import { UserStorage } from 'src/layers/storage/services/user.storage';
 import * as mccCodes from '../../../common/mcc-codes/mcc-codes-ua.json';
 
 interface IGetFilteredStatement {
@@ -34,8 +34,8 @@ const year = startOfYear(new Date());
 @Injectable()
 export class GetFilteredStatementService {
   constructor(
-    private statementService: StatementService,
-    private userService: UserService,
+    private statementStorage: StatementStorage,
+    private userStorage: UserStorage,
   ) {}
 
   async getFilteredStatement({
@@ -46,7 +46,7 @@ export class GetFilteredStatementService {
     period,
     search,
   }: IGetFilteredStatement) {
-    const space = await this.userService.getSpaceByEmail(spaceOwnerEmail);
+    const space = await this.userStorage.getSpaceByEmail(spaceOwnerEmail);
     const [, offset] = period.split(':');
     const numberOffset = offset ? -Number(offset) : 0;
     const timestampList = (period: string) => {
@@ -91,7 +91,7 @@ export class GetFilteredStatementService {
         };
       }
     };
-    const list = await this.statementService.getStatement({
+    const list = await this.statementStorage.getStatement({
       spaceId: space.id,
       from,
       limit,

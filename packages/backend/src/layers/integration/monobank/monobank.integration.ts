@@ -21,7 +21,7 @@ interface IMonobankClientInfoResponse {
 }
 
 @Injectable()
-export class MonobankService {
+export class MonobankIntegration {
   constructor(
     private httpService: HttpService,
     private configService: ConfigService,

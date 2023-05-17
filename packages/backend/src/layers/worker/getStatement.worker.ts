@@ -4,7 +4,7 @@ import { Job } from 'bull';
 import { GetMonobankStatementService } from '../functionality/statement/get-monobank-statement.service';
 
 @Processor('statement')
-export class GetStatementConsumer {
+export class GetStatementWorker {
   constructor(
     private getMonobankStatementService: GetMonobankStatementService,
   ) {}

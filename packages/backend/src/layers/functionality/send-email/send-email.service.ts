@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { SendinblueService } from 'src/layers/integrations/sendinblue/sendinblue.service';
+import { SendinblueIntegration } from 'src/layers/integration/sendinblue/sendinblue.integration';
 
 interface ISendEmailOptions {
   to: {
@@ -12,10 +12,10 @@ interface ISendEmailOptions {
 
 @Injectable()
 export class SendEmailService {
-  constructor(private sendinblueService: SendinblueService) {}
+  constructor(private sendinblueIntegration: SendinblueIntegration) {}
 
   async sendEmail({ to, subject, content }: ISendEmailOptions) {
-    await this.sendinblueService.sendTransactionalEmail({
+    await this.sendinblueIntegration.sendTransactionalEmail({
       to,
       subject,
       content,

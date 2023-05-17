@@ -12,7 +12,7 @@ interface ISaveUserOptions {
 }
 
 @Injectable()
-export class UserService {
+export class UserStorage {
   constructor(private connection: Connection) {}
 
   async save(

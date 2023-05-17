@@ -5,7 +5,7 @@ import { Account } from '../entities/account.entity';
 import { MonobankToken } from '../entities/monobank-token.entity';
 import { ICreateAccountDto } from '../interfaces/create-account-dto.interface';
 import { ICreateSpaceDto } from '../interfaces/create-space-dto.interface';
-import { UserService } from './user.service';
+import { UserStorage } from './user.storage';
 
 interface ISaveTokenWithAccountsDto {
   token: string;
@@ -18,10 +18,10 @@ interface IGetTokenList {
 }
 
 @Injectable()
-export class TokenService {
+export class TokenStorage {
   constructor(
     private connection: Connection,
-    private userService: UserService,
+    private userService: UserStorage,
   ) {}
 
   async saveTokenWithAccounts({
