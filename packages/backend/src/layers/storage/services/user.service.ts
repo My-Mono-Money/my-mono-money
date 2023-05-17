@@ -102,4 +102,16 @@ export class UserService {
       handleStorageError(e);
     }
   }
+
+  async changeDefaultSpace(email: string, space: ICreateSpaceDto) {
+    try {
+      return await this.connection.transaction(async (manager) => {
+        const where = { email };
+
+        return manager.update<User>(User, where, { defaultSpace: space });
+      });
+    } catch (e) {
+      handleStorageError(e);
+    }
+  }
 }

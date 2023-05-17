@@ -26,6 +26,7 @@ import { GetSpaceMembersService } from './space/get-members/get-members.service'
 import { InvitesService } from './invites/invites.service';
 import { GetUserService } from './user/get-user.service';
 import { RemoveMemberService } from './space/remove-member.service.ts/remove-member.service';
+import { ChangeDefaultUserSpaceService } from './space/change-default-user-space.service.ts/change-default-user-space.service';
 @Module({
   imports: [
     StorageModule,
@@ -59,6 +60,7 @@ import { RemoveMemberService } from './space/remove-member.service.ts/remove-mem
     DebugAccessGuard,
     GetSpacesService,
     InviteMemberService,
+    ChangeDefaultUserSpaceService,
     RemoveMemberService,
     GetSpaceMembersService,
     GetMonobankStatementService,
@@ -79,6 +81,7 @@ import { RemoveMemberService } from './space/remove-member.service.ts/remove-mem
     DebugAccessGuard,
     IsEmailVerifiedGuard,
     InviteMemberService,
+    ChangeDefaultUserSpaceService,
     RemoveMemberService,
     GetSpaceMembersService,
     GetMonobankStatementService,

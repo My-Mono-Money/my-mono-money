@@ -21,6 +21,7 @@ import { usePagination } from './use-pagination.hook';
 import { useAuthState } from '../../auth-state/use-auth-state.hook';
 import { UpdatingIndicator } from '../../common/components/updating-indicator/updating-indicator.component';
 import PeriodFilter from './period-filter.component';
+import { useGlobalState } from '../../global-state/use-global-state.hook';
 
 interface IStatementsResponse {
   items: IStatementItem[];
@@ -94,13 +95,17 @@ const renderLoadingSkeleton = () => {
 
 const StatementTable: React.FC = () => {
   const { token, user } = useAuthState();
+  const { defaultUserSpace } = useGlobalState();
   const [page, setPage] = usePagination();
   const [loading, setLoading] = useState(true);
+  const [clearInput, setClearInput] = useState(false);
+  const [updateStatements, setUpdateStatements] = useState(false);
   const [response, setResponse] = useState<IStatementsResponse>();
   const [searchField, setSearchField] = useState('');
+  const [searchFieldRequest, setSearchFieldRequest] = useState('');
   const [debouncedIsLoading] = useDebounce(loading && !response, 150);
   const [debouncedIsUpdating] = useDebounce(loading && response, 500);
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const period = searchParams.get('period') ?? 'day';
 
@@ -110,22 +115,49 @@ const StatementTable: React.FC = () => {
   ) => {
     setPage(page);
   };
+  const fetchStatementsFunc = (email: string) => {
+    if (!token || !user) {
+      return;
+    }
+    fetchStatements(token, email, page, period, searchField).then((result) => {
+      if (result) {
+        setResponse(result);
+      }
+      setLoading(false);
+    });
+  };
+  useEffect(() => {
+    if (!token || !user) {
+      return;
+    }
+    setUpdateStatements(!updateStatements);
+    setLoading(true);
+  }, [searchFieldRequest, page, period]);
+
+  useEffect(() => {
+    clearStatements();
+  }, []);
+
+  useEffect(() => {
+    clearStatements();
+  }, [defaultUserSpace]);
 
   useEffect(() => {
     if (!token || !user) {
       return;
     }
+    fetchStatementsFunc(defaultUserSpace || user.email);
+  }, [updateStatements]);
 
-    setLoading(true);
-    fetchStatements(token, user.email, page, period, searchField).then(
-      (result) => {
-        if (result) {
-          setResponse(result);
-        }
-        setLoading(false);
-      },
-    );
-  }, [searchField, page, period]);
+  const clearStatements = () => {
+    changePage(null, 0);
+    setSearchField('');
+    setSearchFieldRequest('');
+    setClearInput(true);
+    searchParams.set('period', 'day');
+    setSearchParams(searchParams);
+    setUpdateStatements(!updateStatements);
+  };
 
   return (
     <>
@@ -142,7 +174,13 @@ const StatementTable: React.FC = () => {
         }}
       >
         <Box sx={{ p: 3, display: 'flex' }}>
-          <PeriodFilter setSearchField={setSearchField} />
+          <PeriodFilter
+            searchField={searchField}
+            setSearchField={setSearchField}
+            clearInput={clearInput}
+            setClearInput={setClearInput}
+            setSearchFieldRequest={setSearchFieldRequest}
+          />
         </Box>
         <Divider />
         <TableContainer>

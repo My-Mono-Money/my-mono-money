@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { SpaceMemberInvitation } from 'src/layers/storage/entities/space-member-invitation.entity';
 import { StatusType } from 'src/layers/storage/interfaces/create-space-member-invitation-dto.interface';
 
 class Owner {

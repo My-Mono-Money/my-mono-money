@@ -1,4 +1,4 @@
-import { Controller, Get, Query, Req, UseGuards, Param } from '@nestjs/common';
+import { Controller, Get, Query, UseGuards, Param } from '@nestjs/common';
 import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/layers/functionality/authentication/jwt/jwt-auth.guard';
 import { GetFilteredStatementService } from 'src/layers/functionality/statement/get-filtered-statement.service';

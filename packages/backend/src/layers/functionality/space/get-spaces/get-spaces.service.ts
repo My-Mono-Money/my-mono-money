@@ -16,6 +16,7 @@ export class GetSpacesService {
   async getSpaceList({ email }: IGetSpaceList) {
     const result = await this.spaceService.getSpaceListForUserByEmail(email);
     const user = await this.userService.getByEmail(email);
+
     return result.map((item) => {
       return {
         spaceOwnerEmail: item.owner.email,

@@ -48,8 +48,9 @@ const SaveTokenForm: React.FC<ISaveTokenFormProps> = ({ setIsTokenSaved }) => {
           },
         },
       );
-      setIsTokenSaved(true);
+
       setTogglePopupAddToken(true);
+      setIsTokenSaved(true);
     } catch (err) {
       console.log(err);
     }

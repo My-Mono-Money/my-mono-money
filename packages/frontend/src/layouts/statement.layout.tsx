@@ -7,6 +7,7 @@ import { Logout, Settings, Home } from '@mui/icons-material';
 import { MenuItem, ListItemIcon } from '@mui/material';
 import { useAuthState } from '../auth-state/use-auth-state.hook';
 import PopupAddToken from '../common/components/popup-add-token/popup-add-token';
+import SwitchingSpaces from '../common/switching-spaces/switching-spaces.component';
 
 const Header = () => {
   const { user, clearToken } = useAuthState();
@@ -35,11 +36,15 @@ const Header = () => {
       <Box
         sx={{
           pl: '40px',
+          display: 'flex',
+          gap: '10px',
+          alignItems: 'center',
         }}
       >
         <Typography variant="h6" letterSpacing={3}>
           My Mono Money
         </Typography>
+        <SwitchingSpaces />
       </Box>
       <Box
         sx={{

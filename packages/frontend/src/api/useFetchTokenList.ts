@@ -1,33 +1,33 @@
 import axios from 'axios';
 import { ITokenItem } from '../types/token-item.interface';
 import { useAuthState } from '../auth-state/use-auth-state.hook';
-import { useCallback, useState } from 'react';
+import { useGlobalState } from '../global-state/use-global-state.hook';
 
 interface ITokenResponse {
   items: ITokenItem[];
 }
 
 export const useFetchTokenList = (): [
-  ITokenResponse | undefined,
-  () => Promise<ITokenResponse | undefined>,
+  ITokenItem[] | undefined,
+  () => Promise<ITokenItem[] | undefined>,
 ] => {
   const { token } = useAuthState();
-  const [response, setResponse] = useState<ITokenResponse>();
+  const { tokenList, setTokenList } = useGlobalState();
 
-  const fetchToken = useCallback(async () => {
+  const fetchToken = async () => {
     try {
       const response = await axios.get<ITokenResponse>('/tokens', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      setResponse(response.data);
+      setTokenList(response.data.items);
 
-      return response.data;
+      return response.data.items;
     } catch (err) {
       console.log('err', err);
     }
-  }, [token]);
+  };
 
-  return [response, fetchToken];
+  return [tokenList, fetchToken];
 };
