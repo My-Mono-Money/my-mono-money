@@ -135,16 +135,11 @@ const StatementTable: React.FC = () => {
   }, [searchFieldRequest, page, period]);
 
   useEffect(() => {
-    if (!token || !user) {
-      return;
-    }
-    changePage(null, 0);
-    setSearchField('');
-    setSearchFieldRequest('');
-    setClearInput(true);
-    searchParams.set('period', 'day');
-    setSearchParams(searchParams);
-    setUpdateStatements(!updateStatements);
+    clearStatements();
+  }, []);
+
+  useEffect(() => {
+    clearStatements();
   }, [defaultUserSpace]);
 
   useEffect(() => {
@@ -153,6 +148,16 @@ const StatementTable: React.FC = () => {
     }
     fetchStatementsFunc(defaultUserSpace || user.email);
   }, [updateStatements]);
+
+  const clearStatements = () => {
+    changePage(null, 0);
+    setSearchField('');
+    setSearchFieldRequest('');
+    setClearInput(true);
+    searchParams.set('period', 'day');
+    setSearchParams(searchParams);
+    setUpdateStatements(!updateStatements);
+  };
 
   return (
     <>

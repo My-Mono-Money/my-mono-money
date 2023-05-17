@@ -27,7 +27,10 @@ interface IFormData {
 }
 
 const ShareAccess = () => {
-  const [openAlertRemove, setOpenAlertRemove] = useState('');
+  const [openAlertRemove, setOpenAlertRemove] = useState<{
+    rowId: string;
+    table: string;
+  }>({ rowId: '', table: '' });
   const { token, user } = useAuthState();
   const [spaceMembers, fetchSpaceMembers] = useFetchSpaceMembersList();
   const {
@@ -46,8 +49,8 @@ const ShareAccess = () => {
     fetchSpaceMembers();
   }, []);
 
-  const handleRemoveShare = (row: string) => {
-    setOpenAlertRemove(row);
+  const handleRemoveShare = (rowId: string, table: string) => {
+    setOpenAlertRemove({ rowId, table });
   };
 
   const onSubmit = async ({ email }: IFormData) => {
@@ -135,7 +138,6 @@ const ShareAccess = () => {
                       openAlertRemove={openAlertRemove}
                       setOpenAlertRemove={setOpenAlertRemove}
                       fetchSpaceMembers={fetchSpaceMembers}
-                      table={'userSpace'}
                       spaceMembers={spaceMembers}
                       userEmail={user?.email}
                       token={token}
@@ -151,7 +153,7 @@ const ShareAccess = () => {
                       {row.email !== user?.email ? (
                         <Button
                           sx={{ fontSize: '8px' }}
-                          onClick={() => handleRemoveShare(row.id)}
+                          onClick={() => handleRemoveShare(row.id, 'userSpace')}
                         >
                           Видалити
                         </Button>
@@ -197,7 +199,6 @@ const ShareAccess = () => {
                       openAlertRemove={openAlertRemove}
                       setOpenAlertRemove={setOpenAlertRemove}
                       fetchSpaceMembers={fetchSpaceMembers}
-                      table={'otherSpace'}
                       spaceMembers={spaceMembers}
                       userEmail={user?.email}
                       token={token}
@@ -215,7 +216,7 @@ const ShareAccess = () => {
                     <TableCell align="center">
                       <Button
                         sx={{ fontSize: '8px' }}
-                        onClick={() => handleRemoveShare(row.id)}
+                        onClick={() => handleRemoveShare(row.id, 'otherSpace')}
                       >
                         Видалити
                       </Button>

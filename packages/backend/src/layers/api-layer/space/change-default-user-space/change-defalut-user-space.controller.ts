@@ -2,7 +2,7 @@ import { Body, Controller, Patch, Req, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { IRequestWithUser } from 'src/common/interfaces/request-with-user.interface';
 import { JwtAuthGuard } from 'src/layers/functionality/authentication/jwt/jwt-auth.guard';
-import { ChangeDefaultUserSpaceService } from 'src/layers/functionality/space/change-default-user-space.service.ts/change-defalut-user-space.service';
+import { ChangeDefaultUserSpaceService } from 'src/layers/functionality/space/change-default-user-space.service.ts/change-default-user-space.service';
 import { ChangeDefaultUserSpaceResponse } from './change-defalut-user-space.response';
 import { ChangeDefaultUserSpaceBody } from './change-defalut-user-space.body';
 

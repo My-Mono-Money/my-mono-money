@@ -46,10 +46,23 @@ const SwitchingSpaces = () => {
 
   useEffect(() => {
     if (!filteredSpaces || !user) return;
-    setChangeDefaultUserSpace(
-      filteredSpaces.find((space) => space.isDefault === true)
-        ?.spaceOwnerEmail || '',
+
+    //If there is no default user and there is no space, and the default user has deleted the space for this user, then this part of the code will work
+    if (!spaces) return;
+    const findMyCurrentSpace = spaces?.find(
+      (space) => space.spaceOwnerEmail === defaultUserSpace,
     );
+    const findMyDefaultSpace = spaces?.find(
+      (space) => space.isDefault === true,
+    );
+    if (!findMyCurrentSpace && !findMyDefaultSpace) {
+      setChangeDefaultUserSpace(spaces[0].spaceOwnerEmail);
+    } else {
+      setChangeDefaultUserSpace(
+        filteredSpaces.find((space) => space.isDefault === true)
+          ?.spaceOwnerEmail || '',
+      );
+    }
   }, [filteredSpaces]);
 
   const getSpaces = async () => {

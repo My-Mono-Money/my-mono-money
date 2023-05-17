@@ -24,7 +24,7 @@ import { InviteMemberService } from './space/invite-member/invite-member.service
 import { GetSpacesService } from './space/get-spaces/get-spaces.service';
 import { GetSpaceMembersService } from './space/get-members/get-members.service';
 import { RemoveMemberService } from './space/remove-member.service.ts/remove-member.service';
-import { ChangeDefaultUserSpaceService } from './space/change-default-user-space.service.ts/change-defalut-user-space.service';
+import { ChangeDefaultUserSpaceService } from './space/change-default-user-space.service.ts/change-default-user-space.service';
 @Module({
   imports: [
     StorageModule,
