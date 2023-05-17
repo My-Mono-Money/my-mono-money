@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { NotAllowedError } from 'src/common/errors/no-allowed-error';
 import { NotFoundError } from 'src/common/errors/not-found.error';
 import { StatusType } from 'src/layers/storage/interfaces/create-space-member-invitation-dto.interface';
-import { SpaceService } from 'src/layers/storage/services/space.service';
-import { UserService } from 'src/layers/storage/services/user.service';
+import { SpaceStorage } from 'src/layers/storage/services/space.storage';
+import { UserStorage } from 'src/layers/storage/services/user.storage';
 
 interface IAcceptInvite {
   spaceOwnerEmail: string;
@@ -13,13 +13,13 @@ interface IAcceptInvite {
 @Injectable()
 export class InvitesService {
   constructor(
-    private userService: UserService,
-    private spaceService: SpaceService,
+    private userStorage: UserStorage,
+    private spaceStorage: SpaceStorage,
   ) {}
 
   async acceptInvite({ spaceOwnerEmail, invitedUserEmail }: IAcceptInvite) {
-    const space = await this.userService.getSpaceByEmail(spaceOwnerEmail);
-    const memberInvite = await this.spaceService.getMemberInvite(
+    const space = await this.userStorage.getSpaceByEmail(spaceOwnerEmail);
+    const memberInvite = await this.spaceStorage.getMemberInvite(
       invitedUserEmail,
       space.id,
     );
@@ -30,7 +30,7 @@ export class InvitesService {
       throw new NotAllowedError();
     }
 
-    await this.spaceService.updateInvitationStatus(
+    await this.spaceStorage.updateInvitationStatus(
       {
         email: invitedUserEmail,
         space,
@@ -38,7 +38,7 @@ export class InvitesService {
       },
       {
         afterSave: async () => {
-          await this.userService.updateDefaultSpace(invitedUserEmail, space);
+          await this.userStorage.updateDefaultSpace(invitedUserEmail, space);
         },
       },
     );

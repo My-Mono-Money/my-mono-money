@@ -11,7 +11,7 @@ interface IGetStatementOptions {
 }
 
 @Injectable()
-export class QueueService {
+export class QueueIntegration {
   constructor(
     @InjectQueue('email') private readonly emailQueue: Queue,
     @InjectQueue('statement') private readonly statementQueue: Queue,

@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
-import { IntegrationsModule } from '../integrations/integrations.module';
-import { TokenService } from '../storage/services/token.service';
+import { IntegrationsModule } from '../integration/integrations.module';
+import { TokenService } from './tokens/get-token.service';
 import { StorageModule } from '../storage/storage.module';
 import { HashPasswordService } from './authentication/hashing/hash-password.service';
 import { GenerateJwtService } from './authentication/jwt/generate-jwt.service';

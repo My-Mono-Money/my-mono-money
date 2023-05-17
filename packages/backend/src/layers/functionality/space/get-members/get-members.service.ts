@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { SpaceService } from 'src/layers/storage/services/space.service';
-import { UserService } from 'src/layers/storage/services/user.service';
+import { SpaceStorage } from 'src/layers/storage/services/space.storage';
+import { UserStorage } from 'src/layers/storage/services/user.storage';
 
 interface IGetSpaceMembersData {
   spaceOwnerEmail: string;
@@ -9,13 +9,13 @@ interface IGetSpaceMembersData {
 @Injectable()
 export class GetSpaceMembersService {
   constructor(
-    private userService: UserService,
-    private spaceService: SpaceService,
+    private userStorage: UserStorage,
+    private spaceStorage: SpaceStorage,
   ) {}
 
   async getSpaceMembers({ spaceOwnerEmail }: IGetSpaceMembersData) {
-    const space = await this.userService.getSpaceByEmail(spaceOwnerEmail);
-    const members = await this.spaceService.getSpaceMembers({
+    const space = await this.userStorage.getSpaceByEmail(spaceOwnerEmail);
+    const members = await this.spaceStorage.getSpaceMembers({
       spaceId: space.id,
       spaceOwnerEmail,
     });

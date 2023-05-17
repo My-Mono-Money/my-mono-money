@@ -12,7 +12,7 @@ interface ISendEmailOptions {
 }
 
 @Injectable()
-export class SendinblueService {
+export class SendinblueIntegration {
   constructor(
     private httpSevice: HttpService,
     private configService: ConfigService,

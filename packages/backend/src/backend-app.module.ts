@@ -10,7 +10,7 @@ import { redisConfig } from './configs/redis.config';
 import { sendinblueConfig } from './configs/sendinblue.config';
 import { typeOrmConfig } from './configs/typeorm.config';
 import { DocsModule } from './docs/docs.module';
-import { ApiLayerModule } from './layers/api-layer/api-layer.module';
+import { ApiLayerModule } from './layers/api/api.module';
 
 @Module({
   imports: [

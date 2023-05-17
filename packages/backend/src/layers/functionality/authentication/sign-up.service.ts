@@ -1,23 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { UserService } from 'src/layers/storage/services/user.service';
+import { UserStorage } from 'src/layers/storage/services/user.storage';
 import { SendEmailService } from '../send-email/send-email.service';
 import { confirmEmailTemplate } from '../send-email/templates/confirm-email.email-template';
 import { HashPasswordService } from './hashing/hash-password.service';
 import { IUserSignUp } from './interfaces/user-signup-dto.interface';
 import { GenerateJwtService } from './jwt/generate-jwt.service';
-import { SpaceService } from 'src/layers/storage/services/space.service';
+import { SpaceStorage } from 'src/layers/storage/services/space.storage';
 import { StatusType } from 'src/layers/storage/interfaces/create-space-member-invitation-dto.interface';
 
 @Injectable()
 export class SignUpService {
   constructor(
-    private userService: UserService,
+    private userStorage: UserStorage,
     private sendEmailService: SendEmailService,
     private generateJwtService: GenerateJwtService,
     private hashPasswordService: HashPasswordService,
     private configService: ConfigService,
-    private spaceService: SpaceService,
+    private spaceStorage: SpaceStorage,
   ) {}
 
   async signUp(user: IUserSignUp, spaceOwnerEmail?: string) {
@@ -27,10 +27,10 @@ export class SignUpService {
 
     const frontendUrl = this.configService.get('app.frontendUrl');
     if (spaceOwnerEmail) {
-      const ownerSpace = await this.userService.getSpaceByEmail(
+      const ownerSpace = await this.userStorage.getSpaceByEmail(
         spaceOwnerEmail,
       );
-      const savedUser = await this.userService.save(
+      const savedUser = await this.userStorage.save(
         {
           email: user.email,
           firstName: user.firstName,
@@ -41,7 +41,7 @@ export class SignUpService {
         ownerSpace,
         {
           afterSave: async () => {
-            await this.spaceService.updateInvitationStatus({
+            await this.spaceStorage.updateInvitationStatus({
               email: user.email,
               space: ownerSpace,
               status: StatusType.ACCEPTED,
@@ -56,7 +56,7 @@ export class SignUpService {
     } else {
       const verifyEmailToken =
         await this.generateJwtService.generateVerifyEmail(user);
-      await this.userService.save(
+      await this.userStorage.save(
         {
           email: user.email,
           firstName: user.firstName,

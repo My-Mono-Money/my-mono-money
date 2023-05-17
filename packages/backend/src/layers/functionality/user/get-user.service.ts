@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { UserService } from 'src/layers/storage/services/user.service';
+import { UserStorage } from 'src/layers/storage/services/user.storage';
 
 @Injectable()
 export class GetUserService {
-  constructor(private userService: UserService) {}
+  constructor(private userStorage: UserStorage) {}
 
   async getUser(email: string) {
-    return await this.userService.getByEmail(email);
+    return await this.userStorage.getByEmail(email);
   }
 }

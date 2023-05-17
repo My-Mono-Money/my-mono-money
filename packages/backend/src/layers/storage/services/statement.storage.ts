@@ -21,7 +21,7 @@ interface IGetStatement {
 }
 
 @Injectable()
-export class StatementService {
+export class StatementStorage {
   constructor(private connection: Connection) {}
 
   async getAccountByTokenId(tokenId: string) {
