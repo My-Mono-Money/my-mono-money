@@ -43,6 +43,7 @@ export class UserService {
       handleStorageError(e);
     }
   }
+
   async updateDefaultSpace(email: string, space: ICreateSpaceDto) {
     try {
       return await this.connection.transaction(async (manager) => {
