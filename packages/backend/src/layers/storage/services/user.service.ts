@@ -91,7 +91,7 @@ export class UserService {
     }
   }
 
-  async updateDefaultSpace(email: string, space: ICreateSpaceDto) {
+  async changeDefaultSpace(email: string, space: ICreateSpaceDto) {
     try {
       return await this.connection.transaction(async (manager) => {
         const where = { email };

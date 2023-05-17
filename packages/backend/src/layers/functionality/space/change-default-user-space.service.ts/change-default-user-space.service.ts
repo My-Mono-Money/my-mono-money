@@ -11,6 +11,6 @@ export class ChangeDefaultUserSpaceService {
     defaultSpace,
   }: IChangeDefaultUserSpace) {
     const space = await this.userService.getSpaceByEmail(defaultSpace);
-    return await this.userService.updateDefaultSpace(email, space);
+    return await this.userService.changeDefaultSpace(email, space);
   }
 }
