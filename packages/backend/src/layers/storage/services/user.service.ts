@@ -44,18 +44,6 @@ export class UserService {
     }
   }
 
-  async updateDefaultSpace(email: string, space: ICreateSpaceDto) {
-    try {
-      return await this.connection.transaction(async (manager) => {
-        const where = { email };
-
-        return manager.update<User>(User, where, { defaultSpace: space });
-      });
-    } catch (e) {
-      handleStorageError(e);
-    }
-  }
-
   async updateByEmail(email: string, user: IUpdateUserDto) {
     try {
       const where = { email };
@@ -98,6 +86,18 @@ export class UserService {
   async getSpaceByEmail(email: string) {
     try {
       return (await this.getByEmail(email)).ownSpace;
+    } catch (e) {
+      handleStorageError(e);
+    }
+  }
+
+  async updateDefaultSpace(email: string, space: ICreateSpaceDto) {
+    try {
+      return await this.connection.transaction(async (manager) => {
+        const where = { email };
+
+        return manager.update<User>(User, where, { defaultSpace: space });
+      });
     } catch (e) {
       handleStorageError(e);
     }
