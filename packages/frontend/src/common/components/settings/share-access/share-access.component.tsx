@@ -21,18 +21,21 @@ import { useFetchSpaceMembersList } from '../../../../api/useFetchSpaceMembersLi
 import axios, { AxiosError } from 'axios';
 import { useAuthState } from '../../../../auth-state/use-auth-state.hook';
 import { IErrorResponse } from '../../../../types/error-response.interface';
+import { useGlobalState } from '../../../../global-state/use-global-state.hook';
 
 interface IFormData {
   email: string;
 }
 
 const ShareAccess = () => {
+  const { token, user } = useAuthState();
+  const { spaceMembers } = useGlobalState();
   const [openAlertRemove, setOpenAlertRemove] = useState<{
     rowId: string;
     table: string;
   }>({ rowId: '', table: '' });
-  const { token, user } = useAuthState();
-  const [spaceMembers, fetchSpaceMembers] = useFetchSpaceMembersList();
+  const [, fetchSpaceMembers] = useFetchSpaceMembersList();
+
   const {
     register,
     handleSubmit,
@@ -64,7 +67,8 @@ const ShareAccess = () => {
           },
         },
       );
-      await fetchSpaceMembers();
+      fetchSpaceMembers();
+
       reset();
     } catch (err) {
       const axiosError = err as unknown as AxiosError<IErrorResponse>;

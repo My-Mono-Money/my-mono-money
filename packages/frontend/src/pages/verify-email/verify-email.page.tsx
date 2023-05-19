@@ -1,5 +1,5 @@
 import { Box, Typography, Button } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import Countdown from 'react-countdown';
@@ -19,22 +19,39 @@ const fetchResendMailVerification = async (code: string) => {
 export const VerifyEmail: React.FC = () => {
   const navigate = useNavigate();
   const { user, token, clearToken } = useAuthState();
-  const { email, firstName, lastName } = user as IUser;
   const [emailSendedCountDown, setEmailSendedCountDown] = useState(true);
+  const [userData, setUserData] = useState({
+    email: '',
+    firstName: '',
+    lastName: '',
+  });
+  const [userToken, setUserToken] = useState('');
+  useEffect(() => {
+    if (!user || !token) return;
+    setUserData({
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+    });
+    setUserToken(token);
+  }, []);
+  useEffect(() => {
+    localStorage.removeItem('token');
+  }, [userData]);
 
   const emailText = (
     <Typography variant="h6" component="span" color="violet">
-      {email}
+      {userData.email}
     </Typography>
   );
 
   const handleEmailSended = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    if (token) {
-      fetchResendMailVerification(token)
+    if (userToken) {
+      fetchResendMailVerification(userToken)
         .then(() => setEmailSendedCountDown(true))
         .catch(() => {
-          clearToken();
+          // clearToken();
           navigate('/sign-in');
         });
     }
@@ -52,7 +69,7 @@ export const VerifyEmail: React.FC = () => {
         }}
       >
         <Typography variant="h5" fontWeight={500}>
-          Дякуємо за реєстрацію, {firstName} {lastName}!
+          Дякуємо за реєстрацію, {userData.firstName} {userData.lastName}!
         </Typography>
 
         <Typography sx={{ py: 2 }} variant="h6" fontWeight={400}>

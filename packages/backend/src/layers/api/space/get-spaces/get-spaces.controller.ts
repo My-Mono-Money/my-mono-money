@@ -22,9 +22,13 @@ export class GetSpacesController {
   @ApiTags('Space')
   async getSpaces(
     @Req() request: IRequestWithUser,
-  ): Promise<GetSpacesResponse> {
+  ): Promise<GetSpacesResponse | []> {
     const { email } = request.user;
     const result = await this.getSpacesService.getSpaceList({ email });
+    console.log('resultresult', result);
+    if (!result || result.length < 1) {
+      return [];
+    }
     return {
       items: result.map((item) => ({
         spaceOwnerEmail: item.spaceOwnerEmail,

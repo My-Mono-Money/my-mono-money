@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { Box, Button, Typography } from '@mui/material';
 import { useAuthState } from '../../auth-state/use-auth-state.hook';
+import { useGlobalState } from '../../global-state/use-global-state.hook';
 
 interface IGetUserResponse {
   firstName: string;
@@ -26,6 +27,7 @@ const fetchUser = async (spaceOwnerEmail: string, token: string) => {
 
 export const InvitationPage: React.FC = () => {
   const { token } = useAuthState();
+  const { setChangeDefaultUserSpace } = useGlobalState();
   const location = useLocation();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
@@ -42,6 +44,7 @@ export const InvitationPage: React.FC = () => {
     fetchUser(spaceOwnerEmail, token).then((result) => {
       if (result) {
         setResponse(result);
+        setChangeDefaultUserSpace(result.email);
       }
       setLoading(false);
     });

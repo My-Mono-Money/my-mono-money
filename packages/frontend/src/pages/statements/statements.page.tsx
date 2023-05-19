@@ -6,24 +6,40 @@ import { useAuthState } from '../../auth-state/use-auth-state.hook';
 import SaveTokenForm from './save-token-form.component';
 import StatementTable from './statements-table.component';
 import { useFetchSpaceMembersList } from '../../api/useFetchSpaceMembersList';
+import { useFetchSpaces } from '../../api/useFetchSpaces';
+import { useGlobalState } from '../../global-state/use-global-state.hook';
+import { useFetchTokenList } from '../../api/useFetchTokenList';
 
 const Statements: React.FC = () => {
   const { token, user } = useAuthState();
+  const { spaces, setChangeDefaultUserSpace } = useGlobalState();
   const [isTokenSaved, setIsTokenSaved] = useState(false);
-  const [spaceMembers, fetchSpaceMembers] = useFetchSpaceMembersList();
+  const [, fetchSpaceMembers] = useFetchSpaceMembersList();
+  const [, fetchToken] = useFetchTokenList();
+  const [, fetchSpaces] = useFetchSpaces();
+  const [tokenList, setTokenList] = useState([]);
   const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!token) return;
     if (!user?.isEmailVerified) navigate('/verify-email');
-    fetchSpaceMembers();
+
+    if (!isTokenSaved) {
+      fetchSpaceMembers();
+      fetchSpaces();
+      fetchToken().then((tokenLists) => setTokenList(tokenLists as any));
+    }
   }, []);
 
   useEffect(() => {
     if (isTokenSaved) {
       notify('Котики зберегли ваш токен', '🐈');
-      fetchSpaceMembers();
+      fetchSpaces();
+      fetchToken().then((tokenLists) => setTokenList(tokenLists as any));
+
+      setChangeDefaultUserSpace(
+        spaces.find((space) => space.isDefault === true)?.spaceOwnerEmail || '',
+      );
       setIsTokenSaved(false);
     }
   }, [isTokenSaved]);
@@ -37,8 +53,12 @@ const Statements: React.FC = () => {
       setTimeout(() => notify('Приємного користування', '🙂'), 2000);
     }
   }, [location]);
+  const isTokenListEmpty = Boolean(tokenList && tokenList?.length <= 0);
+  const filteredSpaces = isTokenListEmpty
+    ? spaces.filter((space) => space.spaceOwnerEmail !== user?.email)
+    : spaces;
 
-  return spaceMembers.length >= 1 ? (
+  return filteredSpaces?.length >= 1 ? (
     <StatementTable />
   ) : (
     <SaveTokenForm setIsTokenSaved={setIsTokenSaved} />
