@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import Countdown from 'react-countdown';
-import { IUser } from '../../auth-state/auth-state.interface';
 import { useAuthState } from '../../auth-state/use-auth-state.hook';
 
 const fetchResendMailVerification = async (code: string) => {

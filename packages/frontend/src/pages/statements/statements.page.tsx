@@ -27,7 +27,7 @@ const Statements: React.FC = () => {
     if (!isTokenSaved) {
       fetchSpaceMembers();
       fetchSpaces();
-      fetchToken().then((tokenLists) => setTokenList(tokenLists as any));
+      fetchToken().then((tokenLists) => setTokenList(tokenLists as never[]));
     }
   }, []);
 
@@ -35,7 +35,7 @@ const Statements: React.FC = () => {
     if (isTokenSaved) {
       notify('Котики зберегли ваш токен', '🐈');
       fetchSpaces();
-      fetchToken().then((tokenLists) => setTokenList(tokenLists as any));
+      fetchToken().then((tokenLists) => setTokenList(tokenLists as never[]));
 
       setChangeDefaultUserSpace(
         spaces.find((space) => space.isDefault === true)?.spaceOwnerEmail || '',
