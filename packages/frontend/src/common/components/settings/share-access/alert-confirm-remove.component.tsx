@@ -48,7 +48,6 @@ const AlertDialog = ({
         },
       });
       fetchSpaceMembers();
-      // fetchSpaces();
       setOpenAlertRemove({ rowId: '', table: '' });
     } catch (err) {
       const axiosError = err as unknown as AxiosError<IErrorResponse>;

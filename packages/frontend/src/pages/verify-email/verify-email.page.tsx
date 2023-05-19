@@ -50,7 +50,7 @@ export const VerifyEmail: React.FC = () => {
       fetchResendMailVerification(userToken)
         .then(() => setEmailSendedCountDown(true))
         .catch(() => {
-          // clearToken();
+          clearToken();
           navigate('/sign-in');
         });
     }
