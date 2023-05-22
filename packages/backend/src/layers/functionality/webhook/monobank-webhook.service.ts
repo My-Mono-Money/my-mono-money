@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { handleStorageError } from 'src/common/errors/utils/handle-storage-error';
 import { UserStorage } from 'src/layers/storage/services/user.storage';
-import { StatementStorage } from '../../storage/services/statement.storage';
+import { StatementStorage } from '~/storage/services/statement.storage';
 
 interface IMonobankWebHookData {
   transactionInfo: {

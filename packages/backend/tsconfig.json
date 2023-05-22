@@ -17,6 +17,14 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "paths": {
+      "~/*": ["src/*"],
+      "~/api/*": ["src/layers/api/*"],
+      "~/functionality/*": ["src/layers/functionality/*"],
+      "~/storage/*": ["src/layers/storage/*"],
+      "~/integration/*": ["src/layers/integration/*"],
+      "~/common/*": ["src/common/*"]
+    }
   }
 }

@@ -1,5 +1,5 @@
-import { IUserSignUp } from '../../authentication/interfaces/user-signup-dto.interface';
-import { IVerifyEmailTokenPayload } from '../../authentication/interfaces/verify-email-token-payload.interface';
+import { IUserSignUp } from '~/functionality/authentication/interfaces/user-signup-dto.interface';
+import { IVerifyEmailTokenPayload } from '~/functionality/authentication/interfaces/verify-email-token-payload.interface';
 
 interface IConfirmEmailTemplate {
   user: IUserSignUp | IVerifyEmailTokenPayload;
