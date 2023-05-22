@@ -145,6 +145,9 @@ export class SpaceStorage {
           ],
         },
       );
+      if (!members || members.length < 1) {
+        return [];
+      }
       const userIds = members.map((member) => member.space.id);
       const users = await this.connection
         .getRepository(User)

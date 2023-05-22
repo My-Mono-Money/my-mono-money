@@ -21,8 +21,8 @@ export const useFetchTokenList = (): [
           Authorization: `Bearer ${token}`,
         },
       });
-      setTokenList(response.data.items);
 
+      setTokenList(response.data.items);
       return response.data.items;
     } catch (err) {
       console.log('err', err);

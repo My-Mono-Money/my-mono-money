@@ -6,6 +6,7 @@ import {
 import { IGlobalState } from './global-state.interface';
 import { ISpaceMember } from '../types/space-members.interface';
 import { ITokenItem } from '../types/token-item.interface';
+import { IUserSpace } from '../types/user-space.interface';
 
 interface IGlobalStateProviderProps {
   children: React.ReactNode;
@@ -20,6 +21,7 @@ export const GlobalStateProvider: React.FC<IGlobalStateProviderProps> = ({
       settingsPageSelected,
       defaultUserSpace,
       spaceMembers,
+      spaces,
       tokenList,
     },
     setGlobalState,
@@ -31,6 +33,7 @@ export const GlobalStateProvider: React.FC<IGlobalStateProviderProps> = ({
       settingsPageSelected,
       defaultUserSpace,
       spaceMembers,
+      spaces,
       tokenList,
     });
     isShow
@@ -44,6 +47,7 @@ export const GlobalStateProvider: React.FC<IGlobalStateProviderProps> = ({
       isPopupAddTokenEnable,
       defaultUserSpace,
       spaceMembers,
+      spaces,
       tokenList,
     });
   };
@@ -54,6 +58,7 @@ export const GlobalStateProvider: React.FC<IGlobalStateProviderProps> = ({
       isPopupAddTokenEnable,
       defaultUserSpace: spaceId,
       spaceMembers,
+      spaces,
       tokenList,
     });
   };
@@ -64,6 +69,18 @@ export const GlobalStateProvider: React.FC<IGlobalStateProviderProps> = ({
       isPopupAddTokenEnable,
       defaultUserSpace,
       spaceMembers: result,
+      spaces,
+      tokenList,
+    });
+  };
+
+  const setSpaces = (result: IUserSpace[]) => {
+    setGlobalState({
+      settingsPageSelected,
+      isPopupAddTokenEnable,
+      defaultUserSpace,
+      spaceMembers,
+      spaces: result,
       tokenList,
     });
   };
@@ -74,7 +91,19 @@ export const GlobalStateProvider: React.FC<IGlobalStateProviderProps> = ({
       isPopupAddTokenEnable,
       defaultUserSpace,
       spaceMembers,
+      spaces,
       tokenList: result,
+    });
+  };
+
+  const setClearAllGlobalState = () => {
+    setGlobalState({
+      settingsPageSelected: 'Item 1',
+      isPopupAddTokenEnable,
+      defaultUserSpace: '',
+      spaceMembers: [],
+      spaces: [],
+      tokenList: [],
     });
   };
 
@@ -85,12 +114,15 @@ export const GlobalStateProvider: React.FC<IGlobalStateProviderProps> = ({
         isPopupAddTokenEnable,
         defaultUserSpace,
         spaceMembers,
+        spaces,
         tokenList,
         setTogglePopupAddToken,
         setChoiceSettingsPage,
         setChangeDefaultUserSpace,
         setSpaceMembers,
+        setSpaces,
         setTokenList,
+        setClearAllGlobalState,
       }}
     >
       {children}

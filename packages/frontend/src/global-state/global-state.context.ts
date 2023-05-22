@@ -7,6 +7,7 @@ export const INITIAL_GLOBAL_STATE = {
   settingsPageSelected: 'Item 1',
   defaultUserSpace: '',
   spaceMembers: [],
+  spaces: [],
   tokenList: [],
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   setTogglePopupAddToken: () => {},
@@ -17,7 +18,11 @@ export const INITIAL_GLOBAL_STATE = {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   setSpaceMembers: () => {},
   // eslint-disable-next-line @typescript-eslint/no-empty-function
+  setSpaces: () => {},
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   setTokenList: () => {},
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  setClearAllGlobalState: () => {},
 };
 
 export const GlobalStateContext =

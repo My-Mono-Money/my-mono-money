@@ -8,9 +8,11 @@ import { MenuItem, ListItemIcon } from '@mui/material';
 import { useAuthState } from '../auth-state/use-auth-state.hook';
 import PopupAddToken from '../common/components/popup-add-token/popup-add-token';
 import SwitchingSpaces from '../common/switching-spaces/switching-spaces.component';
+import { useGlobalState } from '../global-state/use-global-state.hook';
 
 const Header = () => {
   const { user, clearToken } = useAuthState();
+  const { setClearAllGlobalState } = useGlobalState();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const navigate = useNavigate();
 
@@ -87,7 +89,12 @@ const Header = () => {
             </ListItemIcon>
             Settings
           </MenuItem>
-          <MenuItem onClick={clearToken}>
+          <MenuItem
+            onClick={() => {
+              setClearAllGlobalState();
+              clearToken();
+            }}
+          >
             <ListItemIcon>
               <Logout fontSize="small" />
             </ListItemIcon>

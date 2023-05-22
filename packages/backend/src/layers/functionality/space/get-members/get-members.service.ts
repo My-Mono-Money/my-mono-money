@@ -19,6 +19,9 @@ export class GetSpaceMembersService {
       spaceId: space.id,
       spaceOwnerEmail,
     });
+    if (!members || members.length < 1) {
+      return [];
+    }
 
     return members;
   }
