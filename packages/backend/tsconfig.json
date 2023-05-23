@@ -19,12 +19,13 @@
     "noFallthroughCasesInSwitch": false,
     "resolveJsonModule": true,
     "paths": {
-      "~/*": ["src/*"],
+      "~/src": ["src/*"],
       "~/api/*": ["src/layers/api/*"],
       "~/functionality/*": ["src/layers/functionality/*"],
       "~/storage/*": ["src/layers/storage/*"],
       "~/integration/*": ["src/layers/integration/*"],
-      "~/common/*": ["src/common/*"]
+      "~/common/*": ["src/common/*"],
+      "~/*": ["*"] 
     }
   }
 }
