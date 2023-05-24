@@ -14,7 +14,7 @@ import {
 } from 'date-fns';
 import { StatementStorage } from 'src/layers/storage/services/statement.storage';
 import { UserStorage } from 'src/layers/storage/services/user.storage';
-import * as mccCodes from '../../../common/mcc-codes/mcc-codes-ua.json';
+import * as mccCodes from '~/common/mcc-codes/mcc-codes-ua.json';
 
 interface IGetFilteredStatement {
   spaceOwnerEmail: string;

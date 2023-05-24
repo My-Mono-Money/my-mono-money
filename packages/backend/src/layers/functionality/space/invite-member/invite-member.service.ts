@@ -2,13 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { StatusType } from 'src/layers/storage/interfaces/create-space-member-invitation-dto.interface';
 import { SpaceStorage } from 'src/layers/storage/services/space.storage';
 import { UserStorage } from 'src/layers/storage/services/user.storage';
-import { SendEmailService } from '../../send-email/send-email.service';
 import { ConfigService } from '@nestjs/config';
-import { invitationMemberEmailTemplate } from '../../send-email/templates/invitation-member-email.email-template';
 import { AccessDeniedError } from 'src/common/errors/access-denied-error';
 import { NotAllowedError } from 'src/common/errors/no-allowed-error';
 import { TokenStorage } from 'src/layers/storage/services/token.storage';
 import { TokenEmptyError } from 'src/common/errors/token-empty-error';
+import { invitationMemberEmailTemplate } from '~/functionality/send-email/templates/invitation-member-email.email-template';
+import { SendEmailService } from '~/functionality/send-email/send-email.service';
 
 interface IInviteMemberData {
   email: string;
