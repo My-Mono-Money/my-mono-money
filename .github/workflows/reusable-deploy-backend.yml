@@ -9,10 +9,18 @@ on:
 jobs:
   build_and_deploy_backend_development:
     runs-on: ubuntu-latest
+
+   
     steps:
       - uses: actions/checkout@v2
+       # setup node
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: [16.x]
       # install dependencies
-      - run: yarn install:backend
+      # - run: yarn install:backend
+       - run: yarn install
         name: Install dependencies
       # start test
       - run: yarn test:backend:coverage

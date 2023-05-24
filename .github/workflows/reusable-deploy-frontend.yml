@@ -17,7 +17,8 @@ jobs:
       # checkout repo
       - uses: actions/checkout@v2
       # install dependencies
-      - run: yarn install:frontend
+      # - run: yarn install:frontend
+       - run: yarn install
         name: Install dependencies
       # start test
       - run: yarn test:frontend:coverage
