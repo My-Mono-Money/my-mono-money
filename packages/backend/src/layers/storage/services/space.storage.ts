@@ -185,7 +185,7 @@ export class SpaceStorage {
       return await this.connection.manager.findOne(SpaceMemberInvitation, {
         where: {
           email,
-          space: spaceId,
+          space: { id: spaceId },
         },
       });
     } catch (e) {
