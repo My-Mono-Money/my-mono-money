@@ -4,7 +4,7 @@ import { VerifyEmail } from './verify-email.page';
 import { MemoryRouter } from 'react-router-dom';
 import { useAuthState } from 'auth-state/use-auth-state.hook';
 
-jest.mock('../../auth-state/use-auth-state.hook', () => ({
+jest.mock('auth-state/use-auth-state.hook', () => ({
   useAuthState: jest.fn(),
 }));
 
