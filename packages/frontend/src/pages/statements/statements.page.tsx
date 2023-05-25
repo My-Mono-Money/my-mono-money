@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
-import { notify } from '../../utils/notifications';
-import { useAuthState } from '../../auth-state/use-auth-state.hook';
+import { notify } from 'utils/notifications';
+import { useAuthState } from 'auth-state/use-auth-state.hook';
 import SaveTokenForm from './save-token-form.component';
 import StatementTable from './statements-table.component';
-import { useFetchSpaceMembersList } from '../../api/useFetchSpaceMembersList';
-import { useFetchSpaces } from '../../api/useFetchSpaces';
-import { useGlobalState } from '../../global-state/use-global-state.hook';
-import { useFetchTokenList } from '../../api/useFetchTokenList';
+import { useFetchSpaceMembersList } from 'api/useFetchSpaceMembersList';
+import { useFetchSpaces } from 'api/useFetchSpaces';
+import { useGlobalState } from 'global-state/use-global-state.hook';
+import { useFetchTokenList } from 'api/useFetchTokenList';
 
 const Statements: React.FC = () => {
   const { token, user } = useAuthState();

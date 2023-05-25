@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { Box, Button, Typography } from '@mui/material';
-import { useAuthState } from '../../auth-state/use-auth-state.hook';
-import { useGlobalState } from '../../global-state/use-global-state.hook';
+import { useAuthState } from 'auth-state/use-auth-state.hook';
+import { useGlobalState } from 'global-state/use-global-state.hook';
 
 interface IGetUserResponse {
   firstName: string;

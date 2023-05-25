@@ -6,11 +6,11 @@ import {
   Select,
   SelectChangeEvent,
 } from '@mui/material';
-import { useAuthState } from '../../auth-state/use-auth-state.hook';
+import { useAuthState } from 'auth-state/use-auth-state.hook';
 import axios, { AxiosError } from 'axios';
-import { IErrorResponse } from '../../types/error-response.interface';
-import { useGlobalState } from '../../global-state/use-global-state.hook';
-import { useFetchSpaces } from '../../api/useFetchSpaces';
+import { IErrorResponse } from 'types/error-response.interface';
+import { useGlobalState } from 'global-state/use-global-state.hook';
+import { useFetchSpaces } from 'api/useFetchSpaces';
 
 const SwitchingSpaces = () => {
   const {

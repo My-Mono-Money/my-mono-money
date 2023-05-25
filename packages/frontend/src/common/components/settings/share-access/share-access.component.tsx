@@ -17,11 +17,11 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import AlertDialog from './alert-confirm-remove.component';
 import { AddNewSharinglidationSchema } from './add-new-sharing.validation-schema';
 import Status from './status.component';
-import { useFetchSpaceMembersList } from '../../../../api/useFetchSpaceMembersList';
+import { useFetchSpaceMembersList } from 'api/useFetchSpaceMembersList';
 import axios, { AxiosError } from 'axios';
-import { useAuthState } from '../../../../auth-state/use-auth-state.hook';
-import { IErrorResponse } from '../../../../types/error-response.interface';
-import { useGlobalState } from '../../../../global-state/use-global-state.hook';
+import { useAuthState } from 'auth-state/use-auth-state.hook';
+import { IErrorResponse } from 'types/error-response.interface';
+import { useGlobalState } from 'global-state/use-global-state.hook';
 
 interface IFormData {
   email: string;

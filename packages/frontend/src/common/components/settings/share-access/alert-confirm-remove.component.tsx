@@ -3,9 +3,9 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogTitle from '@mui/material/DialogTitle';
-import { ISpaceMember } from '../../../../types/space-members.interface';
+import { ISpaceMember } from 'types/space-members.interface';
 import axios, { AxiosError } from 'axios';
-import { IErrorResponse } from '../../../../types/error-response.interface';
+import { IErrorResponse } from 'types/error-response.interface';
 
 interface IAlertRemove {
   openAlertRemove: { rowId: string; table: string };

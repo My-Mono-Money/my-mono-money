@@ -12,8 +12,8 @@ import {
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { SignInValidationSchema } from './sign-in.validation-schema';
-import { useAuthState } from '../../auth-state/use-auth-state.hook';
-import PasswordField from '../../common/components/password-field/password-field.component';
+import { useAuthState } from 'auth-state/use-auth-state.hook';
+import PasswordField from 'common/components/password-field/password-field.component';
 
 interface IFormData {
   email: string;

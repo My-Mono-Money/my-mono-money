@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import Countdown from 'react-countdown';
-import { useAuthState } from '../../auth-state/use-auth-state.hook';
+import { useAuthState } from 'auth-state/use-auth-state.hook';
 
 const fetchResendMailVerification = async (code: string) => {
   const response = await axios.post(`/auth/resend-email`, null, {

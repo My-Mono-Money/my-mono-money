@@ -9,8 +9,8 @@ import {
   TableRow,
 } from '@mui/material';
 import { format } from 'date-fns';
-import { useFetchTokenList } from '../../../../api/useFetchTokenList';
-import { useGlobalState } from '../../../../global-state/use-global-state.hook';
+import { useFetchTokenList } from 'api/useFetchTokenList';
+import { useGlobalState } from 'global-state/use-global-state.hook';
 
 const ShowTokenList: React.FC = () => {
   const [, fetchTokenList] = useFetchTokenList();
