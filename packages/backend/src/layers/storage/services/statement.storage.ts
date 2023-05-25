@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { handleStorageError } from 'src/common/errors/utils/handle-storage-error';
-import { Connection, In, Between, FindOptionsWhere, ILike } from 'typeorm';
+import { Connection, In, Between, FindConditions, ILike } from 'typeorm';
 import { Account } from '../entities/account.entity';
 import { Transaction } from '../entities/transaction.entity';
 import { ICreateTransactionDto } from '../interfaces/create-transaction-dto.interface';
@@ -58,7 +58,7 @@ export class StatementStorage {
     search,
   }: IGetStatement) {
     try {
-      const where: FindOptionsWhere<Transaction> = {
+      const where: FindConditions<Transaction> = {
         account: {
           token: {
             space: {
