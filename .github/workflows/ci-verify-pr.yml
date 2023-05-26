@@ -34,16 +34,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-         # setup node
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: [18.x]
 
       - name: Install dependencies
-        run: |
-          cd ./packages/backend && rm -rf node_modules && rm yarn.lock && yarn cache clean && cd ../../
-          yarn install:backend
+        run: yarn install:backend
 
       - name: Linter checks
         run: yarn lint:backend
@@ -121,9 +114,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Install dependencies
-        run: |
-          cd ./packages/mock-monobank-api && rm -rf node_modules && rm yarn.lock && yarn cache clean && cd ../../
-          yarn install:mock-monobank-api
+        run: yarn install:mock-monobank-api
 
       - name: Linter checks
         run: yarn lint:mock-monobank-api
