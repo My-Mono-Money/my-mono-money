@@ -122,7 +122,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd ./packages/backend && rm -rf node_modules && rm yarn.lock && yarn cache clean && cd ../../
+          cd ./packages/mock-monobank-api && rm -rf node_modules && rm yarn.lock && yarn cache clean && cd ../../
           yarn install:mock-monobank-api
 
       - name: Linter checks
