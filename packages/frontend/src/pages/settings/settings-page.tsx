@@ -4,10 +4,10 @@ import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import { Box } from '@mui/material';
-import ShowTokenList from '../../common/components/settings/bank-integration/show-token-list';
-import AddNewToken from '../../common/components/settings/bank-integration/add-new-token.component';
-import ShareAccess from '../../common/components/settings/share-access/share-access.component';
-import { useGlobalState } from '../../global-state/use-global-state.hook';
+import ShowTokenList from 'common/components/settings/bank-integration/show-token-list';
+import AddNewToken from 'common/components/settings/bank-integration/add-new-token.component';
+import ShareAccess from 'common/components/settings/share-access/share-access.component';
+import { useGlobalState } from 'global-state/use-global-state.hook';
 
 const drawerWidth = 240;
 

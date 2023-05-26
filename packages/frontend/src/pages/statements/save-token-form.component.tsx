@@ -10,10 +10,10 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { useAuthState } from '../../auth-state/use-auth-state.hook';
+import { useAuthState } from 'auth-state/use-auth-state.hook';
 import { SaveTokenValidationSchema } from './save-token.validation-schema';
-import { useGlobalState } from '../../global-state/use-global-state.hook';
-import InstructionAddToken from '../../common/components/instructions/instruction-add-token.component';
+import { useGlobalState } from 'global-state/use-global-state.hook';
+import InstructionAddToken from 'common/components/instructions/instruction-add-token.component';
 
 interface IFormData {
   tokenMonobank: string;

@@ -15,13 +15,13 @@ import {
   TablePagination,
   TableRow,
 } from '@mui/material';
-import { IStatementItem } from '../../types/statement-item.interface';
-import { IPagingState } from '../../types/statement-paging.interface';
+import { IStatementItem } from 'types/statement-item.interface';
+import { IPagingState } from 'types/statement-paging.interface';
 import { usePagination } from './use-pagination.hook';
-import { useAuthState } from '../../auth-state/use-auth-state.hook';
-import { UpdatingIndicator } from '../../common/components/updating-indicator/updating-indicator.component';
+import { useAuthState } from 'auth-state/use-auth-state.hook';
+import { UpdatingIndicator } from 'common/components/updating-indicator/updating-indicator.component';
 import PeriodFilter from './period-filter.component';
-import { useGlobalState } from '../../global-state/use-global-state.hook';
+import { useGlobalState } from 'global-state/use-global-state.hook';
 
 interface IStatementsResponse {
   items: IStatementItem[];

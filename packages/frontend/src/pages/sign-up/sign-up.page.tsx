@@ -3,7 +3,7 @@ import axios, { AxiosError } from 'axios';
 import { Link, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useAuthState } from '../../auth-state/use-auth-state.hook';
+import { useAuthState } from 'auth-state/use-auth-state.hook';
 import {
   Alert,
   AlertTitle,
@@ -13,8 +13,8 @@ import {
   Typography,
 } from '@mui/material';
 import { SignUpValidationSchema } from './sign-up.validation-schema';
-import PasswordField from '../../common/components/password-field/password-field.component';
-import { useGlobalState } from '../../global-state/use-global-state.hook';
+import PasswordField from 'common/components/password-field/password-field.component';
+import { useGlobalState } from 'global-state/use-global-state.hook';
 
 interface IFormData {
   firstName: string;

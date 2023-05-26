@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useAuthState } from '../../auth-state/use-auth-state.hook';
+import { useAuthState } from 'auth-state/use-auth-state.hook';
 import { Box, Typography } from '@mui/material';
 
 const fetchMailVerification = async (code: string) => {
