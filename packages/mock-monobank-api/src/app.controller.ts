@@ -8,7 +8,6 @@ export class AppController {
   @Get()
   getHello(): string {
     console.log('Trigger workflow mock');
-    console.log('Trigger workflow');
     return this.appService.getHello();
   }
 }

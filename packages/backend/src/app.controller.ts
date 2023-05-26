@@ -10,6 +10,7 @@ export class AppController {
   @ApiExcludeEndpoint()
   getHello(): string {
     console.log('Trigger workflow');
+    console.log('Trigger workflow');
     return this.appService.getHello();
   }
 }
