@@ -21,8 +21,6 @@ export class SignInController {
   async signIn(
     @Body() { email, password }: SignInBody,
   ): Promise<SignInResponse> {
-    console.log('Trigger workflow');
-    if (email) console.log('Trigger workflow');
     const accessToken = await this.signInService.signInByEmailWithPassword({
       email,
       password,

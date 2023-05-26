@@ -8,7 +8,7 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
-    "build:ci": "yarn build && cp package.json yarn.lock nginx.conf.template dist && tar -czf dist.tar.gz -C dist .",
+    "build:ci": "yarn build && cp package.json nginx.conf.template dist && tar -czf dist.tar.gz -C dist .",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
