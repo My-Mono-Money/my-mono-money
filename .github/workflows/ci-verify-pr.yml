@@ -36,7 +36,9 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Install dependencies
-        run: yarn install:backend
+        run: |
+          yarn cacheclear:backend
+          yarn install:backend
 
       - name: Linter checks
         run: yarn lint:backend
@@ -114,7 +116,9 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Install dependencies
-        run: yarn install:mock-monobank-api
+        run: |
+          yarn cacheclear:mock-monobank-api
+          yarn install:mock-monobank-api
 
       - name: Linter checks
         run: yarn lint:mock-monobank-api

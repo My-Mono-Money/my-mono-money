@@ -36,6 +36,9 @@
     "postinstall": "npm-run-all --parallel install:backend",
     "install:frontend": "cd packages/frontend && yarn",
     "install:backend": "cd packages/backend && yarn",
-    "install:mock-monobank-api": "cd packages/mock-monobank-api && yarn"
+    "install:mock-monobank-api": "cd packages/mock-monobank-api && yarn",
+    "cacheclear:backend": "cd packages/backend && rm -rf node_modules && rm yarn.lock && yarn cache clean",
+    "cacheclear:frontend": "cd packages/frontend && rm -rf node_modules && rm yarn.lock && yarn cache clean",
+    "cacheclear:mock-monobank-api": "cd packages/mock-monobank-api && rm -rf node_modules && rm yarn.lock && yarn cache clean"
   }
 }

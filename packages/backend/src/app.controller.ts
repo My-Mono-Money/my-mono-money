@@ -9,7 +9,6 @@ export class AppController {
   @Get()
   @ApiExcludeEndpoint()
   getHello(): string {
-    console.log('test 3');
     return this.appService.getHello();
   }
 }

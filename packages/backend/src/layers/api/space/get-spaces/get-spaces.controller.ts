@@ -25,7 +25,6 @@ export class GetSpacesController {
   ): Promise<GetSpacesResponse | []> {
     const { email } = request.user;
     const result = await this.getSpacesService.getSpaceList({ email });
-    console.log('resultresult', result);
     if (!result || result.length < 1) {
       return [];
     }
