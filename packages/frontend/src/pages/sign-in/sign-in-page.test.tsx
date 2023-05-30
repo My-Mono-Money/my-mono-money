@@ -77,7 +77,7 @@ describe('Sign in page', () => {
 
     test('User enters invalid email', async () => {
       act(() => {
-        userEvent.type(screen.getByLabelText('Пошта'), 'johny.depp@examplecom');
+        userEvent.type(screen.getByLabelText('Пошта'), 'johny.deppexamplecom');
         userEvent.click(document.body);
       });
       expect(
