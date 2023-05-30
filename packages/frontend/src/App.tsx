@@ -20,6 +20,9 @@ import { ConfirmEmail } from './pages/confirm-email/confirm-email.page';
 import Settings from './pages/settings/settings-page';
 import { GlobalStateProvider } from './global-state/global-state.provider';
 import { InvitationPage } from './pages/invitation/invitation.page';
+import AddNewToken from 'common/components/settings/bank-integration/add-new-token.component';
+import ShowTokenList from 'common/components/settings/bank-integration/show-token-list';
+import ShareAccess from 'common/components/settings/share-access/share-access.component';
 
 function App() {
   const theme = createTheme({
@@ -63,7 +66,18 @@ function App() {
     <Route element={<Private />}>
       <Route element={<StatementLayout />}>
         <Route index element={<StatementsPage />} />
-        <Route path="settings" element={<Settings />} />
+        <Route path="settings" element={<Settings />}>
+          <Route
+            path="integration"
+            element={
+              <>
+                <AddNewToken />
+                <ShowTokenList />
+              </>
+            }
+          />
+          <Route path="shareaccess" element={<ShareAccess />} />
+        </Route>
         <Route path="invitation" element={<InvitationPage />} />
       </Route>
     </Route>

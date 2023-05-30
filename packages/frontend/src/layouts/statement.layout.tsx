@@ -12,7 +12,7 @@ import { useGlobalState } from '../global-state/use-global-state.hook';
 
 const Header = () => {
   const { user, clearToken } = useAuthState();
-  const { setClearAllGlobalState } = useGlobalState();
+  const { settingsPageSelected, setClearAllGlobalState } = useGlobalState();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const navigate = useNavigate();
 
@@ -83,7 +83,9 @@ const Header = () => {
             </ListItemIcon>
             Home
           </MenuItem>
-          <MenuItem onClick={() => navigate('/settings')}>
+          <MenuItem
+            onClick={() => navigate('/settings/' + settingsPageSelected)}
+          >
             <ListItemIcon>
               <Settings fontSize="small" />
             </ListItemIcon>

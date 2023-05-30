@@ -1,20 +1,23 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Drawer from '@mui/material/Drawer';
-import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
+import { Link, useLocation, Outlet, useNavigate } from 'react-router-dom';
 import { Box } from '@mui/material';
-import ShowTokenList from 'common/components/settings/bank-integration/show-token-list';
-import AddNewToken from 'common/components/settings/bank-integration/add-new-token.component';
-import ShareAccess from 'common/components/settings/share-access/share-access.component';
 import { useGlobalState } from 'global-state/use-global-state.hook';
 
 const drawerWidth = 240;
 
 const Settings: React.FC = () => {
   const { settingsPageSelected, setChoiceSettingsPage } = useGlobalState();
+  const navigate = useNavigate();
+  const location = useLocation();
+  useEffect(() => {
+    navigate(settingsPageSelected);
+  }, []);
   const handleItemClick = (item: string) => {
     setChoiceSettingsPage(item);
+    return <Link to={item} />;
   };
 
   return (
@@ -22,6 +25,7 @@ const Settings: React.FC = () => {
       <Drawer
         sx={{
           width: drawerWidth,
+          height: 150,
           flexShrink: 0,
           '& .MuiDrawer-paper': {
             width: drawerWidth,
@@ -31,22 +35,24 @@ const Settings: React.FC = () => {
         }}
         variant="permanent"
       >
-        <List>
-          <ListItemButton
-            selected={settingsPageSelected === 'Item 1'}
-            onClick={() => handleItemClick('Item 1')}
-            sx={{ '&.Mui-selected': { backgroundColor: 'primary.secondary' } }}
-          >
-            <ListItemText primary="Інтеграція Monobank" />
-          </ListItemButton>
-          <ListItemButton
-            selected={settingsPageSelected === 'Item 2'}
-            onClick={() => handleItemClick('Item 2')}
-            sx={{ '&.Mui-selected': { backgroundColor: 'primary.secondary' } }}
-          >
-            <ListItemText primary="Спільний доступ" />
-          </ListItemButton>
-        </List>
+        <ListItemButton
+          sx={{ '&.Mui-selected': { backgroundColor: 'primary.secondary' } }}
+          component={Link}
+          to="integration"
+          selected={location.pathname === '/settings/integration'}
+          onClick={() => handleItemClick('integration')}
+        >
+          <ListItemText primary="Інтеграція Monobank" />
+        </ListItemButton>
+        <ListItemButton
+          sx={{ '&.Mui-selected': { backgroundColor: 'primary.secondary' } }}
+          component={Link}
+          to="shareaccess"
+          selected={location.pathname === '/settings/shareaccess'}
+          onClick={() => handleItemClick('shareaccess')}
+        >
+          <ListItemText primary="Спільний доступ" />
+        </ListItemButton>
       </Drawer>
       <Box
         sx={{
@@ -58,13 +64,7 @@ const Settings: React.FC = () => {
           alignItems: 'center',
         }}
       >
-        {settingsPageSelected === 'Item 1' ? (
-          <>
-            <AddNewToken />
-            <ShowTokenList />
-          </>
-        ) : null}
-        {settingsPageSelected === 'Item 2' ? <ShareAccess /> : null}
+        <Outlet />
       </Box>
     </Box>
   );

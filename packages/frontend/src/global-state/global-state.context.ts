@@ -4,7 +4,7 @@ import { IGlobalContext } from './global-context.interface';
 const isShow = localStorage.getItem('popupAddToken') ?? undefined;
 export const INITIAL_GLOBAL_STATE = {
   isPopupAddTokenEnable: Boolean(isShow),
-  settingsPageSelected: 'Item 1',
+  settingsPageSelected: 'integration',
   defaultUserSpace: '',
   spaceMembers: [],
   spaces: [],
