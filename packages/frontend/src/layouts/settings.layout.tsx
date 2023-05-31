@@ -8,7 +8,7 @@ import { useGlobalState } from 'global-state/use-global-state.hook';
 
 const drawerWidth = 240;
 
-const Settings: React.FC = () => {
+const SettingsLayout: React.FC = () => {
   const { settingsPageSelected, setChoiceSettingsPage } = useGlobalState();
   const navigate = useNavigate();
   const location = useLocation();
@@ -17,7 +17,7 @@ const Settings: React.FC = () => {
   }, []);
   const handleItemClick = (item: string) => {
     setChoiceSettingsPage(item);
-    return <Link to={item} />;
+    <Link to={item} />;
   };
 
   return (
@@ -70,4 +70,4 @@ const Settings: React.FC = () => {
   );
 };
 
-export default Settings;
+export default SettingsLayout;

@@ -17,12 +17,11 @@ import { VerifyEmail } from './pages/verify-email/verify-email.page';
 import StatementLayout from './layouts/statement.layout';
 import { ToastContainer } from 'react-toastify';
 import { ConfirmEmail } from './pages/confirm-email/confirm-email.page';
-import Settings from './pages/settings/settings-page';
+import SettingsLayout from './layouts/settings.layout';
 import { GlobalStateProvider } from './global-state/global-state.provider';
 import { InvitationPage } from './pages/invitation/invitation.page';
-import AddNewToken from 'common/components/settings/bank-integration/add-new-token.component';
-import ShowTokenList from 'common/components/settings/bank-integration/show-token-list';
-import ShareAccess from 'common/components/settings/share-access/share-access.component';
+import ShareAccessPage from 'pages/settings/share-access/share-access.page';
+import IntegrationPage from 'pages/settings/bank-integration/integration.page';
 
 function App() {
   const theme = createTheme({
@@ -66,17 +65,9 @@ function App() {
     <Route element={<Private />}>
       <Route element={<StatementLayout />}>
         <Route index element={<StatementsPage />} />
-        <Route path="settings" element={<Settings />}>
-          <Route
-            path="integration"
-            element={
-              <>
-                <AddNewToken />
-                <ShowTokenList />
-              </>
-            }
-          />
-          <Route path="shareaccess" element={<ShareAccess />} />
+        <Route path="settings" element={<SettingsLayout />}>
+          <Route path="integration" element={<IntegrationPage />} />
+          <Route path="shareaccess" element={<ShareAccessPage />} />
         </Route>
         <Route path="invitation" element={<InvitationPage />} />
       </Route>

@@ -27,7 +27,7 @@ interface IFormData {
   email: string;
 }
 
-const ShareAccess = () => {
+const ShareAccessPage = () => {
   const { token, user } = useAuthState();
   const { spaceMembers } = useGlobalState();
   const [openAlertRemove, setOpenAlertRemove] = useState<{
@@ -235,4 +235,4 @@ const ShareAccess = () => {
   );
 };
 
-export default ShareAccess;
+export default ShareAccessPage;
