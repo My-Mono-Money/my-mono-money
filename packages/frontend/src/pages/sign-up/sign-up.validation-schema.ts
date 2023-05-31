@@ -26,5 +26,5 @@ export const SignUpValidationSchema = Yup.object().shape({
     ),
   confirmPassword: Yup.string()
     .required('Це поле обовʼязкове')
-    .oneOf([Yup.ref('password'), null], 'Пароль не збігається'),
+    .oneOf([Yup.ref('password'), ''], 'Пароль не збігається'),
 });
