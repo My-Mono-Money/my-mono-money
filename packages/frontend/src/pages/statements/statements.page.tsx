@@ -9,6 +9,7 @@ import { useFetchSpaceMembersList } from 'api/useFetchSpaceMembersList';
 import { useFetchSpaces } from 'api/useFetchSpaces';
 import { useGlobalState } from 'global-state/use-global-state.hook';
 import { useFetchTokenList } from 'api/useFetchTokenList';
+import { useQuery } from '@tanstack/react-query';
 
 const Statements: React.FC = () => {
   const { token, user } = useAuthState();
@@ -20,7 +21,10 @@ const Statements: React.FC = () => {
   const [tokenList, setTokenList] = useState([]);
   const location = useLocation();
   const navigate = useNavigate();
-
+  const { status, data, error } = useQuery(['sign-in']);
+  console.log('data', data);
+  console.log('error', error);
+  console.log('status', status);
   useEffect(() => {
     if (!user?.isEmailVerified) navigate('/verify-email');
 

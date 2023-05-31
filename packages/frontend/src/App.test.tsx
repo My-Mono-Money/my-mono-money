@@ -6,6 +6,10 @@ import {
 } from '@testing-library/react';
 import App from './App';
 
+jest.mock('@tanstack/react-query-devtools', () => ({
+  ReactQueryDevtools: () => null,
+}));
+
 test('loader is working', async () => {
   render(<App />);
 

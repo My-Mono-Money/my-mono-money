@@ -1,4 +1,6 @@
 import React from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ThemeProvider } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
@@ -42,6 +44,8 @@ function App() {
     },
   });
 
+  const queryClient = new QueryClient();
+
   const publicRoutes = (
     <>
       <Route element={<OnlyPublic />}>
@@ -72,17 +76,20 @@ function App() {
   return (
     <BrowserRouter>
       <ThemeProvider theme={theme}>
-        <AuthStateProvider>
-          <GlobalStateProvider>
-            <Routes>
-              <Route element={<WaitForAuthResolve />}>
-                {publicRoutes}
-                {privateRoutes}
-              </Route>
-            </Routes>
-            <ToastContainer />
-          </GlobalStateProvider>
-        </AuthStateProvider>
+        <QueryClientProvider client={queryClient}>
+          <AuthStateProvider>
+            <GlobalStateProvider>
+              <Routes>
+                <Route element={<WaitForAuthResolve />}>
+                  {publicRoutes}
+                  {privateRoutes}
+                </Route>
+              </Routes>
+              <ToastContainer />
+            </GlobalStateProvider>
+          </AuthStateProvider>
+          <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
       </ThemeProvider>
     </BrowserRouter>
   );
