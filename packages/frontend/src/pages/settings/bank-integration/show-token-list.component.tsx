@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   Box,
   Table,
@@ -9,16 +9,11 @@ import {
   TableRow,
 } from '@mui/material';
 import { format } from 'date-fns';
+import { ITokenItem } from 'types/token-item.interface';
 import { useFetchTokenList } from 'api/useFetchTokenList';
-import { useGlobalState } from 'global-state/use-global-state.hook';
 
 const ShowTokenList: React.FC = () => {
-  const [, fetchTokenList] = useFetchTokenList();
-  const { tokenList } = useGlobalState();
-  useEffect(() => {
-    fetchTokenList();
-  }, []);
-
+  const tokenList = useFetchTokenList();
   return (
     <Box sx={{ mb: '20px' }}>
       <TableContainer>
@@ -30,17 +25,18 @@ const ShowTokenList: React.FC = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {tokenList && tokenList?.length < 1 && (
-              <TableRow sx={{ width: 'full' }}>
-                <TableCell>
-                  {' '}
-                  Щоб додати інших користувачів до свого простору, спочатку
-                  додайте монобанк токен
-                </TableCell>
-                <TableCell align="right"></TableCell>
-              </TableRow>
-            )}
-            {tokenList?.map((row) => {
+            {!tokenList?.data ||
+              (tokenList.data.length < 1 && (
+                <TableRow sx={{ width: 'full' }}>
+                  <TableCell>
+                    {' '}
+                    Щоб додати інших користувачів до свого простору, спочатку
+                    додайте монобанк токен
+                  </TableCell>
+                  <TableCell align="right"></TableCell>
+                </TableRow>
+              ))}
+            {tokenList?.data?.map((row: ITokenItem) => {
               const formatTime = `${format(
                 new Date(row.createdAt),
                 'dd.MM.yyyy HH:mm',
