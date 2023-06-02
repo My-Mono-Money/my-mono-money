@@ -6,21 +6,12 @@ export const INITIAL_GLOBAL_STATE = {
   isPopupAddTokenEnable: Boolean(isShow),
   settingsPageSelected: 'integration',
   defaultUserSpace: '',
-  spaceMembers: [],
-  spaces: [],
-  tokenList: [],
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   setTogglePopupAddToken: () => {},
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   setChoiceSettingsPage: () => {},
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   setChangeDefaultUserSpace: () => {},
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  setSpaceMembers: () => {},
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  setSpaces: () => {},
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  setTokenList: () => {},
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   setClearAllGlobalState: () => {},
 };

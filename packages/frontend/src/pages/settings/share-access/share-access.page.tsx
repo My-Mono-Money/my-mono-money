@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Button,
@@ -21,7 +21,7 @@ import { useFetchSpaceMembersList } from 'api/useFetchSpaceMembersList';
 import axios, { AxiosError } from 'axios';
 import { useAuthState } from 'auth-state/use-auth-state.hook';
 import { IErrorResponse } from 'types/error-response.interface';
-import { useGlobalState } from 'global-state/use-global-state.hook';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface IFormData {
   email: string;
@@ -29,12 +29,12 @@ interface IFormData {
 
 const ShareAccessPage = () => {
   const { token, user } = useAuthState();
-  const { spaceMembers } = useGlobalState();
+  const queryClient = useQueryClient();
   const [openAlertRemove, setOpenAlertRemove] = useState<{
     rowId: string;
     table: string;
   }>({ rowId: '', table: '' });
-  const [, fetchSpaceMembers] = useFetchSpaceMembersList();
+  const spaceMembers = useFetchSpaceMembersList();
 
   const {
     register,
@@ -45,12 +45,6 @@ const ShareAccessPage = () => {
     resolver: yupResolver(AddNewSharinglidationSchema),
     mode: 'onBlur',
   });
-
-  useEffect(() => {
-    if (!user || !token) return;
-
-    fetchSpaceMembers();
-  }, []);
 
   const handleRemoveShare = (rowId: string, table: string) => {
     setOpenAlertRemove({ rowId, table });
@@ -67,8 +61,7 @@ const ShareAccessPage = () => {
           },
         },
       );
-      fetchSpaceMembers();
-
+      queryClient.invalidateQueries(['space-members']);
       reset();
     } catch (err) {
       const axiosError = err as unknown as AxiosError<IErrorResponse>;
@@ -128,8 +121,8 @@ const ShareAccessPage = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {spaceMembers
-              .filter((el) => user?.email === el.owner.email)
+            {spaceMembers?.data
+              ?.filter((el) => user?.email === el.owner.email)
               .sort((a, b) => +new Date(b.updatedAt) - +new Date(a.updatedAt))
               .map((row) => {
                 const formatTime = `${format(
@@ -141,8 +134,6 @@ const ShareAccessPage = () => {
                     <AlertDialog
                       openAlertRemove={openAlertRemove}
                       setOpenAlertRemove={setOpenAlertRemove}
-                      fetchSpaceMembers={fetchSpaceMembers}
-                      spaceMembers={spaceMembers}
                       userEmail={user?.email}
                       token={token}
                     ></AlertDialog>
@@ -184,8 +175,8 @@ const ShareAccessPage = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {spaceMembers
-              .filter((el) => user?.email !== el.owner.email)
+            {spaceMembers?.data
+              ?.filter((el) => user?.email !== el.owner.email)
               .filter((el) => el.status !== 'reject')
               .sort((a, b) => +new Date(b.updatedAt) - +new Date(a.updatedAt))
               .map((row) => {
@@ -202,8 +193,6 @@ const ShareAccessPage = () => {
                     <AlertDialog
                       openAlertRemove={openAlertRemove}
                       setOpenAlertRemove={setOpenAlertRemove}
-                      fetchSpaceMembers={fetchSpaceMembers}
-                      spaceMembers={spaceMembers}
                       userEmail={user?.email}
                       token={token}
                     ></AlertDialog>

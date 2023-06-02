@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import {
   FormControl,
   InputLabel,
@@ -13,26 +14,22 @@ import { useGlobalState } from 'global-state/use-global-state.hook';
 import { useFetchSpaces } from 'api/useFetchSpaces';
 
 const SwitchingSpaces = () => {
-  const {
-    defaultUserSpace = '',
-    setChangeDefaultUserSpace,
-    spaceMembers,
-    spaces,
-  } = useGlobalState();
-  const [, fetchSpaces] = useFetchSpaces();
-  const { token } = useAuthState();
+  const { defaultUserSpace, setChangeDefaultUserSpace } = useGlobalState();
+  const [viewDefaultUserSpace, setViewDefaultUserSpace] = useState('');
 
+  const { token } = useAuthState();
+  const queryClient = useQueryClient();
+  const spaces = useFetchSpaces();
   useEffect(() => {
-    if (!spaceMembers) return;
-    fetchSpaces();
+    setChangeDefaultUserSpace(
+      spaces?.data?.find((space) => space.isDefault === true)
+        ?.spaceOwnerEmail || '',
+    );
   }, []);
 
   useEffect(() => {
-    if (!spaces) return;
-    setChangeDefaultUserSpace(
-      spaces.find((space) => space.isDefault === true)?.spaceOwnerEmail || '',
-    );
-  }, [spaces]);
+    setViewDefaultUserSpace(defaultUserSpace);
+  }, [defaultUserSpace]);
 
   const handleChangeSpace = async (event: SelectChangeEvent) => {
     try {
@@ -45,7 +42,7 @@ const SwitchingSpaces = () => {
           },
         },
       );
-      fetchSpaces();
+      queryClient.invalidateQueries(['spaces']);
     } catch (err) {
       const axiosError = err as unknown as AxiosError<IErrorResponse>;
       alert(axiosError.response?.data.message);
@@ -64,12 +61,12 @@ const SwitchingSpaces = () => {
       <Select
         labelId="demo-simple-select-label"
         id="space-switching-select"
-        value={defaultUserSpace}
-        label={defaultUserSpace}
+        value={viewDefaultUserSpace}
+        label={viewDefaultUserSpace}
         onChange={handleChangeSpace}
-        disabled={Boolean(spaces && spaces.length <= 1)}
+        disabled={Boolean(!spaces?.data || spaces?.data?.length <= 1)}
       >
-        {spaces?.map((space) => {
+        {spaces?.data?.map((space) => {
           return (
             <MenuItem key={space.spaceOwnerEmail} value={space.spaceOwnerEmail}>
               {space.spaceOwnerEmail}

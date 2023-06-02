@@ -1,18 +1,14 @@
 import axios from 'axios';
+import { useQuery } from '@tanstack/react-query';
 import { ITokenItem } from '../types/token-item.interface';
 import { useAuthState } from '../auth-state/use-auth-state.hook';
-import { useGlobalState } from '../global-state/use-global-state.hook';
 
 interface ITokenResponse {
   items: ITokenItem[];
 }
 
-export const useFetchTokenList = (): [
-  ITokenItem[] | undefined,
-  () => Promise<ITokenItem[] | undefined>,
-] => {
+export const useFetchTokenList = () => {
   const { token } = useAuthState();
-  const { tokenList, setTokenList } = useGlobalState();
 
   const fetchToken = async () => {
     try {
@@ -21,13 +17,15 @@ export const useFetchTokenList = (): [
           Authorization: `Bearer ${token}`,
         },
       });
+      if (!response.data) {
+        throw new Error('Could not get token list');
+      }
 
-      setTokenList(response.data.items);
       return response.data.items;
     } catch (err) {
       console.log('err', err);
     }
   };
 
-  return [tokenList, fetchToken];
+  return useQuery(['token-list'], fetchToken);
 };

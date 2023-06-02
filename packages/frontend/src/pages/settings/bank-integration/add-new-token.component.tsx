@@ -16,7 +16,7 @@ import InstructionAddToken from 'common/components/instructions/instruction-add-
 import axios, { AxiosError } from 'axios';
 import { notify } from 'utils/notifications';
 import { useAuthState } from 'auth-state/use-auth-state.hook';
-import { useFetchTokenList } from 'api/useFetchTokenList';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface IFormData {
   tokenMonobank: string;
@@ -28,9 +28,9 @@ interface IErrorResponse {
 
 const AddNewToken: React.FC = () => {
   const { token } = useAuthState();
-  const [, fetchTokenList] = useFetchTokenList();
   const [openInstruction, setOpenInstruction] = useState(false);
   const [submittingError, setSubmittingError] = useState<string>();
+  const queryClient = useQueryClient();
   const {
     register,
     handleSubmit,
@@ -55,7 +55,7 @@ const AddNewToken: React.FC = () => {
         },
       );
       notify('Котики зберегли ваш токен', '🐈', 0);
-      fetchTokenList();
+      queryClient.invalidateQueries(['token-list']);
       reset();
     } catch (err) {
       const axiosError = err as unknown as AxiosError<IErrorResponse>;

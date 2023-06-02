@@ -6,12 +6,12 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { ISpaceMember } from 'types/space-members.interface';
 import axios, { AxiosError } from 'axios';
 import { IErrorResponse } from 'types/error-response.interface';
+import { useFetchSpaceMembersList } from 'api/useFetchSpaceMembersList';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface IAlertRemove {
   openAlertRemove: { rowId: string; table: string };
   setOpenAlertRemove: (memberId: { rowId: string; table: string }) => void;
-  fetchSpaceMembers: () => void;
-  spaceMembers: ISpaceMember[];
   userEmail?: string;
   token?: string;
 }
@@ -19,12 +19,12 @@ interface IAlertRemove {
 const AlertDialog = ({
   openAlertRemove,
   setOpenAlertRemove,
-  fetchSpaceMembers,
-  spaceMembers,
   userEmail,
   token,
 }: IAlertRemove) => {
-  const spaceMember = spaceMembers?.find(
+  const spaceMembers = useFetchSpaceMembersList();
+  const queryClient = useQueryClient();
+  const spaceMember = spaceMembers?.data?.find(
     (member: ISpaceMember) => member.id === openAlertRemove.rowId,
   );
   const handleClose = () => {
@@ -47,7 +47,8 @@ const AlertDialog = ({
           Authorization: `Bearer ${token}`,
         },
       });
-      fetchSpaceMembers();
+      // fetchSpaceMembers();
+      queryClient.invalidateQueries(['space-members']);
       setOpenAlertRemove({ rowId: '', table: '' });
     } catch (err) {
       const axiosError = err as unknown as AxiosError<IErrorResponse>;

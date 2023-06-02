@@ -1,18 +1,14 @@
 import axios from 'axios';
+import { useQuery } from '@tanstack/react-query';
 import { useAuthState } from '../auth-state/use-auth-state.hook';
 import { ISpaceMember } from '../types/space-members.interface';
-import { useGlobalState } from '../global-state/use-global-state.hook';
 
 interface ISpaceMembersResponse {
   items: ISpaceMember[];
 }
 
-export const useFetchSpaceMembersList = (): [
-  ISpaceMember[],
-  () => Promise<ISpaceMember[] | undefined>,
-] => {
+export const useFetchSpaceMembersList = () => {
   const { token, user } = useAuthState();
-  const { spaceMembers, setSpaceMembers } = useGlobalState();
 
   const fetchSpaceMembers = async () => {
     try {
@@ -24,13 +20,14 @@ export const useFetchSpaceMembersList = (): [
           },
         },
       );
-      setSpaceMembers(response.data.items);
+      if (!response.data) {
+        throw new Error('Could not get space members');
+      }
 
       return response.data.items;
     } catch (err) {
       console.log('err', err);
     }
   };
-
-  return [spaceMembers, fetchSpaceMembers];
+  return useQuery(['space-members'], fetchSpaceMembers);
 };
