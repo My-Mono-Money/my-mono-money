@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios, { AxiosError } from 'axios';
 import { Link, useLocation } from 'react-router-dom';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useAuthState } from 'auth-state/use-auth-state.hook';
@@ -21,7 +22,7 @@ interface IFormData {
   lastName: string;
   email: string;
   password: string;
-  confirmPassword: string;
+  confirmPassword?: string;
 }
 
 type IHistoryState = Omit<IFormData, 'confirmPassword'>;
@@ -29,6 +30,23 @@ type IHistoryState = Omit<IFormData, 'confirmPassword'>;
 interface IErrorResponse {
   message: string;
 }
+
+const fetchSignUp = async (
+  { firstName, lastName, email, password }: IFormData,
+  spaceOwnerEmail: string,
+) => {
+  const response = await axios.post('/auth/sign-up', {
+    firstName,
+    lastName,
+    email,
+    spaceOwnerEmail,
+    password,
+  });
+  if (!response?.data.isSuccessful) {
+    throw new Error("Can't recognize response as successful");
+  }
+  return response;
+};
 
 const SignUp: React.FC = () => {
   //register by invitation
@@ -43,9 +61,35 @@ const SignUp: React.FC = () => {
 
   const [submittingError, setSubmittingError] = useState<string>();
 
+  const queryClient = useQueryClient();
+
   const { setToken } = useAuthState();
   const { setTogglePopupAddToken } = useGlobalState();
   const state = location.state as IHistoryState;
+
+  const { mutate } = useMutation({
+    mutationFn: ({ firstName, lastName, email, password }: IFormData) =>
+      fetchSignUp({ firstName, lastName, email, password }, spaceOwnerEmail),
+
+    onError: (error, variables) => {
+      const axiosError = error as unknown as AxiosError<IErrorResponse>;
+      if (axiosError.response?.data.message === 'duplicated-entity-error') {
+        setSubmittingError(
+          `Користувач з поштою "${variables.email}" уже зареєстрований`,
+        );
+      } else {
+        setSubmittingError(`Будь-ласка, спробуйте повторити пізніше`);
+      }
+    },
+    onSuccess: (response) => {
+      if (!response.data.isSuccessful) {
+        throw new Error("Can't recognize response as successful");
+      }
+      if (invitedEmail) setTogglePopupAddToken(true);
+      setToken(response.data.accessToken);
+      queryClient.setQueryData(['sign-in'], response.data.accessToken);
+    },
+  });
   const {
     register,
     handleSubmit,
@@ -66,27 +110,13 @@ const SignUp: React.FC = () => {
     password,
   }: IFormData) => {
     if (invitedEmail) email = invitedEmail;
-    try {
-      const response = await axios.post('/auth/sign-up', {
-        firstName,
-        lastName,
-        email,
-        spaceOwnerEmail,
-        password,
-      });
-      if (!response.data.isSuccessful) {
-        throw new Error("Can't recognize response as successful");
-      }
-      if (invitedEmail) setTogglePopupAddToken(true);
-      setToken(response.data.accessToken);
-    } catch (err) {
-      const axiosError = err as unknown as AxiosError<IErrorResponse>;
-      if (axiosError.response?.data.message === 'duplicated-entity-error') {
-        setSubmittingError(`Користувач з поштою "${email}" уже зареєстрований`);
-      } else {
-        setSubmittingError(`Будь-ласка, спробуйте повторити пізніше`);
-      }
-    }
+
+    mutate({
+      firstName,
+      lastName,
+      email,
+      password,
+    });
   };
 
   return (

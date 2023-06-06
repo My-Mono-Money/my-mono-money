@@ -124,8 +124,10 @@ const StatementTable: React.FC = () => {
         setResponse(result);
       }
       setLoading(false);
+      console.log('result', result);
     });
   };
+
   useEffect(() => {
     if (!token || !user) {
       return;
