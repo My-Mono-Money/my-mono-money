@@ -56,9 +56,9 @@ function App() {
           <Route path="sign-up" element={<SignUpPage />} />
           <Route path="accept-invite" element={<SignUpPage />} />
           <Route path="forgot-password" element={<ForgotPasswordPage />} />
-          <Route path="confirm-email" element={<ConfirmEmail />} />
         </Route>
       </Route>
+      <Route path="confirm-email" element={<ConfirmEmail />} />
       <Route element={<AuthLayout />}>
         <Route path="verify-email" element={<VerifyEmail />} />
       </Route>
