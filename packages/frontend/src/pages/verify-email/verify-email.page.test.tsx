@@ -2,23 +2,26 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { VerifyEmail } from './verify-email.page';
 import { MemoryRouter } from 'react-router-dom';
-import { useAuthState } from 'auth-state/use-auth-state.hook';
+import { useSignedInAuthState } from 'auth-state/use-auth-state.hook';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 jest.mock('auth-state/use-auth-state.hook', () => ({
-  useAuthState: jest.fn(),
+  useSignedInAuthState: jest.fn(),
 }));
+const queryClient = new QueryClient();
 
 const renderComponent = () => {
   render(
-    <MemoryRouter>
+    <QueryClientProvider client={queryClient}>
       <VerifyEmail />
-    </MemoryRouter>,
+    </QueryClientProvider>,
+    { wrapper: MemoryRouter },
   );
 };
 
 describe('Verify email page', () => {
   beforeEach(() => {
-    (useAuthState as jest.Mock).mockReturnValue({
+    (useSignedInAuthState as jest.Mock).mockReturnValue({
       user: {
         email: 'test@example.com',
         firstName: 'John',
