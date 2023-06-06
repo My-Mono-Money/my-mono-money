@@ -5,7 +5,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { BypassMonobankRateLimit } from '../interfaces/create-feature-flags-dto.interface';
+import { FeatureName } from '../interfaces/create-feature-flags-dto.interface';
 
 @Entity()
 export class FeatureFlag {
@@ -14,9 +14,9 @@ export class FeatureFlag {
 
   @Column({
     type: 'enum',
-    enum: BypassMonobankRateLimit,
+    enum: FeatureName,
   })
-  featureName: BypassMonobankRateLimit;
+  featureName: FeatureName;
 
   @Column({ default: true })
   isEnabled: boolean;
