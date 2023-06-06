@@ -14,6 +14,7 @@ import { useAuthState } from 'auth-state/use-auth-state.hook';
 import { SaveTokenValidationSchema } from './save-token.validation-schema';
 import { useGlobalState } from 'global-state/use-global-state.hook';
 import InstructionAddToken from 'common/components/instructions/instruction-add-token.component';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface IFormData {
   tokenMonobank: string;
@@ -26,6 +27,7 @@ interface ISaveTokenFormProps {
 const SaveTokenForm: React.FC<ISaveTokenFormProps> = ({ setIsTokenSaved }) => {
   const { token } = useAuthState();
   const { setTogglePopupAddToken } = useGlobalState();
+  const queryClient = useQueryClient();
   const {
     register,
     handleSubmit,
@@ -51,6 +53,8 @@ const SaveTokenForm: React.FC<ISaveTokenFormProps> = ({ setIsTokenSaved }) => {
 
       setTogglePopupAddToken(true);
       setIsTokenSaved(true);
+      queryClient.invalidateQueries(['token-list']);
+      queryClient.invalidateQueries(['spaces']);
     } catch (err) {
       console.log(err);
     }

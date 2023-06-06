@@ -22,7 +22,7 @@ export const useFetchSpaces = () => {
       return response.data.items;
     } catch (err) {
       const axiosError = err as unknown as AxiosError<IErrorResponse>;
-      alert(axiosError.response?.data.message);
+      console.log(axiosError.response?.data.message);
     }
   };
 

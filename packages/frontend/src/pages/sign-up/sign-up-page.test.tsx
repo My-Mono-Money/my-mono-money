@@ -4,10 +4,11 @@ import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import SignUp from './sign-up.page';
 import axios from 'axios';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
-
+const queryClient = new QueryClient();
 const fillSignUpFormCorrectly = () =>
   act(() => {
     userEvent.type(screen.getByLabelText('Імʼя'), 'Джоні');
@@ -40,9 +41,13 @@ const checkFormDisabling = async () => {
 
 describe('Sign up page', () => {
   beforeEach(() => {
-    render(<SignUp />, { wrapper: MemoryRouter });
+    render(
+      <QueryClientProvider client={queryClient}>
+        <SignUp />
+      </QueryClientProvider>,
+      { wrapper: MemoryRouter },
+    );
   });
-
   afterEach(() => {
     cleanup();
   });

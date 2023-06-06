@@ -45,7 +45,7 @@ const SwitchingSpaces = () => {
       queryClient.invalidateQueries(['spaces']);
     } catch (err) {
       const axiosError = err as unknown as AxiosError<IErrorResponse>;
-      alert(axiosError.response?.data.message);
+      console.log(axiosError.response?.data.message);
     }
   };
 

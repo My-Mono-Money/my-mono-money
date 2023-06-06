@@ -24,6 +24,10 @@ const Statements: React.FC = () => {
   console.log('status', status);
   useEffect(() => {
     if (!user?.isEmailVerified) navigate('/verify-email');
+    setChangeDefaultUserSpace(
+      spaces?.data?.find((space) => space.isDefault === true)
+        ?.spaceOwnerEmail || '',
+    );
   }, []);
   useEffect(() => {
     if (isTokenSaved) {
