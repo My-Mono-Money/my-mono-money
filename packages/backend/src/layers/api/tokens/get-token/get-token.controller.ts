@@ -27,6 +27,8 @@ export class GetTokenController {
     return {
       items: result.map((item) => ({
         token: item.token,
+        monobankUserName: item.monobankUserName,
+        totalAccounts: item.totalAccounts,
         createdAt: item.createdAt,
         updatedAt: item.updatedAt,
       })),

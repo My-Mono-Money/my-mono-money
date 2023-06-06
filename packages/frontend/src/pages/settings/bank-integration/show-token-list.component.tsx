@@ -21,6 +21,8 @@ const ShowTokenList: React.FC = () => {
           <TableHead>
             <TableRow>
               <TableCell align="left">Токен</TableCell>
+              <TableCell align="right">Імʼя користувача</TableCell>
+              <TableCell align="right">Кількість рахунків</TableCell>
               <TableCell align="right">Дата створення</TableCell>
             </TableRow>
           </TableHead>
@@ -44,6 +46,8 @@ const ShowTokenList: React.FC = () => {
               return (
                 <TableRow key={row.token}>
                   <TableCell align="left">{row.token}</TableCell>
+                  <TableCell align="left">{row.monobankUserName}</TableCell>
+                  <TableCell align="left">{row.totalAccounts}</TableCell>
                   <TableCell align="right">{formatTime}</TableCell>
                 </TableRow>
               );

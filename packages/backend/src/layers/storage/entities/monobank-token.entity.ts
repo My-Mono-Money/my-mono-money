@@ -22,6 +22,12 @@ export class MonobankToken implements ICreateMonobankTokenDto {
   @Column()
   token: string;
 
+  @Column()
+  monobankUserName: string;
+
+  @Column()
+  totalAccounts: number;
+
   @CreateDateColumn()
   createdAt: Date;
 

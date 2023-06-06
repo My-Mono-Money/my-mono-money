@@ -22,7 +22,7 @@ export class SaveTokenService {
   ) {}
 
   async save({ token, email }: ISaveTokenData) {
-    const { accounts } = await this.monobankIntegration.getClientInfo({
+    const { accounts, name } = await this.monobankIntegration.getClientInfo({
       token,
     });
     const space = await this.userStorage.getSpaceByEmail(email);
@@ -30,6 +30,7 @@ export class SaveTokenService {
       token,
       space,
       accounts,
+      name,
     });
     await this.monobankIntegration.setWebHook({ token, email });
     await this.queueIntegration.addToQueueStatement({ tokenId: savedToken.id });
