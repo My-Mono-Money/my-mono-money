@@ -70,9 +70,7 @@ const SignUp: React.FC = () => {
   const { mutate } = useMutation({
     mutationFn: ({ firstName, lastName, email, password }: IFormData) =>
       fetchSignUp({ firstName, lastName, email, password }, spaceOwnerEmail),
-    onMutate: (variables) => {
-      console.log('starting mutation... for', variables.email);
-    },
+
     onError: (error, variables) => {
       const axiosError = error as unknown as AxiosError<IErrorResponse>;
       if (axiosError.response?.data.message === 'duplicated-entity-error') {
@@ -90,12 +88,6 @@ const SignUp: React.FC = () => {
       if (invitedEmail) setTogglePopupAddToken(true);
       setToken(response.data.accessToken);
       queryClient.setQueryData(['sign-in'], response.data.accessToken);
-    },
-    onSettled: (data, error, variables, context) => {
-      console.log('onSettled data ', data);
-      console.log('onSettled error ', error);
-      console.log('onSettled variables ', variables);
-      console.log('onSettled context ', context);
     },
   });
   const {
