@@ -1,9 +1,10 @@
 import { Box, Typography, Button } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import Countdown from 'react-countdown';
-import { useAuthState } from 'auth-state/use-auth-state.hook';
+import { useSignedInAuthState } from 'auth-state/use-auth-state.hook';
+import { useMutation } from '@tanstack/react-query';
 
 const fetchResendMailVerification = async (code: string) => {
   const response = await axios.post(`/auth/resend-email`, null, {
@@ -17,43 +18,29 @@ const fetchResendMailVerification = async (code: string) => {
 
 export const VerifyEmail: React.FC = () => {
   const navigate = useNavigate();
-  const { user, token, clearToken } = useAuthState();
+  const { user, token, clearToken } = useSignedInAuthState();
   const [emailSendedCountDown, setEmailSendedCountDown] = useState(true);
-  const [userData, setUserData] = useState({
-    email: '',
-    firstName: '',
-    lastName: '',
+  const { mutate: resendMailVerification } = useMutation({
+    mutationFn: () => fetchResendMailVerification(token),
+    onSettled: () => setEmailSendedCountDown(true),
+    onError: () => {
+      clearToken();
+      navigate('/sign-in');
+    },
   });
-  const [userToken, setUserToken] = useState('');
-  useEffect(() => {
-    if (!user || !token) return;
-    setUserData({
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-    });
-    setUserToken(token);
-  }, []);
-  useEffect(() => {
-    localStorage.removeItem('token');
-  }, [userData]);
 
   const emailText = (
     <Typography variant="h6" component="span" color="violet">
-      {userData.email}
+      {user.email}
     </Typography>
   );
 
-  const handleEmailSended = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleResendEmailClick = (
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => {
     event.preventDefault();
-    if (userToken) {
-      fetchResendMailVerification(userToken)
-        .then(() => setEmailSendedCountDown(true))
-        .catch(() => {
-          clearToken();
-          navigate('/sign-in');
-        });
-    }
+
+    resendMailVerification();
   };
 
   return (
@@ -68,7 +55,7 @@ export const VerifyEmail: React.FC = () => {
         }}
       >
         <Typography variant="h5" fontWeight={500}>
-          Дякуємо за реєстрацію, {userData.firstName} {userData.lastName}!
+          Дякуємо за реєстрацію, {user?.firstName} {user?.lastName}!
         </Typography>
 
         <Typography sx={{ py: 2 }} variant="h6" fontWeight={400}>
@@ -117,7 +104,7 @@ export const VerifyEmail: React.FC = () => {
           >
             <Button
               variant="outlined"
-              onClick={handleEmailSended}
+              onClick={handleResendEmailClick}
               disabled={emailSendedCountDown}
             >
               Відправити лист знов
