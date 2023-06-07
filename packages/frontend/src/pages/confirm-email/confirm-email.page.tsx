@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { useAuthState } from 'auth-state/use-auth-state.hook';
 import { Box, Typography } from '@mui/material';
@@ -23,19 +24,22 @@ export const ConfirmEmail: React.FC = () => {
   const { setToken } = useAuthState();
   const navigate = useNavigate();
   const code = queryParams.get('code');
+  const { mutate: mutateMailVerification } = useMutation({
+    mutationFn: (code: string) => fetchMailVerification(code),
+    onError: () => {
+      navigate('/sign-in');
+    },
+    onSuccess: ({ accessToken }) => {
+      setToken(accessToken);
+      navigate('/', { replace: true, state: 'confirm-email' });
+    },
+  });
   useEffect(() => {
     if (!code) {
       navigate('/sign-in');
       return;
     }
-    fetchMailVerification(code)
-      .then(({ accessToken }) => {
-        setToken(accessToken);
-        navigate('/', { replace: true, state: 'confirm-email' });
-      })
-      .catch(() => {
-        navigate('/sign-in');
-      });
+    mutateMailVerification(code);
   }, []);
 
   return (

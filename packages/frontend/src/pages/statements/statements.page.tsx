@@ -7,7 +7,6 @@ import SaveTokenForm from './save-token-form.component';
 import StatementTable from './statements-table.component';
 import { useFetchSpaces } from 'api/useFetchSpaces';
 import { useFetchTokenList } from 'api/useFetchTokenList';
-import { useQuery } from '@tanstack/react-query';
 import { useGlobalState } from 'global-state/use-global-state.hook';
 
 const Statements: React.FC = () => {
@@ -18,10 +17,6 @@ const Statements: React.FC = () => {
   const spaces = useFetchSpaces();
   const location = useLocation();
   const navigate = useNavigate();
-  const { status, data, error } = useQuery(['sign-in']);
-  console.log('data', data);
-  console.log('error', error);
-  console.log('status', status);
   useEffect(() => {
     if (!user?.isEmailVerified) navigate('/verify-email');
     setChangeDefaultUserSpace(
