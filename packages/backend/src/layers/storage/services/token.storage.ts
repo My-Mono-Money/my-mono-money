@@ -11,6 +11,7 @@ interface ISaveTokenWithAccountsDto {
   token: string;
   space: ICreateSpaceDto;
   accounts: ICreateAccountDto[];
+  name: string;
 }
 
 interface IGetTokenList {
@@ -28,12 +29,15 @@ export class TokenStorage {
     token,
     space,
     accounts,
+    name,
   }: ISaveTokenWithAccountsDto) {
     try {
       return await this.connection.transaction(async (manager) => {
         const tokenEntity = manager.create<MonobankToken>(MonobankToken, {
           token,
           space,
+          monobankUserName: name,
+          totalAccounts: accounts.length,
         });
         const savedToken = await manager.save(tokenEntity);
         await manager.insert<Account>(

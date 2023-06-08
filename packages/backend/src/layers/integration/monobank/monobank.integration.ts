@@ -18,6 +18,7 @@ interface IGetStatement {
 
 interface IMonobankClientInfoResponse {
   accounts: ICreateAccountDto[];
+  name: string;
 }
 
 @Injectable()
