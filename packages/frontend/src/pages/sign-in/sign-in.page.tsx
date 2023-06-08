@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios, { AxiosError } from 'axios';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import {
   Alert,
   AlertTitle,
@@ -36,14 +36,9 @@ export const signIn = async ({ email, password }: IFormData) => {
 const SignIn: React.FC = () => {
   const { setToken } = useAuthState();
   const [submittingError, setSubmittingError] = useState<string>();
-  const queryClient = useQueryClient();
   const { mutate } = useMutation({
     mutationFn: ({ email, password }: IFormData) => signIn({ email, password }),
-    onMutate: (variables) => {
-      console.log('starting mutation... for', variables.email);
-    },
     onError: (error) => {
-      // An error happened!
       const err = error as unknown as AxiosError<IErrorResponse>;
       if (err.response?.data.message === 'unauthorized-error') {
         setSubmittingError('Неправильний пароль або пошта');
@@ -58,15 +53,6 @@ const SignIn: React.FC = () => {
         throw new Error("Can't recognize response as successful");
       }
       setToken(response.data.accessToken);
-      queryClient.setQueryData(['sign-in'], response.data.accessToken);
-    },
-    onSettled: (data, error, variables, context) => {
-      // Error or success... doesn't matter!
-      // Execute after error or success
-      console.log('onSettled data ', data);
-      console.log('onSettled error ', error);
-      console.log('onSettled variables ', variables);
-      console.log('onSettled context ', context);
     },
   });
 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios, { AxiosError } from 'axios';
 import { Link, useLocation } from 'react-router-dom';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useAuthState } from 'auth-state/use-auth-state.hook';
@@ -61,8 +61,6 @@ const SignUp: React.FC = () => {
 
   const [submittingError, setSubmittingError] = useState<string>();
 
-  const queryClient = useQueryClient();
-
   const { setToken } = useAuthState();
   const { setTogglePopupAddToken } = useGlobalState();
   const state = location.state as IHistoryState;
@@ -87,7 +85,6 @@ const SignUp: React.FC = () => {
       }
       if (invitedEmail) setTogglePopupAddToken(true);
       setToken(response.data.accessToken);
-      queryClient.setQueryData(['sign-in'], response.data.accessToken);
     },
   });
   const {

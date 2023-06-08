@@ -93,7 +93,9 @@ function App() {
               <ToastContainer />
             </GlobalStateProvider>
           </AuthStateProvider>
-          <ReactQueryDevtools initialIsOpen={false} />
+          {process.env.REACT_APP_ENVIROMENT === 'production' ? null : (
+            <ReactQueryDevtools initialIsOpen={false} />
+          )}
         </QueryClientProvider>
       </ThemeProvider>
     </BrowserRouter>
