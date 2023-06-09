@@ -69,7 +69,7 @@ export const InvitationPage: React.FC = () => {
       navigate('/');
     },
   });
-  const { data: userData, isLoading } = useQuery(['user-default-space'], () =>
+  const { data: userData, isLoading } = useQuery(['user-inviter'], () =>
     fetchUser(spaceOwnerEmail, token ?? ''),
   );
 
