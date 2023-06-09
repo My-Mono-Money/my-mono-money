@@ -1,14 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { Box, Button, Typography } from '@mui/material';
 import { useAuthState } from 'auth-state/use-auth-state.hook';
 import { useGlobalState } from 'global-state/use-global-state.hook';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { IErrorResponse } from 'types/error-response.interface';
 
 interface IGetUserResponse {
   firstName: string;
   lastName: string;
   email: string;
+}
+interface IAccepteInvite {
+  token: string;
+  spaceOwnerEmail: string;
 }
 
 const fetchUser = async (spaceOwnerEmail: string, token: string) => {
@@ -25,6 +31,21 @@ const fetchUser = async (spaceOwnerEmail: string, token: string) => {
   }
 };
 
+const fetchAcceptInviteHandle = async ({
+  token,
+  spaceOwnerEmail,
+}: IAccepteInvite) => {
+  try {
+    const result = await axios.post(`invites/${spaceOwnerEmail}/accept`, null, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return result;
+  } catch (error) {
+    throw new Error(`Failed to fetch data: ${error}`);
+  }
+};
 export const InvitationPage: React.FC = () => {
   const { token } = useAuthState();
   const { setChangeDefaultUserSpace } = useGlobalState();
@@ -37,41 +58,44 @@ export const InvitationPage: React.FC = () => {
     searchParams.get('spaceOwnerEmail') || '',
   );
 
+  const { mutate: mutateAcceptInviteHandle } = useMutation({
+    mutationFn: ({ token, spaceOwnerEmail }: IAccepteInvite) =>
+      fetchAcceptInviteHandle({ token, spaceOwnerEmail }),
+    onError: (error) => {
+      const err = error as unknown as AxiosError<IErrorResponse>;
+      console.log(err);
+    },
+    onSuccess: () => {
+      navigate('/');
+    },
+  });
+  const { data: userData, isLoading } = useQuery(['user-default-space'], () =>
+    fetchUser(spaceOwnerEmail, token ?? ''),
+  );
+
   useEffect(() => {
     if (!token) {
       return;
     }
-    fetchUser(spaceOwnerEmail, token).then((result) => {
-      if (result) {
-        setResponse(result);
-        setChangeDefaultUserSpace(result.email);
-      }
+    if (isLoading) {
+      setLoading(true);
+    }
+
+    if (userData) {
+      setResponse(userData);
+      setChangeDefaultUserSpace(userData.email);
       setLoading(false);
-    });
-  }, []);
+    }
+  }, [userData, isLoading]);
+
+  const acceptInviteHandle = () => {
+    if (!token) return;
+    mutateAcceptInviteHandle({ token, spaceOwnerEmail });
+  };
 
   if (!spaceOwnerEmail) {
     return <Navigate to="/" />;
   }
-
-  const acceptInviteHandle = async () => {
-    try {
-      const result = await axios.post(
-        `invites/${spaceOwnerEmail}/accept`,
-        null,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-      if (result) {
-        navigate('/');
-      }
-    } catch (err) {
-      throw new Error(`Failed to fetch data: ${err}`);
-    }
-  };
 
   if (loading) {
     return null;
