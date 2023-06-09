@@ -8,6 +8,14 @@ export enum ImportAttemptStatusType {
   Successful = 'successful',
 }
 
+export enum ImportAttemptLogDescription {
+  StatementImportIsQueued = ' statement import is queued ',
+  StartStatementImportExecution = ' start of statement import execution ',
+  BlackCardExtractRequestFor = ' black card extract request for ',
+  Successfully = ' successfully ',
+  Failed = ' failed ',
+}
+
 export interface ICreateMonobankTokenImportAttemptDto {
   token: ICreateMonobankTokenDto;
   status: ImportAttemptStatusType;
