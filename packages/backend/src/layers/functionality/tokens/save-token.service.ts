@@ -34,10 +34,16 @@ export class SaveTokenService {
     });
     await this.monobankIntegration.setWebHook({ token, email });
     await this.queueIntegration.addToQueueStatement({ tokenId: savedToken.id });
-    await this.spaceStorage.saveInvitation({
+    const memberInvitation = await this.spaceStorage.getMemberInvite(
       email,
-      space,
-      status: StatusType.ACCEPTED,
-    });
+      space.id,
+    );
+    if (!memberInvitation) {
+      await this.spaceStorage.saveInvitation({
+        email,
+        space,
+        status: StatusType.ACCEPTED,
+      });
+    }
   }
 }
