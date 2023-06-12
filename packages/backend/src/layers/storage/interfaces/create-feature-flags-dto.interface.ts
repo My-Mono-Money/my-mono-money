@@ -1,5 +1,5 @@
 export enum FeatureName {
-  bypass_monobank_rate_limit = 'bypass_monobank_rate_limit',
+  bypassMonobankRateLimit = 'bypass_monobank_rate_limit',
 }
 
 export interface ICreateFeatureFlagDto {

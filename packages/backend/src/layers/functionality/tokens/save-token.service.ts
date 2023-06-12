@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
+import { format } from 'date-fns';
 import { MonobankIntegration } from 'src/layers/integration/monobank/monobank.integration';
 import { QueueIntegration } from 'src/layers/integration/queue/queue.integration';
 import { SpaceStorage } from 'src/layers/storage/services/space.storage';
 import { TokenStorage } from 'src/layers/storage/services/token.storage';
 import { UserStorage } from 'src/layers/storage/services/user.storage';
-import { dateNowForLogs } from '~/common/date-format/date-now';
 import {
   ImportAttemptLogDescription,
   ImportAttemptStatusType,
@@ -46,7 +46,9 @@ export class SaveTokenService {
         fetchedMonths: 0,
         totalMonths: 0,
         log:
-          dateNowForLogs() +
+          ' - ' +
+          format(new Date(), 'dd MMM yyyy HH:mm:ss ') +
+          ' - ' +
           ImportAttemptLogDescription.StatementImportIsQueued +
           '\n',
         status: ImportAttemptStatusType.NotStarted,

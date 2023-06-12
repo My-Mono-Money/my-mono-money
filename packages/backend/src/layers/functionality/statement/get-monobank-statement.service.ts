@@ -7,6 +7,7 @@ import {
   eachMonthOfInterval,
   addMonths,
   startOfYear,
+  format,
 } from 'date-fns';
 import { ConfigService } from '@nestjs/config';
 import { ICreateTransactionDto } from 'src/layers/storage/interfaces/create-transaction-dto.interface';
@@ -17,7 +18,6 @@ import {
   ImportAttemptLogDescription,
   ImportAttemptStatusType,
 } from '~/storage/interfaces/create-monobank-token-import-attempt-dto.interface';
-import { dateNowForLogs } from '~/common/date-format/date-now';
 
 interface IGetStatement {
   tokenId: string;
@@ -61,83 +61,71 @@ export class GetMonobankStatementService {
   ) {}
 
   async getStatement({ tokenId, importAttemptId }: IGetStatement) {
-    console.log(tokenId, importAttemptId);
-    const featureFlag = await this.featureFlagStorage.getFeatureFlag(
-      FeatureName.bypass_monobank_rate_limit,
-    );
+    function formatDate(date: Date) {
+      return ' - ' + format(date, 'dd MMM yyyy HH:mm:ss ') + ' - ';
+    }
+
+    const featureFlags = await this.featureFlagStorage.getFeatureFlags();
     const importAttempt = await this.importAttemptStorage.getByImportAttemptId(
       importAttemptId,
     );
-    console.log('featureFlag.isEnabled', featureFlag.isEnabled);
-    console.log('importAttempt', importAttempt);
+
     const importAttemptInProgress =
       await this.importAttemptStorage.updateImportAttempt(
         {
           status: ImportAttemptStatusType.InProgress,
           log:
             importAttempt.log +
-            dateNowForLogs() +
+            formatDate(new Date()) +
             ImportAttemptLogDescription.StartStatementImportExecution +
             '\n',
         },
         importAttemptId,
       );
-    console.log('importAttemptInProgress', importAttemptInProgress);
 
-    if (featureFlag.isEnabled) {
-      const importAttemptUpdateToFail =
-        await this.importAttemptStorage.updateImportAttempt(
-          {
-            status: ImportAttemptStatusType.Failed,
-            log:
-              importAttemptInProgress.log +
-              dateNowForLogs() +
-              ImportAttemptLogDescription.Failed +
-              '\n',
-          },
-          importAttemptId,
+    await this.importAttemptStorage.updateImportAttempt(
+      {
+        status: featureFlags[FeatureName.bypassMonobankRateLimit]
+          ? ImportAttemptStatusType.Failed
+          : ImportAttemptStatusType.Successful,
+        log:
+          importAttemptInProgress.log +
+          formatDate(new Date()) +
+          `${
+            featureFlags[FeatureName.bypassMonobankRateLimit]
+              ? ImportAttemptLogDescription.Failed
+              : ImportAttemptStatusType.Successful
+          }` +
+          '\n',
+      },
+      importAttemptId,
+    );
+
+    const accountList = await this.statementStorage.getAccountByTokenId(
+      tokenId,
+    );
+    const from = fromInTimestamp();
+    const to = toInTimestamp();
+    const transactions: ICreateTransactionDto[] = [];
+    for (let i = 0; i < accountList.length; i++) {
+      for (let j = 0; j < from.length; j++) {
+        const statementPart = await this.monobankIntegration.getStatement({
+          accountId: accountList[i].id,
+          token: accountList[i].token.token,
+          from: from[j],
+          to: to[j],
+        });
+        await delay(this.configService.get('app.monobankRequestDelay'));
+        transactions.push(
+          ...statementPart.data.map((item) => ({
+            ...item,
+            account: {
+              id: accountList[i].id,
+            },
+          })),
         );
-      console.log('importAttemptUpdateToFail', importAttemptUpdateToFail);
-    } else {
-      const importAttemptUpdateToSuccess =
-        await this.importAttemptStorage.updateImportAttempt(
-          {
-            status: ImportAttemptStatusType.Successful,
-            log:
-              importAttemptInProgress.log +
-              dateNowForLogs() +
-              ImportAttemptLogDescription.Successfully +
-              '\n',
-          },
-          importAttemptId,
-        );
-      console.log('importAttemptUpdateToSuccess', importAttemptUpdateToSuccess);
+      }
     }
-    // const accountList = await this.statementStorage.getAccountByTokenId(
-    //   tokenId,
-    // );
-    // const from = fromInTimestamp();
-    // const to = toInTimestamp();
-    // const transactions: ICreateTransactionDto[] = [];
-    // for (let i = 0; i < accountList.length; i++) {
-    //   for (let j = 0; j < from.length; j++) {
-    //     const statementPart = await this.monobankIntegration.getStatement({
-    //       accountId: accountList[i].id,
-    //       token: accountList[i].token.token,
-    //       from: from[j],
-    //       to: to[j],
-    //     });
-    //     await delay(this.configService.get('app.monobankRequestDelay'));
-    //     transactions.push(
-    //       ...statementPart.data.map((item) => ({
-    //         ...item,
-    //         account: {
-    //           id: accountList[i].id,
-    //         },
-    //       })),
-    //     );
-    //   }
-    // }
-    // await this.statementStorage.saveStatement({ transactions });
+    await this.statementStorage.saveStatement({ transactions });
   }
 }
