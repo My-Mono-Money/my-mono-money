@@ -11,7 +11,9 @@ export class GetStatementWorker {
   @Process({
     concurrency: 1,
   })
-  async readOperationJob(job: Job<{ tokenId: string }>) {
+  async readOperationJob(
+    job: Job<{ tokenId: string; importAttemptId: string }>,
+  ) {
     Logger.log(`Worker started: ${JSON.stringify(job)}`, 'Worker');
     await this.getMonobankStatementService.getStatement(job.data);
   }

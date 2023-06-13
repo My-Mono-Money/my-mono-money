@@ -65,9 +65,9 @@ const SaveTokenForm: React.FC<ISaveTokenFormProps> = ({ setIsTokenSaved }) => {
       <Box>
         <Card
           sx={{
-            height: '700px',
             borderRadius: '16px',
             boxShadow: '3px 3px 3px 3px lightgray',
+            pb: '50px',
           }}
         >
           <CardContent

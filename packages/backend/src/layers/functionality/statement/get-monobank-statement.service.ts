@@ -7,12 +7,21 @@ import {
   eachMonthOfInterval,
   addMonths,
   startOfYear,
+  format,
 } from 'date-fns';
 import { ConfigService } from '@nestjs/config';
 import { ICreateTransactionDto } from 'src/layers/storage/interfaces/create-transaction-dto.interface';
+import { FeatureFlagStorage } from '~/storage/services/feature-flag.storage';
+import { ImportAttemptStorage } from '~/storage/services/import-attempt.storage';
+import { FeatureName } from '~/storage/interfaces/create-feature-flags-dto.interface';
+import {
+  ImportAttemptLogDescription,
+  ImportAttemptStatusType,
+} from '~/storage/interfaces/create-monobank-token-import-attempt-dto.interface';
 
 interface IGetStatement {
   tokenId: string;
+  importAttemptId: string;
 }
 
 function delay(ms) {
@@ -45,11 +54,53 @@ const toInTimestamp = () => {
 export class GetMonobankStatementService {
   constructor(
     private monobankIntegration: MonobankIntegration,
-    private statementStorage: StatementStorage,
     private configService: ConfigService,
+    private statementStorage: StatementStorage,
+    private featureFlagStorage: FeatureFlagStorage,
+    private importAttemptStorage: ImportAttemptStorage,
   ) {}
 
-  async getStatement({ tokenId }: IGetStatement) {
+  async getStatement({ tokenId, importAttemptId }: IGetStatement) {
+    function formatDate(date: Date) {
+      return ' - ' + format(date, 'dd MMM yyyy HH:mm:ss ') + ' - ';
+    }
+
+    const featureFlags = await this.featureFlagStorage.getFeatureFlags();
+    const importAttempt = await this.importAttemptStorage.getByImportAttemptId(
+      importAttemptId,
+    );
+
+    const importAttemptInProgress =
+      await this.importAttemptStorage.updateImportAttempt(
+        {
+          status: ImportAttemptStatusType.InProgress,
+          log:
+            importAttempt.log +
+            formatDate(new Date()) +
+            ImportAttemptLogDescription.StartStatementImportExecution +
+            '\n',
+        },
+        importAttemptId,
+      );
+
+    await this.importAttemptStorage.updateImportAttempt(
+      {
+        status: featureFlags[FeatureName.bypassMonobankRateLimit]
+          ? ImportAttemptStatusType.Failed
+          : ImportAttemptStatusType.Successful,
+        log:
+          importAttemptInProgress.log +
+          formatDate(new Date()) +
+          `${
+            featureFlags[FeatureName.bypassMonobankRateLimit]
+              ? ImportAttemptLogDescription.Failed
+              : ImportAttemptStatusType.Successful
+          }` +
+          '\n',
+      },
+      importAttemptId,
+    );
+
     const accountList = await this.statementStorage.getAccountByTokenId(
       tokenId,
     );
