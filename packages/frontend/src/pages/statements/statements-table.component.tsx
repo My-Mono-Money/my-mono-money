@@ -14,6 +14,7 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  Typography,
 } from '@mui/material';
 import { IStatementItem } from 'types/statement-item.interface';
 import { IPagingState } from 'types/statement-paging.interface';
@@ -22,6 +23,7 @@ import { useAuthState } from 'auth-state/use-auth-state.hook';
 import { UpdatingIndicator } from 'common/components/updating-indicator/updating-indicator.component';
 import PeriodFilter from './period-filter.component';
 import { useGlobalState } from 'global-state/use-global-state.hook';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 interface IStatementsResponse {
   items: IStatementItem[];
@@ -35,22 +37,18 @@ const fetchStatements = async (
   period: string,
   search: string,
 ) => {
-  try {
-    const response = await axios.get<IStatementsResponse>(
-      `/spaces/${spaceOwnerEmail}/statements?from=${
-        page * 10
-      }&limit=10&period=${period}&search=${search}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+  const response = await axios.get<IStatementsResponse>(
+    `/spaces/${spaceOwnerEmail}/statements?from=${
+      page * 10
+    }&limit=10&period=${period}&search=${search}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
-    );
+    },
+  );
 
-    return response.data;
-  } catch (err) {
-    console.log('err', err);
-  }
+  return response.data;
 };
 
 const formatAmountCurrency = (num: number) => {
@@ -97,16 +95,11 @@ const StatementTable: React.FC = () => {
   const { token, user } = useAuthState();
   const { defaultUserSpace } = useGlobalState();
   const [page, setPage] = usePagination();
-  const [loading, setLoading] = useState(true);
   const [clearInput, setClearInput] = useState(false);
-  const [updateStatements, setUpdateStatements] = useState(false);
-  const [response, setResponse] = useState<IStatementsResponse>();
   const [searchField, setSearchField] = useState('');
   const [searchFieldRequest, setSearchFieldRequest] = useState('');
-  const [debouncedIsLoading] = useDebounce(loading && !response, 150);
-  const [debouncedIsUpdating] = useDebounce(loading && response, 500);
   const [searchParams, setSearchParams] = useSearchParams();
-
+  const queryClient = useQueryClient();
   const period = searchParams.get('period') ?? 'day';
 
   const changePage = (
@@ -115,26 +108,32 @@ const StatementTable: React.FC = () => {
   ) => {
     setPage(page);
   };
-  const fetchStatementsFunc = (email: string) => {
-    if (!token || !user) {
-      return;
-    }
-    fetchStatements(token, email, page, period, searchField).then((result) => {
-      if (result) {
-        setResponse(result);
-      }
-      setLoading(false);
-      console.log('result', result);
-    });
-  };
+
+  const {
+    data: statements,
+    isLoading,
+    isFetching,
+    isError,
+  } = useQuery(['statements', page, period, searchField], () =>
+    fetchStatements(
+      token ?? '',
+      defaultUserSpace || (user?.email ?? ''),
+      page,
+      period,
+      searchField,
+    ),
+  );
+  const [debouncedIsLoading] = useDebounce(isLoading, 150);
+  const [debouncedIsUpdating] = useDebounce(isFetching && statements, 500);
 
   useEffect(() => {
-    if (!token || !user) {
-      return;
+    if (statements) {
+      queryClient.setQueryData(
+        ['statements', page, period, searchField],
+        statements,
+      );
     }
-    setUpdateStatements(!updateStatements);
-    setLoading(true);
-  }, [searchFieldRequest, page, period]);
+  }, [statements, searchFieldRequest, page, period]);
 
   useEffect(() => {
     clearStatements();
@@ -144,13 +143,6 @@ const StatementTable: React.FC = () => {
     clearStatements();
   }, [defaultUserSpace]);
 
-  useEffect(() => {
-    if (!token || !user) {
-      return;
-    }
-    fetchStatementsFunc(defaultUserSpace || user.email);
-  }, [updateStatements]);
-
   const clearStatements = () => {
     changePage(null, 0);
     setSearchField('');
@@ -158,13 +150,12 @@ const StatementTable: React.FC = () => {
     setClearInput(true);
     searchParams.set('period', 'day');
     setSearchParams(searchParams);
-    setUpdateStatements(!updateStatements);
+    queryClient.invalidateQueries(['statements']);
   };
 
   return (
     <>
       {debouncedIsUpdating && <UpdatingIndicator />}
-
       <Box
         sx={{
           margin: '0 auto',
@@ -183,6 +174,11 @@ const StatementTable: React.FC = () => {
             setClearInput={setClearInput}
             setSearchFieldRequest={setSearchFieldRequest}
           />
+          {isError && (
+            <Typography sx={{ pl: '10px', pt: '8px' }}>
+              Помилка. Будь ласка, спробуйте пізніше
+            </Typography>
+          )}
         </Box>
         <Divider />
         <TableContainer>
@@ -210,7 +206,7 @@ const StatementTable: React.FC = () => {
             >
               {debouncedIsLoading && renderLoadingSkeleton()}
               {!debouncedIsLoading &&
-                response?.items.map((row) => {
+                statements?.items.map((row) => {
                   const formatTime = `${format(
                     fromUnixTime(row.time),
                     'dd.MM.yyyy HH:mm',
@@ -235,9 +231,9 @@ const StatementTable: React.FC = () => {
         <TablePagination
           rowsPerPageOptions={[10]}
           component="div"
-          count={response?.paging.total ?? 0}
+          count={statements?.paging.total ?? 0}
           rowsPerPage={10}
-          page={response?.paging.total ? page : 0}
+          page={statements?.paging.total ? page : 0}
           onPageChange={changePage}
         />
       </Box>

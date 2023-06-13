@@ -14,7 +14,8 @@ import { useAuthState } from 'auth-state/use-auth-state.hook';
 import { SaveTokenValidationSchema } from './save-token.validation-schema';
 import { useGlobalState } from 'global-state/use-global-state.hook';
 import InstructionAddToken from 'common/components/instructions/instruction-add-token.component';
-import { useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { UpdatingIndicator } from 'common/components/updating-indicator/updating-indicator.component';
 
 interface IFormData {
   tokenMonobank: string;
@@ -23,6 +24,20 @@ interface IFormData {
 interface ISaveTokenFormProps {
   setIsTokenSaved: (isTokenSaved: boolean) => void;
 }
+
+const fetchSaveToken = async (tokenMonobank: string, token: string) => {
+  await axios.post(
+    '/tokens',
+    {
+      token: tokenMonobank,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+};
 
 const SaveTokenForm: React.FC<ISaveTokenFormProps> = ({ setIsTokenSaved }) => {
   const { token } = useAuthState();
@@ -37,31 +52,28 @@ const SaveTokenForm: React.FC<ISaveTokenFormProps> = ({ setIsTokenSaved }) => {
     mode: 'onBlur',
   });
 
-  const onSubmit = async ({ tokenMonobank }: IFormData) => {
-    try {
-      await axios.post(
-        '/tokens',
-        {
-          token: tokenMonobank,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-
+  const {
+    mutate: mutateSaveToken,
+    isError,
+    isLoading,
+  } = useMutation({
+    mutationFn: (tokenMonobank: string) =>
+      fetchSaveToken(tokenMonobank, token ?? ''),
+    onSuccess: () => {
       setTogglePopupAddToken(true);
       setIsTokenSaved(true);
       queryClient.invalidateQueries(['token-list']);
       queryClient.invalidateQueries(['spaces']);
-    } catch (err) {
-      console.log(err);
-    }
+    },
+  });
+
+  const onSubmit = ({ tokenMonobank }: IFormData) => {
+    mutateSaveToken(tokenMonobank);
   };
 
   return (
     <>
+      {isLoading && <UpdatingIndicator />}
       <Box>
         <Card
           sx={{
@@ -111,6 +123,9 @@ const SaveTokenForm: React.FC<ISaveTokenFormProps> = ({ setIsTokenSaved }) => {
                 Зберегти
               </Button>
             </Box>
+            {isError && (
+              <Typography>Помилка. Будь ласка, спробуйте пізніше</Typography>
+            )}
           </CardContent>
         </Card>
       </Box>
