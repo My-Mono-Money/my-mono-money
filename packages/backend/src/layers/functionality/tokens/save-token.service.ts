@@ -55,7 +55,10 @@ export class SaveTokenService {
         token: savedToken,
       });
     await this.monobankIntegration.setWebHook({ token, email });
-    await this.queueIntegration.addToQueueStatement({ tokenId: savedToken.id });
+    await this.queueIntegration.addToQueueStatement({
+      tokenId: savedToken.id,
+      importAttemptId: savedImportAttempt.id,
+    });
     const memberInvitation = await this.spaceStorage.getMemberInvite(
       email,
       space.id,
