@@ -16,7 +16,8 @@ import InstructionAddToken from 'common/components/instructions/instruction-add-
 import axios, { AxiosError } from 'axios';
 import { notify } from 'utils/notifications';
 import { useAuthState } from 'auth-state/use-auth-state.hook';
-import { useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { UpdatingIndicator } from 'common/components/updating-indicator/updating-indicator.component';
 
 interface IFormData {
   tokenMonobank: string;
@@ -25,6 +26,23 @@ interface IFormData {
 interface IErrorResponse {
   message: string;
 }
+
+const fetchAddNewToken = async (
+  { tokenMonobank }: IFormData,
+  token: string,
+) => {
+  await axios.post(
+    '/tokens',
+    {
+      token: tokenMonobank,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+};
 
 const AddNewToken: React.FC = () => {
   const { token } = useAuthState();
@@ -41,34 +59,32 @@ const AddNewToken: React.FC = () => {
     mode: 'onBlur',
   });
 
-  const onSubmit = async ({ tokenMonobank }: IFormData) => {
-    try {
-      await axios.post(
-        '/tokens',
-        {
-          token: tokenMonobank,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-      notify('Котики зберегли ваш токен', '🐈', 0);
-      queryClient.invalidateQueries(['token-list']);
-      reset();
-    } catch (err) {
-      const axiosError = err as unknown as AxiosError<IErrorResponse>;
+  const { mutate: mutateAddNewToken, isLoading } = useMutation({
+    mutationFn: ({ tokenMonobank }: IFormData) =>
+      fetchAddNewToken({ tokenMonobank }, token ?? ''),
+
+    onError: (error) => {
+      const axiosError = error as unknown as AxiosError<IErrorResponse>;
       if (axiosError.response?.data.message === 'duplicated-entity-error') {
         setSubmittingError('Токен вже доданий');
       } else {
         setSubmittingError('Закрито до додавання або неправильний токен');
       }
       setTimeout(() => setSubmittingError(''), 10000);
-    }
+    },
+    onSuccess: () => {
+      notify('Котики зберегли ваш токен', '🐈', 0);
+      queryClient.invalidateQueries(['token-list']);
+      reset();
+    },
+  });
+
+  const onSubmit = ({ tokenMonobank }: IFormData) => {
+    mutateAddNewToken({ tokenMonobank });
   };
   return (
     <>
+      {isLoading && <UpdatingIndicator />}
       <Box
         component="form"
         noValidate

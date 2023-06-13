@@ -55,14 +55,20 @@ export class SaveTokenService {
         token: savedToken,
       });
     await this.monobankIntegration.setWebHook({ token, email });
-    await this.spaceStorage.saveInvitation({
-      email,
-      space,
-      status: StatusType.ACCEPTED,
-    });
     await this.queueIntegration.addToQueueStatement({
       tokenId: savedToken.id,
       importAttemptId: savedImportAttempt.id,
     });
+    const memberInvitation = await this.spaceStorage.getMemberInvite(
+      email,
+      space.id,
+    );
+    if (!memberInvitation) {
+      await this.spaceStorage.saveInvitation({
+        email,
+        space,
+        status: StatusType.ACCEPTED,
+      });
+    }
   }
 }
