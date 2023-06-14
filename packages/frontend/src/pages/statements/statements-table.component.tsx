@@ -108,7 +108,6 @@ const StatementTable: React.FC = () => {
   ) => {
     setPage(page);
   };
-
   const {
     data: statements,
     isLoading,

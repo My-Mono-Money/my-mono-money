@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import {
   FormControl,
@@ -15,7 +15,6 @@ import { useFetchSpaces } from 'api/useFetchSpaces';
 
 const SwitchingSpaces = () => {
   const { defaultUserSpace, setChangeDefaultUserSpace } = useGlobalState();
-  const [viewDefaultUserSpace, setViewDefaultUserSpace] = useState('');
 
   const { token } = useAuthState();
   const queryClient = useQueryClient();
@@ -28,8 +27,11 @@ const SwitchingSpaces = () => {
   }, []);
 
   useEffect(() => {
-    setViewDefaultUserSpace(defaultUserSpace);
-  }, [defaultUserSpace]);
+    setChangeDefaultUserSpace(
+      spaces?.data?.find((space) => space.isDefault === true)
+        ?.spaceOwnerEmail || '',
+    );
+  }, [spaces]);
 
   const handleChangeSpace = async (event: SelectChangeEvent) => {
     try {
@@ -61,8 +63,8 @@ const SwitchingSpaces = () => {
       <Select
         labelId="demo-simple-select-label"
         id="space-switching-select"
-        value={viewDefaultUserSpace}
-        label={viewDefaultUserSpace}
+        value={defaultUserSpace}
+        label={defaultUserSpace}
         onChange={handleChangeSpace}
         disabled={Boolean(!spaces?.data || spaces?.data?.length <= 1)}
       >
