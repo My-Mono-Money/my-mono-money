@@ -58,6 +58,7 @@ export class SaveTokenService {
     await this.queueIntegration.addToQueueStatement({
       tokenId: savedToken.id,
       importAttemptId: savedImportAttempt.id,
+      spaceOwnerEmail: email,
     });
     const memberInvitation = await this.spaceStorage.getMemberInvite(
       email,

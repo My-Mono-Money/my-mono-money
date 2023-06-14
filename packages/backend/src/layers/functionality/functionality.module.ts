@@ -27,6 +27,7 @@ import { InvitesService } from './invites/invites.service';
 import { GetUserService } from './user/get-user.service';
 import { RemoveMemberService } from './space/remove-member.service.ts/remove-member.service';
 import { ChangeDefaultUserSpaceService } from './space/change-default-user-space.service.ts/change-default-user-space.service';
+import { RetryImportService } from './tokens/retry-import.service';
 @Module({
   imports: [
     StorageModule,
@@ -65,6 +66,7 @@ import { ChangeDefaultUserSpaceService } from './space/change-default-user-space
     GetSpaceMembersService,
     GetMonobankStatementService,
     GetFilteredStatementService,
+    RetryImportService,
   ],
   exports: [
     SignUpService,
@@ -87,6 +89,7 @@ import { ChangeDefaultUserSpaceService } from './space/change-default-user-space
     GetMonobankStatementService,
     GetFilteredStatementService,
     ResendVerificationEmailService,
+    RetryImportService,
   ],
 })
 export class FunctionalityModule {}
