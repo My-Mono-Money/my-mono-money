@@ -65,10 +65,24 @@ export class ImportAttemptStorage {
 
   async getByImportAttemptId(id: string) {
     try {
-      console.log('getByImportAttemptId', id);
       return await this.connection.manager.findOne(MonobankTokenImportAttempt, {
         where: { id },
       });
+    } catch (e) {
+      handleStorageError(e);
+    }
+  }
+
+  async getByTokenId(tokenId: string) {
+    try {
+      const result = await this.connection.manager.find(
+        MonobankTokenImportAttempt,
+        {
+          relations: ['token'],
+          where: { token: { token: tokenId } },
+        },
+      );
+      return result;
     } catch (e) {
       handleStorageError(e);
     }

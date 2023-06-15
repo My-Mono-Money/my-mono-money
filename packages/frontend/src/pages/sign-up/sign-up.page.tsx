@@ -22,8 +22,10 @@ interface IFormData {
   lastName: string;
   email: string;
   password: string;
-  confirmPassword?: string;
+  confirmPassword: string;
 }
+
+type IFormDataEmail = Partial<IFormData>;
 
 type IHistoryState = Omit<IFormData, 'confirmPassword'>;
 
@@ -32,7 +34,7 @@ interface IErrorResponse {
 }
 
 const fetchSignUp = async (
-  { firstName, lastName, email, password }: IFormData,
+  { firstName, lastName, email, password }: IFormDataEmail,
   spaceOwnerEmail: string,
 ) => {
   const response = await axios.post('/auth/sign-up', {
@@ -66,7 +68,7 @@ const SignUp: React.FC = () => {
   const state = location.state as IHistoryState;
 
   const { mutate } = useMutation({
-    mutationFn: ({ firstName, lastName, email, password }: IFormData) =>
+    mutationFn: ({ firstName, lastName, email, password }: IFormDataEmail) =>
       fetchSignUp({ firstName, lastName, email, password }, spaceOwnerEmail),
 
     onError: (error, variables) => {

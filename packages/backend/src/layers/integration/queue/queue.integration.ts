@@ -9,6 +9,7 @@ interface ISendTestEmailOptions {
 interface IGetStatementOptions {
   tokenId: string;
   importAttemptId: string;
+  spaceOwnerEmail: string;
 }
 
 @Injectable()
@@ -25,8 +26,19 @@ export class QueueIntegration {
   async addToQueueStatement({
     tokenId,
     importAttemptId,
+    spaceOwnerEmail,
   }: IGetStatementOptions) {
-    Logger.log(`Added to queue: ${tokenId}`, 'WebApp', `${importAttemptId}`);
-    await this.statementQueue.add({ tokenId, importAttemptId });
+    Logger.log(
+      `Added to queue: ${tokenId}`,
+      'WebApp',
+      `${importAttemptId}`,
+      'spaceOwnerEmail',
+      `${spaceOwnerEmail}`,
+    );
+    await this.statementQueue.add({
+      tokenId,
+      importAttemptId,
+      spaceOwnerEmail,
+    });
   }
 }

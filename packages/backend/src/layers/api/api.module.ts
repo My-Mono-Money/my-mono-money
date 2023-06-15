@@ -17,6 +17,7 @@ import { AcceptInviteController } from './invites/accept-invite/accept-invite.co
 import { GetUserController } from './user/get-user.controller';
 import { RemoveMemberController } from './space/remove-member.controller.ts/remove-member.controller';
 import { ChangeDefaultUserSpaceController } from './space/change-default-user-space/change-defalut-user-space.controller';
+import { RetryImportController } from './tokens/retry-import/retry-import.controller';
 
 @Module({
   imports: [FunctionalityModule, ConfigModule],
@@ -37,6 +38,7 @@ import { ChangeDefaultUserSpaceController } from './space/change-default-user-sp
     ResendVerificationEmailController,
     RemoveMemberController,
     ChangeDefaultUserSpaceController,
+    RetryImportController,
   ],
 })
 export class ApiLayerModule {}

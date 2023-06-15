@@ -18,10 +18,12 @@ import {
   ImportAttemptLogDescription,
   ImportAttemptStatusType,
 } from '~/storage/interfaces/create-monobank-token-import-attempt-dto.interface';
+import { UserStorage } from '~/storage/services/user.storage';
 
 interface IGetStatement {
   tokenId: string;
   importAttemptId: string;
+  spaceOwnerEmail: string;
 }
 
 function delay(ms) {
@@ -58,9 +60,14 @@ export class GetMonobankStatementService {
     private statementStorage: StatementStorage,
     private featureFlagStorage: FeatureFlagStorage,
     private importAttemptStorage: ImportAttemptStorage,
+    private userStorage: UserStorage,
   ) {}
 
-  async getStatement({ tokenId, importAttemptId }: IGetStatement) {
+  async getStatement({
+    tokenId,
+    importAttemptId,
+    spaceOwnerEmail,
+  }: IGetStatement) {
     function formatDate(date: Date) {
       return ' - ' + format(date, 'dd MMM yyyy HH:mm:ss ') + ' - ';
     }
@@ -104,6 +111,7 @@ export class GetMonobankStatementService {
     const accountList = await this.statementStorage.getAccountByTokenId(
       tokenId,
     );
+
     const from = fromInTimestamp();
     const to = toInTimestamp();
     const transactions: ICreateTransactionDto[] = [];
@@ -126,6 +134,19 @@ export class GetMonobankStatementService {
         );
       }
     }
-    await this.statementStorage.saveStatement({ transactions });
+
+    //If the webhook added a transaction, then we will not add a duplicate transaction
+    const space = await this.userStorage.getSpaceByEmail(spaceOwnerEmail);
+    const allStatments = await this.statementStorage.getAllStatements(space.id);
+
+    function removeDuplicates(firstArray, secondArray) {
+      const uniqueIds = new Set(secondArray.map((obj) => obj.id));
+      const filteredArray = firstArray.filter((obj) => !uniqueIds.has(obj.id));
+      return filteredArray;
+    }
+    const filteredTransactions = removeDuplicates(transactions, allStatments);
+    await this.statementStorage.saveStatement({
+      transactions: filteredTransactions,
+    });
   }
 }
