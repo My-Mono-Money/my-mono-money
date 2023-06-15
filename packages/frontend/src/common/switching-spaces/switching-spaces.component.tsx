@@ -1,54 +1,47 @@
 import React, { useEffect } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   FormControl,
   InputLabel,
   MenuItem,
   Select,
   SelectChangeEvent,
+  Typography,
 } from '@mui/material';
-import { useAuthState } from 'auth-state/use-auth-state.hook';
-import axios, { AxiosError } from 'axios';
-import { IErrorResponse } from 'types/error-response.interface';
 import { useGlobalState } from 'global-state/use-global-state.hook';
 import { useFetchSpaces } from 'api/useFetchSpaces';
+import { axiosPrivate } from 'api/axios';
 
 const SwitchingSpaces = () => {
   const { defaultUserSpace, setChangeDefaultUserSpace } = useGlobalState();
 
-  const { token } = useAuthState();
   const queryClient = useQueryClient();
   const spaces = useFetchSpaces();
-  useEffect(() => {
+
+  const { mutate: mutateChangeSpace, isError } = useMutation({
+    mutationFn: (defaultSpace: string) =>
+      axiosPrivate.patch(`/user`, { defaultSpace }),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['spaces']);
+    },
+  });
+
+  function changeDefaultSpace() {
     setChangeDefaultUserSpace(
       spaces?.data?.find((space) => space.isDefault === true)
         ?.spaceOwnerEmail || '',
     );
+  }
+  useEffect(() => {
+    changeDefaultSpace();
   }, []);
 
   useEffect(() => {
-    setChangeDefaultUserSpace(
-      spaces?.data?.find((space) => space.isDefault === true)
-        ?.spaceOwnerEmail || '',
-    );
+    changeDefaultSpace();
   }, [spaces]);
 
   const handleChangeSpace = async (event: SelectChangeEvent) => {
-    try {
-      await axios.patch(
-        `/user`,
-        { defaultSpace: event.target.value },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-      queryClient.invalidateQueries(['spaces']);
-    } catch (err) {
-      const axiosError = err as unknown as AxiosError<IErrorResponse>;
-      console.log(axiosError.response?.data.message);
-    }
+    mutateChangeSpace(event.target.value);
   };
 
   return (
@@ -76,6 +69,9 @@ const SwitchingSpaces = () => {
           );
         })}
       </Select>
+      {isError && (
+        <Typography>Помилка. Будь ласка, спробуйте пізніше</Typography>
+      )}
     </FormControl>
   );
 };
