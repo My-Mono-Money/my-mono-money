@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
 import { useAuthState } from 'auth-state/use-auth-state.hook';
 import { Box, Typography } from '@mui/material';
+import axiosPublic from 'axios';
 
 const fetchMailVerification = async (code: string) => {
   try {
-    const response = await axios.post(`/auth/verify-email`, null, {
+    const response = await axiosPublic.post(`/auth/verify-email`, null, {
       headers: {
         Authorization: `Bearer ${code}`,
       },

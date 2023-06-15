@@ -1,13 +1,13 @@
 import { Box, Typography, Button } from '@mui/material';
 import React, { useState } from 'react';
-import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import Countdown from 'react-countdown';
 import { useSignedInAuthState } from 'auth-state/use-auth-state.hook';
 import { useMutation } from '@tanstack/react-query';
+import axiosPublic from 'axios';
 
 const fetchResendMailVerification = async (code: string) => {
-  const response = await axios.post(`/auth/resend-email`, null, {
+  const response = await axiosPublic.post(`/auth/resend-email`, null, {
     headers: {
       Authorization: `Bearer ${code}`,
     },

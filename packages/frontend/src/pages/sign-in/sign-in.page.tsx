@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import axios, { AxiosError } from 'axios';
+import axiosPublic, { AxiosError } from 'axios';
 import { useMutation } from '@tanstack/react-query';
 import {
   Alert,
@@ -26,7 +26,7 @@ interface IErrorResponse {
 }
 
 export const signIn = async ({ email, password }: IFormData) => {
-  const response = await axios.post('/auth/sign-in', { email, password });
+  const response = await axiosPublic.post('/auth/sign-in', { email, password });
   if (!response?.data.isSuccessful) {
     throw new Error("Can't recognize response as successful");
   }

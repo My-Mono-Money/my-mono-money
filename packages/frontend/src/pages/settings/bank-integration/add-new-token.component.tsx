@@ -13,11 +13,11 @@ import {
   DialogActions,
 } from '@mui/material';
 import InstructionAddToken from 'common/components/instructions/instruction-add-token.component';
-import axios, { AxiosError } from 'axios';
 import { notify } from 'utils/notifications';
-import { useAuthState } from 'auth-state/use-auth-state.hook';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { UpdatingIndicator } from 'common/components/updating-indicator/updating-indicator.component';
+import { axiosPrivate } from 'api/axios';
+import { AxiosError } from 'axios';
 
 interface IFormData {
   tokenMonobank: string;
@@ -27,25 +27,7 @@ interface IErrorResponse {
   message: string;
 }
 
-const fetchAddNewToken = async (
-  { tokenMonobank }: IFormData,
-  token: string,
-) => {
-  await axios.post(
-    '/tokens',
-    {
-      token: tokenMonobank,
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    },
-  );
-};
-
 const AddNewToken: React.FC = () => {
-  const { token } = useAuthState();
   const [openInstruction, setOpenInstruction] = useState(false);
   const [submittingError, setSubmittingError] = useState<string>();
   const queryClient = useQueryClient();
@@ -61,7 +43,9 @@ const AddNewToken: React.FC = () => {
 
   const { mutate: mutateAddNewToken, isLoading } = useMutation({
     mutationFn: ({ tokenMonobank }: IFormData) =>
-      fetchAddNewToken({ tokenMonobank }, token ?? ''),
+      axiosPrivate.post('/tokens', {
+        token: tokenMonobank,
+      }),
 
     onError: (error) => {
       const axiosError = error as unknown as AxiosError<IErrorResponse>;
