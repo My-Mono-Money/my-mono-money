@@ -24,7 +24,6 @@ interface IFormData {
   password: string;
   confirmPassword: string;
 }
-
 type IFormDataFromEmail = Partial<IFormData>;
 
 type IHistoryState = Omit<IFormData, 'confirmPassword'>;

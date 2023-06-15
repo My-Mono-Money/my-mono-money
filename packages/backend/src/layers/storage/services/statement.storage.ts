@@ -39,6 +39,26 @@ export class StatementStorage {
     }
   }
 
+  async getAllStatements(spaceId: string) {
+    try {
+      const where: FindConditions<Transaction> = {
+        account: {
+          token: {
+            space: {
+              id: spaceId,
+            },
+          },
+        },
+      };
+      return await this.connection.manager.find<Transaction>(Transaction, {
+        relations: ['account', 'account.token'],
+        where,
+      });
+    } catch (e) {
+      handleStorageError(e);
+    }
+  }
+
   async saveStatement({ transactions }: ISaveStatement) {
     try {
       return await this.connection.transaction(async (manager) => {

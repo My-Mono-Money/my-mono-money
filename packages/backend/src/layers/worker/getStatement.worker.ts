@@ -12,9 +12,18 @@ export class GetStatementWorker {
     concurrency: 1,
   })
   async readOperationJob(
-    job: Job<{ tokenId: string; importAttemptId: string }>,
+    job: Job<{
+      tokenId: string;
+      importAttemptId: string;
+      spaceOwnerEmail: string;
+    }>,
   ) {
-    Logger.log(`Worker started: ${JSON.stringify(job)}`, 'Worker');
+    Logger.log(
+      `Worker started: ${JSON.stringify(job)}`,
+      'Worker',
+      job.data,
+      'Job Data',
+    );
     await this.getMonobankStatementService.getStatement(job.data);
   }
 }

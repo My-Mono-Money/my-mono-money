@@ -69,4 +69,17 @@ export class TokenStorage {
       handleStorageError(e);
     }
   }
+
+  async getTokenByTokenId(tokenId: string) {
+    try {
+      return await this.connection.manager.findOne<MonobankToken>(
+        MonobankToken,
+        {
+          where: { token: tokenId },
+        },
+      );
+    } catch (e) {
+      handleStorageError(e);
+    }
+  }
 }
