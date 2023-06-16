@@ -45,34 +45,41 @@ const SwitchingSpaces = () => {
   };
 
   return (
-    <FormControl variant="standard" sx={{ ml: 2, minWidth: 120 }}>
-      <InputLabel
-        id="space-switching-select-label"
-        variant="standard"
-        htmlFor="uncontrolled-native"
-      >
-        Простір
-      </InputLabel>
-      <Select
-        labelId="demo-simple-select-label"
-        id="space-switching-select"
-        value={defaultUserSpace}
-        label={defaultUserSpace}
-        onChange={handleChangeSpace}
-        disabled={Boolean(!spaces?.data || spaces?.data?.length <= 1)}
-      >
-        {spaces?.data?.map((space) => {
-          return (
-            <MenuItem key={space.spaceOwnerEmail} value={space.spaceOwnerEmail}>
-              {space.spaceOwnerEmail}
-            </MenuItem>
-          );
-        })}
-      </Select>
+    <>
+      <FormControl variant="standard" sx={{ ml: 2, minWidth: 120 }}>
+        <InputLabel
+          id="space-switching-select-label"
+          variant="standard"
+          htmlFor="uncontrolled-native"
+        >
+          Простір
+        </InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="space-switching-select"
+          value={defaultUserSpace}
+          label={defaultUserSpace}
+          onChange={handleChangeSpace}
+          disabled={Boolean(!spaces?.data || spaces?.data?.length <= 1)}
+        >
+          {spaces?.data?.map((space) => {
+            return (
+              <MenuItem
+                key={space.spaceOwnerEmail}
+                value={space.spaceOwnerEmail}
+              >
+                {space.spaceOwnerEmail}
+              </MenuItem>
+            );
+          })}
+        </Select>
+      </FormControl>
       {isError && (
-        <Typography>Помилка. Будь ласка, спробуйте пізніше</Typography>
+        <Typography sx={{ mt: 2 }}>
+          Помилка. Будь ласка, спробуйте пізніше
+        </Typography>
       )}
-    </FormControl>
+    </>
   );
 };
 
