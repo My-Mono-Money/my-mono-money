@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios, { AxiosError } from 'axios';
+import axiosPublic, { AxiosError } from 'axios';
 import { Link, useLocation } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
@@ -36,7 +36,7 @@ const fetchSignUp = async (
   { firstName, lastName, email, password }: IFormDataFromEmail,
   spaceOwnerEmail: string,
 ) => {
-  const response = await axios.post('/auth/sign-up', {
+  const response = await axiosPublic.post('/auth/sign-up', {
     firstName,
     lastName,
     email,

@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
@@ -10,12 +9,12 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { useAuthState } from 'auth-state/use-auth-state.hook';
 import { SaveTokenValidationSchema } from './save-token.validation-schema';
 import { useGlobalState } from 'global-state/use-global-state.hook';
 import InstructionAddToken from 'common/components/instructions/instruction-add-token.component';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { UpdatingIndicator } from 'common/components/updating-indicator/updating-indicator.component';
+import { axiosPrivate } from 'api/axios';
 
 interface IFormData {
   tokenMonobank: string;
@@ -25,22 +24,7 @@ interface ISaveTokenFormProps {
   setIsTokenSaved: (isTokenSaved: boolean) => void;
 }
 
-const fetchSaveToken = async (tokenMonobank: string, token: string) => {
-  await axios.post(
-    '/tokens',
-    {
-      token: tokenMonobank,
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    },
-  );
-};
-
 const SaveTokenForm: React.FC<ISaveTokenFormProps> = ({ setIsTokenSaved }) => {
-  const { token } = useAuthState();
   const { setTogglePopupAddToken } = useGlobalState();
   const queryClient = useQueryClient();
   const {
@@ -58,7 +42,9 @@ const SaveTokenForm: React.FC<ISaveTokenFormProps> = ({ setIsTokenSaved }) => {
     isLoading,
   } = useMutation({
     mutationFn: (tokenMonobank: string) =>
-      fetchSaveToken(tokenMonobank, token ?? ''),
+      axiosPrivate.post('/tokens', {
+        token: tokenMonobank,
+      }),
     onSuccess: () => {
       setTogglePopupAddToken(true);
       setIsTokenSaved(true);
