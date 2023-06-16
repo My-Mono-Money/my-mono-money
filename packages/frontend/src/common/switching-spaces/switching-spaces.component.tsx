@@ -1,83 +1,85 @@
 import React, { useEffect } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   FormControl,
   InputLabel,
   MenuItem,
   Select,
   SelectChangeEvent,
+  Typography,
 } from '@mui/material';
-import { useAuthState } from 'auth-state/use-auth-state.hook';
-import axios, { AxiosError } from 'axios';
-import { IErrorResponse } from 'types/error-response.interface';
 import { useGlobalState } from 'global-state/use-global-state.hook';
 import { useFetchSpaces } from 'api/useFetchSpaces';
+import { axiosPrivate } from 'api/axios';
 
 const SwitchingSpaces = () => {
   const { defaultUserSpace, setChangeDefaultUserSpace } = useGlobalState();
 
-  const { token } = useAuthState();
   const queryClient = useQueryClient();
   const spaces = useFetchSpaces();
-  useEffect(() => {
+
+  const { mutate: mutateChangeSpace, isError } = useMutation({
+    mutationFn: (defaultSpace: string) =>
+      axiosPrivate.patch(`/user`, { defaultSpace }),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['spaces']);
+    },
+  });
+
+  function changeDefaultSpace() {
     setChangeDefaultUserSpace(
       spaces?.data?.find((space) => space.isDefault === true)
         ?.spaceOwnerEmail || '',
     );
+  }
+  useEffect(() => {
+    changeDefaultSpace();
   }, []);
 
   useEffect(() => {
-    setChangeDefaultUserSpace(
-      spaces?.data?.find((space) => space.isDefault === true)
-        ?.spaceOwnerEmail || '',
-    );
+    changeDefaultSpace();
   }, [spaces]);
 
   const handleChangeSpace = async (event: SelectChangeEvent) => {
-    try {
-      await axios.patch(
-        `/user`,
-        { defaultSpace: event.target.value },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-      queryClient.invalidateQueries(['spaces']);
-      queryClient.invalidateQueries(['statements']);
-    } catch (err) {
-      const axiosError = err as unknown as AxiosError<IErrorResponse>;
-      console.log(axiosError.response?.data.message);
-    }
+  mutateChangeSpace(event.target.value);
   };
 
   return (
-    <FormControl variant="standard" sx={{ ml: 2, minWidth: 120 }}>
-      <InputLabel
-        id="space-switching-select-label"
-        variant="standard"
-        htmlFor="uncontrolled-native"
-      >
-        Простір
-      </InputLabel>
-      <Select
-        labelId="demo-simple-select-label"
-        id="space-switching-select"
-        value={defaultUserSpace}
-        label={defaultUserSpace}
-        onChange={handleChangeSpace}
-        disabled={Boolean(!spaces?.data || spaces?.data?.length <= 1)}
-      >
-        {spaces?.data?.map((space) => {
-          return (
-            <MenuItem key={space.spaceOwnerEmail} value={space.spaceOwnerEmail}>
-              {space.spaceOwnerEmail}
-            </MenuItem>
-          );
-        })}
-      </Select>
-    </FormControl>
+    <>
+      <FormControl variant="standard" sx={{ ml: 2, minWidth: 120 }}>
+        <InputLabel
+          id="space-switching-select-label"
+          variant="standard"
+          htmlFor="uncontrolled-native"
+        >
+          Простір
+        </InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="space-switching-select"
+          value={defaultUserSpace}
+          label={defaultUserSpace}
+          onChange={handleChangeSpace}
+          disabled={Boolean(!spaces?.data || spaces?.data?.length <= 1)}
+        >
+          {spaces?.data?.map((space) => {
+            return (
+              <MenuItem
+                key={space.spaceOwnerEmail}
+                value={space.spaceOwnerEmail}
+              >
+                {space.spaceOwnerEmail}
+              </MenuItem>
+            );
+          })}
+        </Select>
+      </FormControl>
+      {isError && (
+        <Typography sx={{ mt: 2 }}>
+          Помилка. Будь ласка, спробуйте пізніше
+        </Typography>
+      )}
+    </>
   );
 };
 
