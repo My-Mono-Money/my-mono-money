@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useSearchParams } from 'react-router-dom';
 import { useDebounce } from 'use-debounce';
 import { fromUnixTime, format } from 'date-fns';
