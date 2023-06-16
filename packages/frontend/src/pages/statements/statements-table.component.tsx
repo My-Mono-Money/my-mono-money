@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useSearchParams } from 'react-router-dom';
 import { useDebounce } from 'use-debounce';
 import { fromUnixTime, format } from 'date-fns';
@@ -24,6 +23,7 @@ import { UpdatingIndicator } from 'common/components/updating-indicator/updating
 import PeriodFilter from './period-filter.component';
 import { useGlobalState } from 'global-state/use-global-state.hook';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { axiosPrivate } from 'api/axios';
 
 interface IStatementsResponse {
   items: IStatementItem[];
@@ -31,21 +31,15 @@ interface IStatementsResponse {
 }
 
 const fetchStatements = async (
-  token: string,
   spaceOwnerEmail: string,
   page: number,
   period: string,
   search: string,
 ) => {
-  const response = await axios.get<IStatementsResponse>(
+  const response = await axiosPrivate.get<IStatementsResponse>(
     `/spaces/${spaceOwnerEmail}/statements?from=${
       page * 10
     }&limit=10&period=${period}&search=${search}`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    },
   );
 
   return response.data;
@@ -92,7 +86,7 @@ const renderLoadingSkeleton = () => {
 };
 
 const StatementTable: React.FC = () => {
-  const { token, user } = useAuthState();
+  const { user } = useAuthState();
   const { defaultUserSpace } = useGlobalState();
   const [page, setPage] = usePagination();
   const [clearInput, setClearInput] = useState(false);
@@ -115,7 +109,6 @@ const StatementTable: React.FC = () => {
     isError,
   } = useQuery(['statements', page, period, searchField], () =>
     fetchStatements(
-      token ?? '',
       defaultUserSpace || (user?.email ?? ''),
       page,
       period,

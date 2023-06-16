@@ -41,7 +41,7 @@ const SwitchingSpaces = () => {
   }, [spaces]);
 
   const handleChangeSpace = async (event: SelectChangeEvent) => {
-    mutateChangeSpace(event.target.value);
+  mutateChangeSpace(event.target.value);
   };
 
   return (

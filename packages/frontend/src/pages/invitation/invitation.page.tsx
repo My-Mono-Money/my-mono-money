@@ -25,17 +25,6 @@ const fetchUser = async (spaceOwnerEmail: string) => {
   }
 };
 
-const fetchAcceptInviteHandle = async ({ spaceOwnerEmail }: IAccepteInvite) => {
-  try {
-    const result = await axiosPrivate.post(
-      `invites/${spaceOwnerEmail}/accept`,
-      null,
-    );
-    return result;
-  } catch (error) {
-    throw new Error(`Failed to fetch data: ${error}`);
-  }
-};
 export const InvitationPage: React.FC = () => {
   const { setChangeDefaultUserSpace } = useGlobalState();
   const location = useLocation();
@@ -52,7 +41,7 @@ export const InvitationPage: React.FC = () => {
     isLoading,
   } = useMutation({
     mutationFn: ({ spaceOwnerEmail }: IAccepteInvite) =>
-      fetchAcceptInviteHandle({ spaceOwnerEmail }),
+      axiosPrivate.post(`invites/${spaceOwnerEmail}/accept`, null),
 
     onSuccess: () => {
       navigate('/');
