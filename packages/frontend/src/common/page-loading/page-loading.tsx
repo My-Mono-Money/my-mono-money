@@ -10,6 +10,7 @@ export const PageLoading = () => (
       justifyContent: 'center',
       alignItems: 'center',
     }}
+    data-testid="page-loader"
   >
     <InfinitySpin width="200" color="#4fa94d" />
   </Box>

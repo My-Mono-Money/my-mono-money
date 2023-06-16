@@ -13,7 +13,7 @@ jest.mock('@tanstack/react-query-devtools', () => ({
 test('loader is working', async () => {
   render(<App />);
 
-  const linkElement = screen.getByText(/Завантаження/i);
-  expect(linkElement).toBeInTheDocument();
-  await waitForElementToBeRemoved(linkElement);
+  const loaderElement = screen.getByTestId('page-loader');
+  expect(loaderElement).toBeInTheDocument();
+  await waitForElementToBeRemoved(loaderElement);
 });
