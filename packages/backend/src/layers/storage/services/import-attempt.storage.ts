@@ -63,6 +63,50 @@ export class ImportAttemptStorage {
     }
   }
 
+  async updateFetchedMonthsCount(
+    fetchedMonths: number,
+    importAttemptId: string,
+  ) {
+    try {
+      const where = {
+        id: importAttemptId,
+      } as Partial<MonobankTokenImportAttempt>;
+      return await this.connection.transaction(async (manager) => {
+        const importAttempt = await manager.findOne(
+          MonobankTokenImportAttempt,
+          where,
+        );
+        const updatedFetchedMonths =
+          importAttempt.fetchedMonths + fetchedMonths;
+
+        return await manager.update<MonobankTokenImportAttempt>(
+          MonobankTokenImportAttempt,
+          where,
+          { fetchedMonths: updatedFetchedMonths },
+        );
+      });
+    } catch (e) {
+      handleStorageError(e);
+    }
+  }
+
+  async removeFetchedMonthsCount(importAttemptId: string) {
+    try {
+      const where = {
+        id: importAttemptId,
+      } as Partial<MonobankTokenImportAttempt>;
+      return await this.connection.transaction(async (manager) => {
+        return await manager.update<MonobankTokenImportAttempt>(
+          MonobankTokenImportAttempt,
+          where,
+          { fetchedMonths: 0 },
+        );
+      });
+    } catch (e) {
+      handleStorageError(e);
+    }
+  }
+
   async getByImportAttemptId(id: string) {
     try {
       return await this.connection.manager.findOne(MonobankTokenImportAttempt, {
