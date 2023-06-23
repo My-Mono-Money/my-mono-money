@@ -65,6 +65,25 @@ const toInTimestamp = (year: number) => {
   return monthsInYear.map((item) => String(getUnixTime(item)));
 };
 
+const requestLimitExceededError = 'Too many requests'; //Normal error says to wait 60 seconds
+const cardHasNotBeenOpenedError = "Value field 'to' out of bounds"; //Normal error indicating import completed
+//Removing normal errors from logs
+function deleteNormalError(error: string) {
+  if (
+    error === requestLimitExceededError ||
+    error === cardHasNotBeenOpenedError
+  ) {
+    return '';
+  } else {
+    return error;
+  }
+}
+function errorStringOrArrayResult(statementPart: string | []) {
+  return isString(statementPart)
+    ? deleteNormalError(statementPart)
+    : statementPart.length;
+}
+
 @Injectable()
 export class GetMonobankStatementService {
   constructor(
@@ -102,23 +121,27 @@ export class GetMonobankStatementService {
       importAttemptId,
     );
 
-    const accountList = await this.statementStorage.getAccountByTokenId(
+    const accountListFull = await this.statementStorage.getAccountByTokenId(
       tokenId,
     );
+    const UAHCurrencyCode = 980;
+    const accountList = accountListFull.filter(
+      (account) => account.currencyCode === UAHCurrencyCode,
+    );
 
-    const findBlackCard = accountList
-      .filter((account) => account.currencyCode === 980)
-      .find((account) => account.type === 'black');
-
-    //let valueForTesting = 0; //To test unknown server error
+    // let valueForTesting = 0; //To test unknown server error. Uncomment for test
     let year = 0;
-    let runImport = true;
     let attemptToReFetch = 1;
-    const requestLimitExceededError = 'Too many requests';
-    const cardHasNotBeenOpenedError = "Value field 'to' out of bounds";
+    let exitFromAllCyclesWithError = false;
 
     const transactions = [];
-    for (let i = 0; i < 1; i++) {
+
+    //Cards cycle
+    for (let i = 0; i < accountList.length; i++) {
+      if (exitFromAllCyclesWithError) break;
+
+      let runImport = true;
+      //Years cycle
       while (runImport) {
         const from = fromInTimestamp(year);
         const to = toInTimestamp(year);
@@ -134,36 +157,22 @@ export class GetMonobankStatementService {
         ) {
           length = months;
         }
-
+        //Months cycle. Come from the end of the year. In order not to lose some of the months from the final year
         for (let j = length - 1; j >= 0; j--) {
           const statementPart = await this.monobankIntegration.getStatement({
-            accountId: findBlackCard.id,
-            token: findBlackCard.token.token,
+            accountId: accountList[i].id,
+            token: accountList[i].token.token,
             from: from[j],
             to: to[j],
           });
 
-          //To test unknown server error
+          //To test unknown server error. Uncomment for test
           // valueForTesting++;
           // if (valueForTesting >= 5) statementPart.data = 'unknown error';
 
-          function deleteNormalError(error: string) {
-            if (
-              error === requestLimitExceededError ||
-              error === cardHasNotBeenOpenedError
-            ) {
-              return '';
-            } else {
-              return error;
-            }
-          }
-          const errorStringOrArrayResult = isString(statementPart.data)
-            ? deleteNormalError(statementPart.data)
-            : statementPart.data.length;
-
           if (statementPart.data.includes(requestLimitExceededError)) {
             await delay(this.configService.get('app.monobankRequestDelay'));
-            j++; // Increment j to repeat the current iteration
+            j++; // Increment j to repeat the current iteration(For the month)
             continue;
           }
           if (!featureFlags[FeatureName.bypassMonobankRateLimit]) {
@@ -171,57 +180,38 @@ export class GetMonobankStatementService {
           }
 
           if (statementPart.statusText) {
+            //Exit the loop if import well
             if (statementPart.data === cardHasNotBeenOpenedError) {
-              //If the webhook added a transaction, then we will not add a duplicate transaction
-              const space = await this.userStorage.getSpaceByEmail(
-                spaceOwnerEmail,
-              );
-              const allStatments = await this.statementStorage.getAllStatements(
-                space.id,
-              );
-              function removeDuplicates(firstArray, secondArray) {
-                const uniqueIds = new Set(secondArray.map((obj) => obj.id));
-                const filteredArray = firstArray.filter(
-                  (obj) => !uniqueIds.has(obj.id),
-                );
-                return filteredArray;
-              }
-              const filteredTransactions = removeDuplicates(
-                transactions,
-                allStatments,
-              );
-
-              //save result to DB
-              const result = await this.statementStorage.saveStatement({
-                transactions: filteredTransactions,
-              });
-
-              runImport = false;
-
-              const monthsImportAttempt =
+              const importAttempt =
                 await this.importAttemptStorage.getByImportAttemptId(
                   importAttemptId,
                 );
               await this.importAttemptStorage.updateImportAttempt(
                 {
-                  status: result
-                    ? ImportAttemptStatusType.Successful
-                    : ImportAttemptStatusType.Failed,
+                  status: ImportAttemptStatusType.InProgress,
                   log:
-                    monthsImportAttempt.log +
+                    importAttempt.log +
                     formatDate(new Date()) +
-                    (result
-                      ? ImportAttemptLogDescription.Successfully
-                      : ImportAttemptLogDescription.Failed) +
-                    errorStringOrArrayResult +
+                    ImportAttemptLogDescription.Successfully +
+                    'import card: ' +
+                    accountList[i].maskedPan[0] +
                     '\n',
                 },
                 importAttemptId,
               );
+
+              if (i === 0) {
+                //Adding totalMonths after the first iteration card
+                await this.importAttemptStorage.updateTotalMonthsCount(
+                  importAttempt.fetchedMonths * accountList.length,
+                  importAttemptId,
+                );
+              }
+              runImport = false;
               break;
             }
 
-            //if monobank server unknown error, repeat connection with delay. 3 attempts
+            //if monobank server unknown error, repeat connection with delay. 3 attempts. We exit all cycles with an error if the error does not go away
             if (
               isString(statementPart.data) &&
               deleteNormalError(statementPart.data)
@@ -243,7 +233,7 @@ export class GetMonobankStatementService {
                       formatDate(new Date()) +
                       ImportAttemptLogDescription.Failed +
                       ' monobank server error: ' +
-                      errorStringOrArrayResult +
+                      errorStringOrArrayResult(statementPart.data) +
                       '\n',
                   },
                   importAttemptId,
@@ -251,6 +241,7 @@ export class GetMonobankStatementService {
                 await this.importAttemptStorage.removeFetchedMonthsCount(
                   importAttemptId,
                 );
+                exitFromAllCyclesWithError = true;
                 break;
               }
               await delay(newDelay);
@@ -261,7 +252,7 @@ export class GetMonobankStatementService {
           }
 
           await delay(1000);
-
+          //Update logs and fetchedMonths with each month iteration
           const monthsImportAttempt =
             await this.importAttemptStorage.getByImportAttemptId(
               importAttemptId,
@@ -288,7 +279,7 @@ export class GetMonobankStatementService {
                     'dd MMM yyyy HH:mm:ss ',
                   ) +
                   'fetched transaction count: ' +
-                  errorStringOrArrayResult +
+                  errorStringOrArrayResult(statementPart.data) +
                   '\n',
               },
               importAttemptId,
@@ -304,8 +295,50 @@ export class GetMonobankStatementService {
             })),
           );
         }
-        year++;
+        year++; //Go fetch previous year
       }
+
+      year = 0; //Starting from the beginning for the next card
+    }
+
+    if (!exitFromAllCyclesWithError) {
+      //If the webhook added a transaction, then we will not add a duplicate transaction
+      const space = await this.userStorage.getSpaceByEmail(spaceOwnerEmail);
+      const allStatments = await this.statementStorage.getAllStatements(
+        space.id,
+      );
+      function removeDuplicates(firstArray, secondArray) {
+        const uniqueIds = new Set(secondArray.map((obj) => obj.id));
+        const filteredArray = firstArray.filter(
+          (obj) => !uniqueIds.has(obj.id),
+        );
+        return filteredArray;
+      }
+      const filteredTransactions = removeDuplicates(transactions, allStatments);
+
+      //save full result to DB
+      const result = await this.statementStorage.saveStatement({
+        transactions: filteredTransactions,
+      });
+
+      const monthsImportAttempt =
+        await this.importAttemptStorage.getByImportAttemptId(importAttemptId);
+      await this.importAttemptStorage.updateImportAttempt(
+        {
+          status: result
+            ? ImportAttemptStatusType.Successful
+            : ImportAttemptStatusType.Failed,
+          log:
+            monthsImportAttempt.log +
+            formatDate(new Date()) +
+            (result
+              ? ImportAttemptLogDescription.Successfully
+              : ImportAttemptLogDescription.Failed) +
+            'finished fetch all cards' +
+            '\n',
+        },
+        importAttemptId,
+      );
     }
   }
 }

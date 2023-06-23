@@ -90,6 +90,23 @@ export class ImportAttemptStorage {
     }
   }
 
+  async updateTotalMonthsCount(totalMonths: number, importAttemptId: string) {
+    try {
+      const where = {
+        id: importAttemptId,
+      } as Partial<MonobankTokenImportAttempt>;
+      return await this.connection.transaction(async (manager) => {
+        return await manager.update<MonobankTokenImportAttempt>(
+          MonobankTokenImportAttempt,
+          where,
+          { totalMonths: totalMonths },
+        );
+      });
+    } catch (e) {
+      handleStorageError(e);
+    }
+  }
+
   async removeFetchedMonthsCount(importAttemptId: string) {
     try {
       const where = {
@@ -100,6 +117,23 @@ export class ImportAttemptStorage {
           MonobankTokenImportAttempt,
           where,
           { fetchedMonths: 0 },
+        );
+      });
+    } catch (e) {
+      handleStorageError(e);
+    }
+  }
+
+  async removeTotalMonthsCount(importAttemptId: string) {
+    try {
+      const where = {
+        id: importAttemptId,
+      } as Partial<MonobankTokenImportAttempt>;
+      return await this.connection.transaction(async (manager) => {
+        return await manager.update<MonobankTokenImportAttempt>(
+          MonobankTokenImportAttempt,
+          where,
+          { totalMonths: 0 },
         );
       });
     } catch (e) {
