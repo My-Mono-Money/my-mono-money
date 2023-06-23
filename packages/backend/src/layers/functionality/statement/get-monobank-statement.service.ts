@@ -8,6 +8,7 @@ import {
   startOfYear,
   endOfYear,
   format,
+  getTime,
 } from 'date-fns';
 import { ConfigService } from '@nestjs/config';
 import { MonobankIntegration } from '~/integration/monobank/monobank.integration';
@@ -21,6 +22,8 @@ import {
 } from '~/storage/interfaces/create-monobank-token-import-attempt-dto.interface';
 import { FeatureName } from '~/storage/interfaces/create-feature-flags-dto.interface';
 import { isString } from 'class-validator';
+import { Account } from '~/storage/entities/account.entity';
+import subMonths from 'date-fns/fp/subMonths';
 
 interface IGetStatement {
   tokenId: string;
@@ -29,6 +32,10 @@ interface IGetStatement {
 }
 function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function formatDate(date: Date) {
+  return ' - ' + format(date, 'dd MMM yyyy HH:mm:ss ') + ' - ';
 }
 
 const fromInTimestamp = (year: number) => {
@@ -66,13 +73,19 @@ const toInTimestamp = (year: number) => {
 };
 
 const requestLimitExceededError = 'Too many requests'; //Normal error says to wait 60 seconds
-const cardHasNotBeenOpenedError = "Value field 'to' out of bounds"; //Normal error indicating import completed
+const OUT_OF_BOUNDS_ERROR = "Value field 'to' out of bounds"; //Normal error indicating import completed
+
+type MonobankIntegrationResponse = Awaited<
+  ReturnType<MonobankIntegration['getStatement']>
+>;
+
+function isImportFinishedResponse(response: MonobankIntegrationResponse) {
+  return response.data === OUT_OF_BOUNDS_ERROR;
+}
+
 //Removing normal errors from logs
 function deleteNormalError(error: string) {
-  if (
-    error === requestLimitExceededError ||
-    error === cardHasNotBeenOpenedError
-  ) {
+  if (error === requestLimitExceededError || error === OUT_OF_BOUNDS_ERROR) {
     return '';
   } else {
     return error;
@@ -95,30 +108,101 @@ export class GetMonobankStatementService {
     private userStorage: UserStorage,
   ) {}
 
+  private async writeLog(
+    importAttemptId: string,
+    message: string,
+    status: ImportAttemptStatusType,
+  ) {
+    const importAttempt = await this.importAttemptStorage.getByImportAttemptId(
+      importAttemptId,
+    );
+    await this.importAttemptStorage.updateImportAttempt(
+      {
+        status,
+        log: [importAttempt.log, formatDate(new Date()), message, '\n'].join(
+          '',
+        ),
+      },
+      importAttemptId,
+    );
+  }
+
+  private async fetchDataWithRetryOnError(
+    args: Parameters<MonobankIntegration['getStatement']>[0],
+    iteration = 0,
+  ): Promise<MonobankIntegrationResponse> {
+    const standardDelay = this.configService.get('app.monobankRequestDelay');
+    const result = await this.monobankIntegration.getStatement(args);
+
+    if (isString(result.data) && deleteNormalError(result.data)) {
+      const delayTime = {
+        0: standardDelay * 1,
+        1: standardDelay * 5,
+        2: standardDelay * 10,
+      }[iteration];
+      if (!delayTime) {
+        throw new Error(result.data);
+      }
+      await delay(delayTime);
+      return await this.fetchDataWithRetryOnError(args, iteration + 1);
+    }
+
+    return result;
+  }
+
+  private async handleImportForOneAccount(
+    account: Account,
+    importAttemptId: string,
+  ) {
+    const transactions = [];
+    let monthsOffset = 0;
+    const now = new Date();
+
+    while (true) {
+      const currentMonth = subMonths(monthsOffset, now);
+      const startDate = startOfMonth(currentMonth);
+      const endDate = addMonths(startDate, 1);
+
+      const currentStatement = await this.fetchDataWithRetryOnError({
+        accountId: account.id,
+        token: account.token.token,
+        from: String(getTime(startDate)),
+        to: String(getTime(endDate)),
+      });
+
+      if (isImportFinishedResponse(currentStatement)) {
+        break;
+      }
+
+      // TODO: insert to transactions
+      monthsOffset += 1;
+
+      return transactions;
+    }
+
+    await this.writeLog(
+      importAttemptId,
+      `${
+        ImportAttemptLogDescription.Successfully
+      } import card: ${account.maskedPan.join(', ')}`,
+      ImportAttemptStatusType.InProgress,
+    );
+  }
+
   async getStatement({
     tokenId,
     importAttemptId,
     spaceOwnerEmail,
   }: IGetStatement) {
-    function formatDate(date: Date) {
-      return ' - ' + format(date, 'dd MMM yyyy HH:mm:ss ') + ' - ';
-    }
-
     const featureFlags = await this.featureFlagStorage.getFeatureFlags();
     const importAttempt = await this.importAttemptStorage.getByImportAttemptId(
       importAttemptId,
     );
 
-    await this.importAttemptStorage.updateImportAttempt(
-      {
-        status: ImportAttemptStatusType.InProgress,
-        log:
-          importAttempt.log +
-          formatDate(new Date()) +
-          ImportAttemptLogDescription.StartStatementImportExecution +
-          '\n',
-      },
+    await this.writeLog(
       importAttemptId,
+      ImportAttemptLogDescription.StartStatementImportExecution,
+      ImportAttemptStatusType.InProgress,
     );
 
     const accountListFull = await this.statementStorage.getAccountByTokenId(
@@ -135,6 +219,23 @@ export class GetMonobankStatementService {
     let exitFromAllCyclesWithError = false;
 
     const transactions = [];
+
+    // start: the skeleton for updated global cycle
+    try {
+      for (let i = 0; i < accountList.length; i++) {
+        const accountTransactions = await this.handleImportForOneAccount(
+          accountList[i],
+          importAttemptId,
+        );
+        allTransactions.push(...accountTransactions);
+      }
+
+      // save to db
+      // write log that all cards imported
+    } catch (error) {
+      // write to logs with error status
+    }
+    // end: the skeleton for updated global cycle
 
     //Cards cycle
     for (let i = 0; i < accountList.length; i++) {
