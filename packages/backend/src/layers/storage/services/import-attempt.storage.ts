@@ -17,47 +17,43 @@ export class ImportAttemptStorage {
     token,
   }: ICreateMonobankTokenImportAttemptDto) {
     try {
-      return await this.connection.transaction(async (manager) => {
-        const monobankTokenImportAttemptEntity =
-          manager.create<MonobankTokenImportAttempt>(
-            MonobankTokenImportAttempt,
-            {
-              fetchedMonths,
-              totalMonths,
-              log,
-              status,
-              token,
-            },
-          );
-        const saveMonobankTokenImportAttempt = await manager.save(
-          monobankTokenImportAttemptEntity,
-        );
+      const manager = this.connection.manager;
+      const monobankTokenImportAttemptEntity =
+        manager.create<MonobankTokenImportAttempt>(MonobankTokenImportAttempt, {
+          fetchedMonths,
+          totalMonths,
+          log,
+          status,
+          token,
+        });
+      const saveMonobankTokenImportAttempt = await manager.save(
+        monobankTokenImportAttemptEntity,
+      );
 
-        return saveMonobankTokenImportAttempt;
-      });
+      return saveMonobankTokenImportAttempt;
     } catch (e) {
       handleStorageError(e);
     }
   }
+
   async updateImportAttempt(
     { status, log }: IUpdateMonobankTokenImportAttemptDto,
     importAttemptId: string,
   ) {
     try {
+      const manager = this.connection.manager;
       const where = { id: importAttemptId };
-      return await this.connection.transaction(async (manager) => {
-        await manager.update<MonobankTokenImportAttempt>(
-          MonobankTokenImportAttempt,
-          where,
-          { status, log },
-        );
+      await manager.update<MonobankTokenImportAttempt>(
+        MonobankTokenImportAttempt,
+        where,
+        { status, log },
+      );
 
-        const updatedImportAttempt = await manager.findOne(
-          MonobankTokenImportAttempt,
-          importAttemptId,
-        );
-        return updatedImportAttempt;
-      });
+      const updatedImportAttempt = await manager.findOne(
+        MonobankTokenImportAttempt,
+        importAttemptId,
+      );
+      return updatedImportAttempt;
     } catch (e) {
       handleStorageError(e);
     }
@@ -68,23 +64,21 @@ export class ImportAttemptStorage {
     importAttemptId: string,
   ) {
     try {
+      const manager = this.connection.manager;
       const where = {
         id: importAttemptId,
       } as Partial<MonobankTokenImportAttempt>;
-      return await this.connection.transaction(async (manager) => {
-        const importAttempt = await manager.findOne(
-          MonobankTokenImportAttempt,
-          where,
-        );
-        const updatedFetchedMonths =
-          importAttempt.fetchedMonths + fetchedMonths;
+      const importAttempt = await manager.findOne(
+        MonobankTokenImportAttempt,
+        where,
+      );
+      const updatedFetchedMonths = importAttempt.fetchedMonths + fetchedMonths;
 
-        return await manager.update<MonobankTokenImportAttempt>(
-          MonobankTokenImportAttempt,
-          where,
-          { fetchedMonths: updatedFetchedMonths },
-        );
-      });
+      return await manager.update<MonobankTokenImportAttempt>(
+        MonobankTokenImportAttempt,
+        where,
+        { fetchedMonths: updatedFetchedMonths },
+      );
     } catch (e) {
       handleStorageError(e);
     }
@@ -92,16 +86,15 @@ export class ImportAttemptStorage {
 
   async updateTotalMonthsCount(totalMonths: number, importAttemptId: string) {
     try {
+      const manager = this.connection.manager;
       const where = {
         id: importAttemptId,
       } as Partial<MonobankTokenImportAttempt>;
-      return await this.connection.transaction(async (manager) => {
-        return await manager.update<MonobankTokenImportAttempt>(
-          MonobankTokenImportAttempt,
-          where,
-          { totalMonths: totalMonths },
-        );
-      });
+      return await manager.update<MonobankTokenImportAttempt>(
+        MonobankTokenImportAttempt,
+        where,
+        { totalMonths: totalMonths },
+      );
     } catch (e) {
       handleStorageError(e);
     }
@@ -109,16 +102,15 @@ export class ImportAttemptStorage {
 
   async removeFetchedMonthsCount(importAttemptId: string) {
     try {
+      const manager = this.connection.manager;
       const where = {
         id: importAttemptId,
       } as Partial<MonobankTokenImportAttempt>;
-      return await this.connection.transaction(async (manager) => {
-        return await manager.update<MonobankTokenImportAttempt>(
-          MonobankTokenImportAttempt,
-          where,
-          { fetchedMonths: 0 },
-        );
-      });
+      return await manager.update<MonobankTokenImportAttempt>(
+        MonobankTokenImportAttempt,
+        where,
+        { fetchedMonths: 0 },
+      );
     } catch (e) {
       handleStorageError(e);
     }
@@ -126,16 +118,15 @@ export class ImportAttemptStorage {
 
   async removeTotalMonthsCount(importAttemptId: string) {
     try {
+      const manager = this.connection.manager;
       const where = {
         id: importAttemptId,
       } as Partial<MonobankTokenImportAttempt>;
-      return await this.connection.transaction(async (manager) => {
-        return await manager.update<MonobankTokenImportAttempt>(
-          MonobankTokenImportAttempt,
-          where,
-          { totalMonths: 0 },
-        );
-      });
+      return await manager.update<MonobankTokenImportAttempt>(
+        MonobankTokenImportAttempt,
+        where,
+        { totalMonths: 0 },
+      );
     } catch (e) {
       handleStorageError(e);
     }
@@ -153,13 +144,11 @@ export class ImportAttemptStorage {
 
   async getByTokenId(tokenId: string) {
     try {
-      const result = await this.connection.manager.find(
-        MonobankTokenImportAttempt,
-        {
-          relations: ['token'],
-          where: { token: { token: tokenId } },
-        },
-      );
+      const manager = this.connection.manager;
+      const result = await manager.find(MonobankTokenImportAttempt, {
+        relations: ['token'],
+        where: { token: { token: tokenId } },
+      });
       return result;
     } catch (e) {
       handleStorageError(e);
