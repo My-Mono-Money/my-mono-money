@@ -57,7 +57,7 @@ function errorStringOrArrayResult(statementPart: string | []) {
     ? deleteNormalError(statementPart)
     : statementPart.length;
 }
-// let errorTest = 1; //Uncomment this for error test
+
 @Injectable()
 export class GetMonobankStatementService {
   constructor(
@@ -95,11 +95,6 @@ export class GetMonobankStatementService {
     const standardDelay = this.configService.get('app.monobankRequestDelay');
     const result = await this.monobankIntegration.getStatement(args);
     const featureFlags = await this.featureFlagStorage.getFeatureFlags();
-    //Uncomment this for error test
-    // errorTest++;
-    // if (errorTest >= 5) {
-    //   result.data = 'unknown error' as any;
-    // }
 
     if (
       !result ||
@@ -128,7 +123,7 @@ export class GetMonobankStatementService {
   private async handleImportForOneAccount(
     account: Account,
     importAttemptId: string,
-    i: number,
+    accountIndex: number,
     accountList: Account[],
   ) {
     let monthsOffset = 0;
@@ -140,8 +135,8 @@ export class GetMonobankStatementService {
       const endDate = addMonths(startDate, 1);
 
       const currentStatement = await this.fetchDataWithRetryOnError({
-        accountId: accountList[i].id,
-        token: accountList[i].token.token,
+        accountId: accountList[accountIndex].id,
+        token: accountList[accountIndex].token.token,
         from: String(getTime(startDate)),
         to: String(getTime(endDate)),
       });
@@ -149,7 +144,7 @@ export class GetMonobankStatementService {
       if (isImportFinishedResponse(currentStatement)) {
         const importAttempt =
           await this.importAttemptStorage.getByImportAttemptId(importAttemptId);
-        if (i === 0) {
+        if (accountIndex === 0) {
           //Adding totalMonths after the first iteration card
           await this.importAttemptStorage.updateTotalMonthsCount(
             importAttempt.fetchedMonths * accountList.length,
@@ -185,13 +180,13 @@ export class GetMonobankStatementService {
           ...currentStatement.data.map((item) => ({
             ...item,
             account: {
-              id: accountList[i].id,
+              id: accountList[accountIndex].id,
             },
           })),
         );
       }
     }
-    if (i === transactions.length - 1) {
+    if (accountIndex === transactions.length - 1) {
       await this.importAttemptStorage.updateFetchedMonthsCount(
         1,
         importAttemptId,
