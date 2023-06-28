@@ -19,3 +19,9 @@ export interface ICreateTransactionDto {
   counterEdrpou?: string;
   counterIban?: string;
 }
+
+export interface ITransactionErrorDto {
+  status: string;
+  statusText: string;
+  data: string;
+}
