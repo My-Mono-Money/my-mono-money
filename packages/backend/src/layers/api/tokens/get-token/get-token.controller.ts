@@ -23,15 +23,23 @@ export class GetTokenController {
   async getToken(@Req() request: IRequestWithUser): Promise<GetTokenResponse> {
     const { email } = request.user;
     const result = await this.tokenService.getTokenList({ email });
-
-    return {
+    const updatedResult = {
       items: result.map((item) => ({
         token: item.token,
         monobankUserName: item.monobankUserName,
         totalAccounts: item.totalAccounts,
         createdAt: item.createdAt,
         updatedAt: item.updatedAt,
+        importAttempts: item.importAttempts.map((importAttempt) => ({
+          id: importAttempt.id,
+          fetchedMonths: importAttempt.fetchedMonths,
+          totalMonths: importAttempt.totalMonths,
+          status: importAttempt.status,
+          createdAt: importAttempt.createdAt,
+          updatedAt: importAttempt.updatedAt,
+        })),
       })),
     };
+    return updatedResult;
   }
 }

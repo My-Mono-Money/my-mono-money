@@ -4,11 +4,13 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { ICreateMonobankTokenDto } from '../interfaces/create-monobank-token-dto.interface';
 import { Space } from './space.entity';
+import { MonobankTokenImportAttempt } from './monobank-token-import-attempt.entity';
 
 @Entity()
 export class MonobankToken implements ICreateMonobankTokenDto {
@@ -33,4 +35,10 @@ export class MonobankToken implements ICreateMonobankTokenDto {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @OneToMany(
+    () => MonobankTokenImportAttempt,
+    (importAttempt) => importAttempt.token,
+  )
+  importAttempts: MonobankTokenImportAttempt[];
 }
