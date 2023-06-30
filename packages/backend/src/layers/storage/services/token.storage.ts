@@ -58,13 +58,12 @@ export class TokenStorage {
   async getTokenList({ email }: IGetTokenList) {
     const space = await this.userService.getSpaceByEmail(email);
     try {
-      return await this.connection.manager.find<MonobankToken>(MonobankToken, {
-        where: {
-          space: {
-            id: space.id,
-          },
-        },
-      });
+      const tokens = await this.connection.manager
+        .createQueryBuilder(MonobankToken, 'token')
+        .leftJoinAndSelect('token.importAttempts', 'importAttempt')
+        .where('token.space = :space', { space: space.id })
+        .getMany();
+      return tokens;
     } catch (e) {
       handleStorageError(e);
     }

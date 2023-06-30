@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { MonobankTokenImportAttempt } from '~/storage/entities/monobank-token-import-attempt.entity';
 
 class TokenItem {
   @ApiProperty()
@@ -15,6 +16,9 @@ class TokenItem {
 
   @ApiProperty()
   updatedAt: Date;
+
+  @ApiProperty()
+  importAttempts: Array<Partial<MonobankTokenImportAttempt>>;
 }
 
 export class GetTokenResponse {
@@ -28,6 +32,16 @@ export class GetTokenResponse {
         totalAccounts: 2,
         createdAt: '2023-03-27 11:47:24.682',
         updatedAt: '2023-03-27 11:47:24.682',
+        importAttempts: [
+          {
+            id: '754d23c7-3188-49bd-a425-73fd3fcafbd4',
+            fetchedMonths: 46,
+            totalMonths: 46,
+            status: 'successful',
+            createdAt: '2023-03-27 11:48:24.682',
+            updatedAt: '2023-03-27 11:49:24.682',
+          },
+        ],
       },
     ],
   })
