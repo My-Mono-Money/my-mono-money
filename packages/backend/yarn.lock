@@ -751,20 +751,20 @@
   resolved "https://registry.npmjs.org/@nestjs/axios/-/axios-2.0.0.tgz#2116fad483e232ef102a877b503a9f19926bd102"
   integrity sha512-F6oceoQLEn031uun8NiommeMkRIojQqVryxQy/mK7fx0CI0KbgkJL3SloCQcsOD+agoEnqKJKXZpEvL6FNswJg==
 
-"@nestjs/bull-shared@^0.1.3":
-  version "0.1.3"
-  resolved "https://registry.npmjs.org/@nestjs/bull-shared/-/bull-shared-0.1.3.tgz#df08180d3990c1234599069fa37c399d4913c6c1"
-  integrity sha512-K0a1ERpnl/ZnTmm0UtYSSClDlDkQwNNwJYM6PogzpeflD64oqwVIn8Pj8rdS+BOYUxqdDy55q3p67ytO5oaVDA==
+"@nestjs/bull-shared@^10.0.0":
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/@nestjs/bull-shared/-/bull-shared-10.0.0.tgz#a0338eaa1c68dff509ddfea81f21fa4ac14ff072"
+  integrity sha512-eejy+Us25q/8xab4hUwyi/nO83gGpobTHCoYnXPjR9tlrT03EK+tvB+Fy0Vlka1PpVnu5408R3ThgZu9Mp6F3A==
   dependencies:
-    tslib "2.5.0"
+    tslib "2.5.3"
 
-"@nestjs/bull@^0.6.3":
-  version "0.6.3"
-  resolved "https://registry.npmjs.org/@nestjs/bull/-/bull-0.6.3.tgz#c93e97c4575828bee9664a3deca650c55292d5af"
-  integrity sha512-CckH9O3t9qSiO4RCzdYvtFSaaMfIhTXMYagV/rtmVvI1SX5XNnxEaQXvtjxDBXF9DB1JE/5AejIl6ICym+MJIw==
+"@nestjs/bull@^10.0.0":
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/@nestjs/bull/-/bull-10.0.0.tgz#884611437dbb656e27aa358a65e6237cdc54c1f9"
+  integrity sha512-u5dNOQu3SezolZvyFoJp3mURQxA1Y2QT6Ib1IHp7/Z6ujomu1ZJHsOWcvZ+tiSV1HTBMpUZfY1gKI5TeXEzcDw==
   dependencies:
-    "@nestjs/bull-shared" "^0.1.3"
-    tslib "2.5.0"
+    "@nestjs/bull-shared" "^10.0.0"
+    tslib "2.5.3"
 
 "@nestjs/cli@^9.5.0":
   version "9.5.0"
@@ -5424,11 +5424,6 @@ tsconfig-paths@4.2.0, tsconfig-paths@^4.1.2:
     json5 "^2.2.2"
     minimist "^1.2.6"
     strip-bom "^3.0.0"
-
-tslib@2.5.0:
-  version "2.5.0"
-  resolved "https://registry.npmjs.org/tslib/-/tslib-2.5.0.tgz#42bfed86f5787aeb41d031866c8f402429e0fddf"
-  integrity sha512-336iVw3rtn2BUK7ORdIAHTyxHGRIHVReokCR3XjbckJMK7ms8FysBfhLR8IXnAgy7T0PTPNBWKiH514FOW/WSg==
 
 tslib@2.5.3:
   version "2.5.3"
