@@ -5,6 +5,11 @@ import { MonobankTokenImportAttempt } from '../entities/monobank-token-import-at
 import { handleStorageError } from '~/common/errors/utils/handle-storage-error';
 import { IUpdateMonobankTokenImportAttemptDto } from '../interfaces/update-monobank-token-import-attempt-dto.interface';
 
+interface GetByImportAttemptIdArgs {
+  id: string;
+  tokenId?: string;
+}
+
 @Injectable()
 export class ImportAttemptStorage {
   constructor(private connection: Connection) {}
@@ -132,10 +137,10 @@ export class ImportAttemptStorage {
     }
   }
 
-  async getByImportAttemptId(id: string) {
+  async getByImportAttemptId({ id, tokenId }: GetByImportAttemptIdArgs) {
     try {
       return await this.connection.manager.findOne(MonobankTokenImportAttempt, {
-        where: { id },
+        where: { id, token: { id: tokenId } },
       });
     } catch (e) {
       handleStorageError(e);

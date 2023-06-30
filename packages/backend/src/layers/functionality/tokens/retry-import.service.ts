@@ -28,7 +28,7 @@ export class RetryImportService {
       const checkInProgressImport = tryFindImportAttempt.find(
         (item) => item.status === ImportAttemptStatusType.InProgress,
       );
-      const token = await this.tokenStorage.getTokenByTokenId(tokenId);
+      const token = await this.tokenStorage.getTokenByTokenValue(tokenId);
       if (!token) throw new Error('Token not found');
 
       if (checkAlreadyImport)

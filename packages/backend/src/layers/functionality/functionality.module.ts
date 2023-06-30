@@ -28,6 +28,7 @@ import { GetUserService } from './user/get-user.service';
 import { RemoveMemberService } from './space/remove-member.service.ts/remove-member.service';
 import { ChangeDefaultUserSpaceService } from './space/change-default-user-space.service.ts/change-default-user-space.service';
 import { RetryImportService } from './tokens/retry-import.service';
+import { ImportAttemptService } from './tokens/import-attempt.service';
 @Module({
   imports: [
     StorageModule,
@@ -59,6 +60,7 @@ import { RetryImportService } from './tokens/retry-import.service';
     SaveTokenService,
     SendTestEmailService,
     DebugAccessGuard,
+    ImportAttemptService,
     GetSpacesService,
     InviteMemberService,
     ChangeDefaultUserSpaceService,
@@ -82,6 +84,7 @@ import { RetryImportService } from './tokens/retry-import.service';
     GetSpacesService,
     DebugAccessGuard,
     IsEmailVerifiedGuard,
+    ImportAttemptService,
     InviteMemberService,
     ChangeDefaultUserSpaceService,
     RemoveMemberService,

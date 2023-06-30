@@ -40,7 +40,7 @@ const fetchSignUp = async (
     firstName,
     lastName,
     email,
-    spaceOwnerEmail,
+    spaceOwnerEmail: spaceOwnerEmail || undefined,
     password,
   });
   if (!response?.data.isSuccessful) {
