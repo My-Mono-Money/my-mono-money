@@ -139,9 +139,18 @@ export class ImportAttemptStorage {
 
   async getByImportAttemptId({ id, tokenId }: GetByImportAttemptIdArgs) {
     try {
-      return await this.connection.manager.findOne(MonobankTokenImportAttempt, {
-        where: { id, token: { id: tokenId } },
-      });
+      const where = { id };
+
+      if (tokenId) {
+        Object.assign(where, { token: { id, tokenId } });
+      }
+      return await this.connection.manager.findOne<MonobankTokenImportAttempt>(
+        MonobankTokenImportAttempt,
+        {
+          where,
+          relations: ['token'],
+        },
+      );
     } catch (e) {
       handleStorageError(e);
     }
