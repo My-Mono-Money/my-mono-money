@@ -142,7 +142,7 @@ export class ImportAttemptStorage {
       const where = { id };
 
       if (tokenId) {
-        Object.assign(where, { token: { id, tokenId } });
+        Object.assign(where, { token: { id: tokenId } });
       }
       return await this.connection.manager.findOne<MonobankTokenImportAttempt>(
         MonobankTokenImportAttempt,
