@@ -91,7 +91,7 @@
   "proxy": "http://localhost:8080/v1",
   "devDependencies": {
     "@types/react-dates": "^21.8.3",
-    "@typescript-eslint/eslint-plugin": "^5.23.0",
+    "@typescript-eslint/eslint-plugin": "^5.60.1",
     "@typescript-eslint/parser": "^5.23.0",
     "eslint": "^8.43.0",
     "eslint-config-prettier": "^8.5.0",
