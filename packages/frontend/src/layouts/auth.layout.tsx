@@ -16,7 +16,7 @@ const LeftSide = () => {
         color: 'whitesmoke',
         background:
           'linear-gradient(164deg, rgba(97,123,227,1) 0%, rgba(97,121,227,1) 15%, rgba(111,37,220,1) 70%, rgba(112,28,219,1) 100%)',
-        ...(isXs && { pl: '20px', pr: '0', pt: '100px' }),
+        ...(isXs && { display: 'none' }),
       }}
     >
       <Typography
@@ -32,7 +32,6 @@ const LeftSide = () => {
       <Box
         sx={{
           pt: '100px',
-          ...(isXs && { pl: '0px', pr: '0', pt: '40px' }),
         }}
       >
         <Typography

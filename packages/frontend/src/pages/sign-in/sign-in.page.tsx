@@ -84,8 +84,7 @@ const SignIn: React.FC = () => {
         pt: '100px',
         mx: 'auto',
         width: '285px',
-        ...(isMd && { width: '220px' }),
-        ...(isXs && { width: '130px' }),
+        ...(isMd && { width: '220px', mt: '5vh' }),
       }}
     >
       <Typography
