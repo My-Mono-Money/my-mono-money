@@ -38,7 +38,7 @@ const SwitchingSpaces = () => {
 
   useEffect(() => {
     changeDefaultSpace();
-  }, [spaces]);
+  }, [spaces?.data]);
 
   const handleChangeSpace = async (event: SelectChangeEvent) => {
     mutateChangeSpace(event.target.value);

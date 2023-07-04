@@ -12,6 +12,7 @@ import {
 import { useSearchParams } from 'react-router-dom';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import CustomDateFilter from './custom-date-filter.component';
+import ImportAttempts from './import-attempts/import-attempts.component';
 
 const OPTIONS_LIST = [
   { text: 'Сьогодні', value: 'day' },
@@ -89,27 +90,40 @@ const PeriodFilter: React.FC<ISearchProps> = ({
   const id = open ? 'simple-popover' : undefined;
   return (
     <>
-      <Button
-        aria-describedby={id}
-        onClick={openPopover}
-        variant="outlined"
-        color="inherit"
-        startIcon={<CalendarTodayIcon />}
-      >
-        {selectedOption ? selectedOption.text : 'Оберіть період'}
-      </Button>
-      <TextField
-        label="Пошук"
-        onChange={(event) => {
-          setSearchField(event.target.value);
-          setTimeout(() => setSearchFieldRequest(event.target.value), 1000);
-        }}
-        inputRef={inputRef}
-        value={searchField}
+      <Box
         sx={{
-          ml: '10px',
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          width: '100%',
+          flexWrap: 'nowrap',
         }}
-      ></TextField>
+      >
+        <Box>
+          <Button
+            aria-describedby={id}
+            onClick={openPopover}
+            variant="outlined"
+            color="inherit"
+            startIcon={<CalendarTodayIcon />}
+          >
+            {selectedOption ? selectedOption.text : 'Оберіть період'}
+          </Button>
+          <TextField
+            label="Пошук"
+            onChange={(event) => {
+              setSearchField(event.target.value);
+              setTimeout(() => setSearchFieldRequest(event.target.value), 1000);
+            }}
+            inputRef={inputRef}
+            value={searchField}
+            sx={{
+              ml: '10px',
+            }}
+          />
+        </Box>
+        <ImportAttempts></ImportAttempts>
+      </Box>
       <Popover
         id={id}
         open={open}

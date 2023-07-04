@@ -1,0 +1,9 @@
+.no-pointer-cursor {
+  cursor: auto !important;
+}
+
+.css-1da7mu8-MuiButtonBase-root-MuiAccordionSummary-root:hover:not(
+    .Mui-disabled
+  ) {
+  cursor: default !important;
+}

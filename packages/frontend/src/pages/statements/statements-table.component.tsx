@@ -85,7 +85,7 @@ const renderLoadingSkeleton = () => {
   ));
 };
 
-const StatementTable: React.FC = () => {
+const StatementTable = () => {
   const { user } = useAuthState();
   const { defaultUserSpace } = useGlobalState();
   const [page, setPage] = usePagination();
