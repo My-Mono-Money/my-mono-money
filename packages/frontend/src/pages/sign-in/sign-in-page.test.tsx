@@ -1,11 +1,14 @@
 import React from 'react';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
+import mediaQuery from 'css-mediaquery';
 import { MemoryRouter } from 'react-router-dom';
 import SignIn from './sign-in.page';
 import axios from 'axios';
 import { act } from 'react-dom/test-utils';
 import userEvent from '@testing-library/user-event';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
+import { ThemeProvider } from '@mui/material';
+import { createTheme } from '@mui/material/styles';
 
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
@@ -36,13 +39,29 @@ const fillSignInFormIncorrectly = () =>
     userEvent.type(screen.getByLabelText('Пошта'), 'johny.depp@example.com');
     userEvent.type(screen.getByLabelText('Пароль'), 'JohnyLoveRom2022');
   });
+export const createMatchMedia =
+  (width: number) =>
+  (query: string): MediaQueryList => ({
+    matches: mediaQuery.match(query, { width }),
+    media: query,
+    onchange: null,
+    addListener: () => jest.fn(),
+    removeListener: () => jest.fn(),
+    addEventListener: jest.fn(),
+    removeEventListener: jest.fn(),
+    dispatchEvent: jest.fn(),
+  });
+const theme = createTheme();
 
 describe('Sign in page', () => {
   beforeEach(() => {
+    window.matchMedia = createMatchMedia(window.innerWidth);
     render(
-      <QueryClientProvider client={queryClient}>
-        <SignIn />
-      </QueryClientProvider>,
+      <ThemeProvider theme={theme}>
+        <QueryClientProvider client={queryClient}>
+          <SignIn />
+        </QueryClientProvider>
+      </ThemeProvider>,
       { wrapper: MemoryRouter },
     );
   });

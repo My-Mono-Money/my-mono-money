@@ -9,6 +9,8 @@ import {
   Button,
   TextField,
   Typography,
+  useMediaQuery,
+  Theme,
 } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -35,6 +37,8 @@ export const signIn = async ({ email, password }: IFormData) => {
 
 const SignIn: React.FC = () => {
   const { setToken } = useAuthState();
+  const isMd = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
+  const isXs = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
   const [submittingError, setSubmittingError] = useState<string>();
   const { mutate } = useMutation({
     mutationFn: ({ email, password }: IFormData) => signIn({ email, password }),
@@ -80,15 +84,39 @@ const SignIn: React.FC = () => {
         pt: '100px',
         mx: 'auto',
         width: '285px',
+        ...(isMd && { width: '220px' }),
+        ...(isXs && { mt: '5vh' }),
       }}
     >
-      <Typography variant="h5" fontWeight={500}>
+      <Typography
+        variant="h5"
+        fontWeight={500}
+        sx={{
+          ...(isXs && { fontSize: '18px' }),
+        }}
+      >
         Вхід у кабінет
       </Typography>
       {submittingError && (
         <Alert severity="warning">
-          <AlertTitle>Сталася помилка</AlertTitle>
-          {submittingError}
+          <AlertTitle>
+            <Typography
+              sx={{
+                ...(isMd && { fontSize: '18px' }),
+                ...(isXs && { fontSize: '12px' }),
+              }}
+            >
+              Сталася помилка
+            </Typography>
+          </AlertTitle>
+          <Typography
+            sx={{
+              ...(isMd && { fontSize: '15px' }),
+              ...(isXs && { fontSize: '10px' }),
+            }}
+          >
+            {submittingError}
+          </Typography>
         </Alert>
       )}
       <TextField
@@ -122,10 +150,22 @@ const SignIn: React.FC = () => {
           pt: 2,
         }}
       >
-        <Typography>
+        <Typography
+          sx={{
+            textAlign: 'center',
+            ...(isMd && { fontSize: '15px' }),
+            ...(isXs && { fontSize: '10px' }),
+          }}
+        >
           <Link to="/sign-up">Створити аккаунт</Link>
         </Typography>
-        <Typography>
+        <Typography
+          sx={{
+            textAlign: 'center',
+            ...(isMd && { fontSize: '15px' }),
+            ...(isXs && { fontSize: '10px' }),
+          }}
+        >
           <Link to="/forgot-password">Забули пароль?</Link>
         </Typography>
       </Box>
