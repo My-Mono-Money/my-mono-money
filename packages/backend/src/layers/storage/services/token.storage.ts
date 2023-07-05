@@ -69,12 +69,26 @@ export class TokenStorage {
     }
   }
 
+  async getTokenByTokenValue(token: string) {
+    try {
+      return await this.connection.manager.findOne<MonobankToken>(
+        MonobankToken,
+        {
+          where: { token: token },
+        },
+      );
+    } catch (e) {
+      handleStorageError(e);
+    }
+  }
+
   async getTokenByTokenId(tokenId: string) {
     try {
       return await this.connection.manager.findOne<MonobankToken>(
         MonobankToken,
         {
-          where: { token: tokenId },
+          where: { id: tokenId },
+          relations: ['space'],
         },
       );
     } catch (e) {

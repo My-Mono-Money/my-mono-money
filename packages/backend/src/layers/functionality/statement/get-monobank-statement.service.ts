@@ -74,9 +74,9 @@ export class GetMonobankStatementService {
     message: string,
     status: ImportAttemptStatusType,
   ) {
-    const importAttempt = await this.importAttemptStorage.getByImportAttemptId(
-      importAttemptId,
-    );
+    const importAttempt = await this.importAttemptStorage.getByImportAttemptId({
+      id: importAttemptId,
+    });
     await this.importAttemptStorage.updateImportAttempt(
       {
         status,
@@ -143,7 +143,9 @@ export class GetMonobankStatementService {
 
       if (isImportFinishedResponse(currentStatement)) {
         const importAttempt =
-          await this.importAttemptStorage.getByImportAttemptId(importAttemptId);
+          await this.importAttemptStorage.getByImportAttemptId({
+            id: importAttemptId,
+          });
         if (accountIndex === 0) {
           //Adding totalMonths after the first iteration card
           await this.importAttemptStorage.updateTotalMonthsCount(

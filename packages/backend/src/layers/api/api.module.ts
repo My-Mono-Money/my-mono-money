@@ -18,6 +18,7 @@ import { GetUserController } from './user/get-user.controller';
 import { RemoveMemberController } from './space/remove-member.controller.ts/remove-member.controller';
 import { ChangeDefaultUserSpaceController } from './space/change-default-user-space/change-defalut-user-space.controller';
 import { RetryImportController } from './tokens/retry-import/retry-import.controller';
+import { GetImportAttemptController } from './tokens/get-import-attempt-log/get-import-attempt.controller';
 
 @Module({
   imports: [FunctionalityModule, ConfigModule],
@@ -32,6 +33,7 @@ import { RetryImportController } from './tokens/retry-import/retry-import.contro
     AcceptInviteController,
     InviteMemberController,
     GetSpaceMembersController,
+    GetImportAttemptController,
     SendTestEmailController,
     MonobankWebHookController,
     GetFilteredStatementController,

@@ -192,4 +192,18 @@ export class SpaceStorage {
       handleStorageError(e);
     }
   }
+
+  async getAcceptedMemberInvite(email: string, spaceId: string) {
+    try {
+      return await this.connection.manager.findOne(SpaceMemberInvitation, {
+        where: {
+          email,
+          space: { id: spaceId },
+          status: StatusType.ACCEPTED,
+        },
+      });
+    } catch (e) {
+      handleStorageError(e);
+    }
+  }
 }
