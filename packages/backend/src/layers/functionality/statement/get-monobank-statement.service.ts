@@ -220,9 +220,9 @@ export class GetMonobankStatementService {
       tokenId,
     );
     const UAHCurrencyCode = 980;
-    const accountList = accountListFull.filter(
-      (account) => account.currencyCode === UAHCurrencyCode,
-    );
+    const accountList = accountListFull
+      .filter((account) => account.currencyCode === UAHCurrencyCode)
+      .filter((account) => account.maskedPan.length > 0);
 
     try {
       const transactions = [];

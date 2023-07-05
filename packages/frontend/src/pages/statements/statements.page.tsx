@@ -51,7 +51,6 @@ const Statements: React.FC = () => {
   const filteredSpaces = isTokenListEmpty
     ? spaces.data?.filter((space) => space.spaceOwnerEmail !== user?.email)
     : spaces.data;
-
   return filteredSpaces && filteredSpaces.length >= 1 ? (
     <StatementTable />
   ) : (
