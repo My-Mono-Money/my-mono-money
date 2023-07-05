@@ -199,7 +199,7 @@ export class GetMonobankStatementService {
       importAttemptId,
       `${
         ImportAttemptLogDescription.Successfully
-      } import card: ${account.maskedPan.join(', ')}`,
+      }import card: ${account.maskedPan.join(', ')}`,
       ImportAttemptStatusType.InProgress,
     );
     return transactions;
