@@ -11,14 +11,20 @@ export interface IImportAttempt {
   createdAt: string;
   updatedAt: string;
   status: ImportAttemptStatusType;
-  totalMonths: number;
 }
 
 export interface ITokenItem {
+  id: string;
   token: string;
   monobankUserName: string;
   totalAccounts: number;
   createdAt: string;
   updatedAt: string;
   importAttempts: IImportAttempt[];
+}
+
+export interface IImportAttemptLog extends IImportAttempt {
+  log: string;
+  totalMonths: number;
+  fetchedMonths: number;
 }

@@ -25,6 +25,7 @@ export class GetTokenController {
     const result = await this.tokenService.getTokenList({ email });
     const updatedResult = {
       items: result.map((item) => ({
+        id: item.id,
         token: item.token,
         monobankUserName: item.monobankUserName,
         totalAccounts: item.totalAccounts,

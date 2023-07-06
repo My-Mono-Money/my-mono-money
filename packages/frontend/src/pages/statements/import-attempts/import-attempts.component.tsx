@@ -31,7 +31,7 @@ const ImportAttempts = () => {
   const [openAccordionIndex, setOpenAccordionIndex] = useState(-1);
   const [openLogModal, setOpenLogModal] = useState({
     open: false,
-    token: '',
+    tokenId: '',
     importAttempt: '',
   });
   const toggleDrawer =
@@ -350,7 +350,7 @@ const ImportAttempts = () => {
                       onClick={() =>
                         setOpenLogModal({
                           open: true,
-                          token: token.token,
+                          tokenId: token.id,
                           importAttempt: importAttempt.id,
                         })
                       }

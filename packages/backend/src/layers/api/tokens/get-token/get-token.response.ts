@@ -27,6 +27,7 @@ export class GetTokenResponse {
     isArray: true,
     example: [
       {
+        id: 'ca9cc0b4-2d4e-456f-bc72-9b9fe6ab41e2',
         token: 'u3_-for2akDnzxblQTF1NZK6GDeY-673aXgWZQa-wD5Y',
         monobankUserName: 'User Name',
         totalAccounts: 2,
