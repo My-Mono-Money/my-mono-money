@@ -11,7 +11,7 @@ interface IGetUserResponse {
   lastName: string;
   email: string;
 }
-interface IAccepteInvite {
+interface IResponseInvite {
   spaceOwnerEmail: string;
 }
 
@@ -37,11 +37,24 @@ export const InvitationPage: React.FC = () => {
 
   const {
     mutate: mutateAcceptInviteHandle,
-    isError,
-    isLoading,
+    isError: mutateErrorHandleAccept,
+    isLoading: mutateLoadingAccept,
   } = useMutation({
-    mutationFn: ({ spaceOwnerEmail }: IAccepteInvite) =>
+    mutationFn: ({ spaceOwnerEmail }: IResponseInvite) =>
       axiosPrivate.post(`invites/${spaceOwnerEmail}/accept`, null),
+
+    onSuccess: () => {
+      navigate('/');
+    },
+  });
+
+  const {
+    mutate: mutateRejectInviteHandle,
+    isError: mutateErrorHandleReject,
+    isLoading: mutateLoadingReject,
+  } = useMutation({
+    mutationFn: ({ spaceOwnerEmail }: IResponseInvite) =>
+      axiosPrivate.post(`invites/${spaceOwnerEmail}/reject`, null),
 
     onSuccess: () => {
       navigate('/');
@@ -55,10 +68,14 @@ export const InvitationPage: React.FC = () => {
       setResponse(userData);
       setChangeDefaultUserSpace(userData.email);
     }
-  }, [userData, isLoading]);
+  }, [userData, mutateErrorHandleAccept]);
 
   const acceptInviteHandle = () => {
     mutateAcceptInviteHandle({ spaceOwnerEmail });
+  };
+
+  const rejectInviteHandle = () => {
+    mutateRejectInviteHandle({ spaceOwnerEmail });
   };
 
   if (!spaceOwnerEmail) {
@@ -67,7 +84,7 @@ export const InvitationPage: React.FC = () => {
 
   return (
     <>
-      {isLoading && <UpdatingIndicator />}
+      {(mutateLoadingAccept || mutateLoadingReject) && <UpdatingIndicator />}
       <Box
         sx={{
           margin: '0 auto',
@@ -100,9 +117,9 @@ export const InvitationPage: React.FC = () => {
           }}
         >
           <Button onClick={acceptInviteHandle}>Прийняти</Button>
-          <Button>Відхилити</Button>
+          <Button onClick={rejectInviteHandle}>Відхилити</Button>
         </Box>
-        {isError && (
+        {(mutateErrorHandleAccept || mutateErrorHandleReject) && (
           <Typography>Помилка. Будь ласка, спробуйте пізніше</Typography>
         )}
       </Box>

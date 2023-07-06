@@ -14,6 +14,8 @@ import {
   TablePagination,
   TableRow,
   Typography,
+  useMediaQuery,
+  Theme,
 } from '@mui/material';
 import { IStatementItem } from 'types/statement-item.interface';
 import { IPagingState } from 'types/statement-paging.interface';
@@ -95,6 +97,7 @@ const StatementTable = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const queryClient = useQueryClient();
   const period = searchParams.get('period') ?? 'day';
+  const isXs = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
 
   const changePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -158,7 +161,17 @@ const StatementTable = () => {
           px: '40px',
         }}
       >
-        <Box sx={{ p: 3, display: 'flex' }}>
+        <Box
+          sx={{
+            p: 3,
+            display: 'flex',
+            ...(isXs && {
+              flexWrap: 'wrap',
+              pt: 2,
+              pb: 1,
+            }),
+          }}
+        >
           <PeriodFilter
             searchField={searchField}
             setSearchField={setSearchField}
@@ -167,7 +180,15 @@ const StatementTable = () => {
             setSearchFieldRequest={setSearchFieldRequest}
           />
           {isError && (
-            <Typography sx={{ pl: '10px', pt: '8px' }}>
+            <Typography
+              sx={{
+                pl: '10px',
+                pt: '8px',
+                ...(isXs && {
+                  fontSize: '10px',
+                }),
+              }}
+            >
               Помилка. Будь ласка, спробуйте пізніше
             </Typography>
           )}
@@ -179,13 +200,68 @@ const StatementTable = () => {
             sx={{ borderRadius: '16px', tableLayout: 'fixed' }}
           >
             <TableHead>
-              <TableRow>
-                <TableCell sx={{ width: '115px' }} align="left">
+              <TableRow
+                sx={{
+                  ...(isXs && {
+                    fontSize: '8px',
+                    height: '30px',
+                    padding: '0',
+                  }),
+                }}
+              >
+                <TableCell
+                  sx={{
+                    width: '115px',
+                    ...(isXs && {
+                      fontSize: '8px',
+                      height: '30px',
+                      width: '30px',
+                      padding: '0',
+                    }),
+                  }}
+                  align="left"
+                >
                   Дата та час
                 </TableCell>
-                <TableCell align="center">Деталі транзкції</TableCell>
-                <TableCell align="center">Категорія</TableCell>
-                <TableCell sx={{ width: '115px' }} align="right">
+                <TableCell
+                  sx={{
+                    width: '115px',
+                    ...(isXs && {
+                      fontSize: '8px',
+                      height: '30px',
+                      width: '30px',
+                      padding: '0',
+                    }),
+                  }}
+                  align="center"
+                >
+                  Деталі транзкції
+                </TableCell>
+                <TableCell
+                  sx={{
+                    width: '115px',
+                    ...(isXs && {
+                      fontSize: '8px',
+                      height: '30px',
+                      width: '30px',
+                      padding: '0',
+                    }),
+                  }}
+                  align="center"
+                >
+                  Категорія
+                </TableCell>
+                <TableCell
+                  sx={{
+                    width: '115px',
+                    ...(isXs && {
+                      fontSize: '8px',
+                      width: '30px',
+                      padding: '0',
+                    }),
+                  }}
+                  align="right"
+                >
                   Сума
                 </TableCell>
               </TableRow>
@@ -205,10 +281,56 @@ const StatementTable = () => {
                   )}`;
                   return (
                     <TableRow key={row.id}>
-                      <TableCell align="left">{formatTime}</TableCell>
-                      <TableCell align="center">{row.description}</TableCell>
-                      <TableCell align="center">{row.category}</TableCell>
-                      <TableCell align="right">
+                      <TableCell
+                        align="left"
+                        sx={{
+                          ...(isXs && {
+                            fontSize: '8px',
+                            height: '30px',
+                            width: '30px',
+                            padding: '0',
+                          }),
+                        }}
+                      >
+                        {formatTime}
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        sx={{
+                          ...(isXs && {
+                            fontSize: '8px',
+                            height: '30px',
+                            width: '30px',
+                            padding: '0',
+                          }),
+                        }}
+                      >
+                        {row.description}
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        sx={{
+                          ...(isXs && {
+                            fontSize: '8px',
+                            height: '30px',
+                            width: '30px',
+                            padding: '0',
+                          }),
+                        }}
+                      >
+                        {row.category}
+                      </TableCell>
+                      <TableCell
+                        align="right"
+                        sx={{
+                          ...(isXs && {
+                            fontSize: '8px',
+                            height: '30px',
+                            width: '30px',
+                            padding: '0',
+                          }),
+                        }}
+                      >
                         <span>{formatAmountCurrency(row.amount)}</span>
                         <span style={{ fontSize: '0.6rem' }}>
                           {formatAmountCents(row.amount)}

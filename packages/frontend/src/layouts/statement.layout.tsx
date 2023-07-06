@@ -5,7 +5,7 @@ import {
   Menu,
   useMediaQuery,
   Theme,
-  Popover,
+ Popover,
   Button,
 } from '@mui/material';
 import { Box } from '@mui/system';
@@ -26,6 +26,7 @@ const Header = () => {
   const isMd = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const navigate = useNavigate();
+  const isXs = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -69,6 +70,10 @@ const Header = () => {
         height: '76px',
         width: '100%',
         backgroundColor: 'white',
+
+        ...(isXs && {
+          height: '116px',
+        }),
       }}
     >
       <Box
@@ -79,7 +84,15 @@ const Header = () => {
           alignItems: 'center',
         }}
       >
-        <Typography variant="h6" letterSpacing={3}>
+        <Typography
+          variant="h6"
+          sx={{
+            ...(isXs && {
+              display: 'none',
+            }),
+          }}
+          letterSpacing={3}
+        >
           My Mono Money
         </Typography>
         <SwitchingSpaces />
@@ -90,9 +103,12 @@ const Header = () => {
           display: 'flex',
           flexDirection: 'row',
           alignItems: 'center',
+          ...(isXs && {
+            paddingRight: '10px',
+          }),
         }}
       >
-        <Box
+  <Box
           sx={{
             mr: 4,
             ...(isMd && {
