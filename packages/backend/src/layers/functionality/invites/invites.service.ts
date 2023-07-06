@@ -43,4 +43,24 @@ export class InvitesService {
       },
     );
   }
+
+  async rejectInvite({ spaceOwnerEmail, invitedUserEmail }: IAcceptInvite) {
+    const space = await this.userStorage.getSpaceByEmail(spaceOwnerEmail);
+    const memberInvite = await this.spaceStorage.getMemberInvite(
+      invitedUserEmail,
+      space.id,
+    );
+    if (!memberInvite) {
+      throw new NotFoundError();
+    }
+    if (memberInvite.status !== StatusType.NEW) {
+      throw new NotAllowedError();
+    }
+
+    await this.spaceStorage.updateInvitationStatus({
+      email: invitedUserEmail,
+      space,
+      status: StatusType.REJECTED,
+    });
+  }
 }

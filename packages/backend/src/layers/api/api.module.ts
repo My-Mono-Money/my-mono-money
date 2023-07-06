@@ -19,6 +19,7 @@ import { RemoveMemberController } from './space/remove-member.controller.ts/remo
 import { ChangeDefaultUserSpaceController } from './space/change-default-user-space/change-defalut-user-space.controller';
 import { RetryImportController } from './tokens/retry-import/retry-import.controller';
 import { GetImportAttemptController } from './tokens/get-import-attempt-log/get-import-attempt.controller';
+import { RejectInviteController } from './invites/reject-invite/reject-invite.controller';
 
 @Module({
   imports: [FunctionalityModule, ConfigModule],
@@ -31,6 +32,7 @@ import { GetImportAttemptController } from './tokens/get-import-attempt-log/get-
     SaveTokenController,
     VerifyEmailController,
     AcceptInviteController,
+    RejectInviteController,
     InviteMemberController,
     GetSpaceMembersController,
     GetImportAttemptController,
