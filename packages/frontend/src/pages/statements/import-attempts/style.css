@@ -7,3 +7,9 @@
   ) {
   cursor: default !important;
 }
+
+@media (max-width: 600px) {
+  .css-10hburv-MuiTypography-root {
+    font-size: 0.8rem !important;
+  }
+}

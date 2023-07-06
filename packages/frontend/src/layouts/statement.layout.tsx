@@ -1,5 +1,11 @@
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import { Typography, IconButton, Menu } from '@mui/material';
+import {
+  Typography,
+  IconButton,
+  Menu,
+  useMediaQuery,
+  Theme,
+} from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
@@ -15,6 +21,7 @@ const Header = () => {
   const { settingsPageSelected, setClearAllGlobalState } = useGlobalState();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const navigate = useNavigate();
+  const isXs = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -33,6 +40,10 @@ const Header = () => {
         height: '76px',
         width: '100%',
         backgroundColor: 'white',
+
+        ...(isXs && {
+          height: '116px',
+        }),
       }}
     >
       <Box
@@ -43,7 +54,15 @@ const Header = () => {
           alignItems: 'center',
         }}
       >
-        <Typography variant="h6" letterSpacing={3}>
+        <Typography
+          variant="h6"
+          sx={{
+            ...(isXs && {
+              display: 'none',
+            }),
+          }}
+          letterSpacing={3}
+        >
           My Mono Money
         </Typography>
         <SwitchingSpaces />
@@ -54,9 +73,20 @@ const Header = () => {
           display: 'flex',
           flexDirection: 'row',
           alignItems: 'center',
+          ...(isXs && {
+            paddingRight: '10px',
+          }),
         }}
       >
-        <Typography variant="h6">
+        <Typography
+          variant="h6"
+          sx={{
+            ...(isXs && {
+              fontSize: '10px',
+              display: 'none',
+            }),
+          }}
+        >
           {user?.firstName} {user?.lastName}
         </Typography>
         <IconButton size="large" onClick={handleMenu} color="inherit">

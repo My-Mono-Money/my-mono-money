@@ -8,6 +8,8 @@ import {
   ListItemText,
   ListItemButton,
   TextField,
+  useMediaQuery,
+  Theme,
 } from '@mui/material';
 import { useSearchParams } from 'react-router-dom';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
@@ -50,6 +52,7 @@ const PeriodFilter: React.FC<ISearchProps> = ({
     OPTIONS_LIST.find(
       (itemOption) => itemOption.value === searchParams.get('period'),
     ) || (isCustomPeriodSelected ? undefined : OPTIONS_LIST[0]);
+  const isXs = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
 
   useEffect(() => {
     if (inputRef.current) {
@@ -105,7 +108,22 @@ const PeriodFilter: React.FC<ISearchProps> = ({
             onClick={openPopover}
             variant="outlined"
             color="inherit"
-            startIcon={<CalendarTodayIcon />}
+            startIcon={
+              <CalendarTodayIcon
+                sx={{
+                  ...(isXs && {
+                    width: '8px',
+                  }),
+                }}
+              />
+            }
+            sx={{
+              ...(isXs && {
+                fontSize: '6px',
+                paddingX: '12px',
+                paddingY: '1px',
+              }),
+            }}
           >
             {selectedOption ? selectedOption.text : 'Оберіть період'}
           </Button>
@@ -117,8 +135,23 @@ const PeriodFilter: React.FC<ISearchProps> = ({
             }}
             inputRef={inputRef}
             value={searchField}
+            inputProps={{
+              style: {
+                ...(isXs && {
+                  height: '12px',
+                }),
+              },
+            }}
             sx={{
               ml: '10px',
+              padding: '2px',
+              ...(isXs && {
+                '& .MuiFormLabel-root': {
+                  fontSize: '0.5rem',
+                },
+                width: '70px',
+                display: 'none',
+              }),
             }}
           />
         </Box>

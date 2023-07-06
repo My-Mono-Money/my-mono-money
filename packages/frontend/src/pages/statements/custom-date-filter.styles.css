@@ -1,3 +1,7 @@
 .DateInput_input {
   box-sizing: border-box;
 }
+.day-picker-container.small .DayPicker {
+  transform: scale(0.7);
+  transform-origin: top left;
+}

@@ -1,6 +1,5 @@
 import React from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ThemeProvider } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
@@ -93,9 +92,6 @@ function App() {
               <ToastContainer />
             </GlobalStateProvider>
           </AuthStateProvider>
-          {process.env.REACT_APP_ENVIROMENT === 'production' ? null : (
-            <ReactQueryDevtools initialIsOpen={false} />
-          )}
         </QueryClientProvider>
       </ThemeProvider>
     </BrowserRouter>
