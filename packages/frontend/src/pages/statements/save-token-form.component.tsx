@@ -8,6 +8,8 @@ import {
   CardContent,
   TextField,
   Typography,
+  useMediaQuery,
+  Theme,
 } from '@mui/material';
 import { SaveTokenValidationSchema } from './save-token.validation-schema';
 import { useGlobalState } from 'global-state/use-global-state.hook';
@@ -27,6 +29,7 @@ interface ISaveTokenFormProps {
 const SaveTokenForm: React.FC<ISaveTokenFormProps> = ({ setIsTokenSaved }) => {
   const { setTogglePopupAddToken } = useGlobalState();
   const queryClient = useQueryClient();
+  const isXs = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
   const {
     register,
     handleSubmit,
@@ -75,9 +78,21 @@ const SaveTokenForm: React.FC<ISaveTokenFormProps> = ({ setIsTokenSaved }) => {
               height: '100%',
               pl: '200px',
               pt: '100px',
+              ...(isXs && {
+                pl: '40px',
+                pt: '10px',
+              }),
             }}
           >
-            <Typography sx={{ pb: '20px' }} variant="h4">
+            <Typography
+              sx={{
+                pb: '25px',
+                ...(isXs && {
+                  fontSize: '24px',
+                }),
+              }}
+              variant="h4"
+            >
               Додайте свій monobank токен
             </Typography>
             <InstructionAddToken />

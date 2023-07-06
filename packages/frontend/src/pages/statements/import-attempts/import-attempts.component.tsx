@@ -7,6 +7,7 @@ import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
 import Typography from '@mui/material/Typography';
+import { Theme } from '@mui/material';
 import ListItemText from '@mui/material/ListItemText';
 import { useFetchTokenList } from 'api/useFetchTokenList';
 import { ImportAttemptStatusType } from 'types/token-item.interface';
@@ -20,6 +21,7 @@ import QuizIcon from '@mui/icons-material/Quiz';
 import { RotatingLines } from 'react-loader-spinner';
 import './style.css';
 import LogImportAttemptsModal from './log-import-attempts.component';
+import { useMediaQuery } from '@mui/material';
 
 type Anchor = 'top';
 
@@ -34,6 +36,7 @@ const ImportAttempts = () => {
     token: '',
     importAttempt: '',
   });
+  const isXs = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
   const toggleDrawer =
     (anchor: Anchor, open: boolean) =>
     (event: React.KeyboardEvent | React.MouseEvent) => {
@@ -209,7 +212,6 @@ const ImportAttempts = () => {
                     width: '33%',
                     color: tokenImportStatus(lastImportAttemptStatus).color,
                     justifyContent: 'center',
-                    fontSize: '8px',
                     alignItems: 'center',
                   }}
                 >
@@ -236,7 +238,13 @@ const ImportAttempts = () => {
                         openAccordionIndex === index ? -1 : index,
                       );
                     }}
-                    sx={{ maxWidth: '150px' }}
+                    sx={{
+                      maxWidth: '150px',
+                      ...(isXs && {
+                        maxWidth: '50px',
+                        fontSize: '7px',
+                      }),
+                    }}
                   >
                     {openAccordionIndex === index ? 'Сховати' : 'Детальніше'}
                   </Button>
@@ -257,6 +265,9 @@ const ImportAttempts = () => {
                   sx={{
                     width: '25%',
                     float: 'left',
+                    ...(isXs && {
+                      display: 'none',
+                    }),
                   }}
                   primary={'Дата створення'}
                 />
@@ -302,6 +313,9 @@ const ImportAttempts = () => {
                     sx={{
                       width: '25%',
                       float: 'left',
+                      ...(isXs && {
+                        display: 'none',
+                      }),
                     }}
                     primary={format(
                       new Date(importAttempt.createdAt),
@@ -346,7 +360,12 @@ const ImportAttempts = () => {
                     }}
                   >
                     <Button
-                      sx={{ paddingX: 1 }}
+                      sx={{
+                        paddingX: 1,
+                        ...(isXs && {
+                          fontSize: '7px',
+                        }),
+                      }}
                       onClick={() =>
                         setOpenLogModal({
                           open: true,
@@ -377,7 +396,18 @@ const ImportAttempts = () => {
     <div>
       {(['top'] as const).map((anchor) => (
         <React.Fragment key={anchor}>
-          <Button onClick={toggleDrawer(anchor, true)}>Спроба імпорту</Button>
+          <Button
+            sx={{
+              ...(isXs && {
+                fontSize: '6px',
+                paddingX: '4px',
+                paddingY: '3px',
+              }),
+            }}
+            onClick={toggleDrawer(anchor, true)}
+          >
+            Спроба імпорту
+          </Button>
           <Drawer
             anchor={anchor}
             open={state[anchor]}

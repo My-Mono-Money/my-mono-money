@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material';
+import { Typography, useMediaQuery, Theme } from '@mui/material';
 import React from 'react';
 
 const labels: Array<string> = [
@@ -12,11 +12,20 @@ const labels: Array<string> = [
 ];
 
 const InstructionAddToken: React.FC = () => {
+  const isXs = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
   return (
     <>
       {labels.map((label, i) => {
         return (
-          <Typography key={i} variant="h5">
+          <Typography
+            key={i}
+            variant="h5"
+            sx={{
+              ...(isXs && {
+                fontSize: '15px',
+              }),
+            }}
+          >
             {i === 0 ? (
               <>
                 1. Перейдіть на сайт{' '}
