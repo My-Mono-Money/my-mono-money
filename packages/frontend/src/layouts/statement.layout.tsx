@@ -83,6 +83,7 @@ const Header = () => {
           sx={{
             ...(isXs && {
               fontSize: '10px',
+              display: 'none',
             }),
           }}
         >
