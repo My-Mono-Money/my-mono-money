@@ -108,7 +108,7 @@ const Header = () => {
           }),
         }}
       >
-  <Box
+        <Box
           sx={{
             mr: 4,
             ...(isMd && {
