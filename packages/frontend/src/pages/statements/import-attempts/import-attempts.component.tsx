@@ -36,7 +36,7 @@ const ImportAttempts = () => {
     tokenId: '',
     importAttempt: '',
   });
-  const isXs = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
+  const isMd = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
   const toggleDrawer =
     (anchor: Anchor, open: boolean) =>
     (event: React.KeyboardEvent | React.MouseEvent) => {
@@ -240,7 +240,7 @@ const ImportAttempts = () => {
                     }}
                     sx={{
                       maxWidth: '150px',
-                      ...(isXs && {
+                      ...(isMd && {
                         maxWidth: '50px',
                         fontSize: '7px',
                       }),
@@ -265,7 +265,7 @@ const ImportAttempts = () => {
                   sx={{
                     width: '25%',
                     float: 'left',
-                    ...(isXs && {
+                    ...(isMd && {
                       display: 'none',
                     }),
                   }}
@@ -313,7 +313,7 @@ const ImportAttempts = () => {
                     sx={{
                       width: '25%',
                       float: 'left',
-                      ...(isXs && {
+                      ...(isMd && {
                         display: 'none',
                       }),
                     }}
@@ -362,7 +362,7 @@ const ImportAttempts = () => {
                     <Button
                       sx={{
                         paddingX: 1,
-                        ...(isXs && {
+                        ...(isMd && {
                           fontSize: '7px',
                         }),
                       }}
@@ -398,7 +398,7 @@ const ImportAttempts = () => {
         <React.Fragment key={anchor}>
           <Button
             sx={{
-              ...(isXs && {
+              ...(isMd && {
                 fontSize: '6px',
                 paddingX: '4px',
                 paddingY: '3px',
