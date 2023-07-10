@@ -3,13 +3,12 @@ import Drawer from '@mui/material/Drawer';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import { Link, useLocation, Outlet, useNavigate } from 'react-router-dom';
-import { Box } from '@mui/material';
+import { Box, useMediaQuery, Theme } from '@mui/material';
 import { useGlobalState } from 'global-state/use-global-state.hook';
-
-const drawerWidth = 240;
 
 const SettingsLayout: React.FC = () => {
   const { settingsPageSelected, setChoiceSettingsPage } = useGlobalState();
+  const isMd = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
   const navigate = useNavigate();
   const location = useLocation();
   useEffect(() => {
@@ -19,7 +18,7 @@ const SettingsLayout: React.FC = () => {
     setChoiceSettingsPage(item);
     <Link to={item} />;
   };
-
+  const drawerWidth = isMd ? 100 : 240;
   return (
     <Box sx={{ display: 'flex', position: 'relative' }}>
       <Drawer

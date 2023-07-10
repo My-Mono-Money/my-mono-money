@@ -10,6 +10,8 @@ import {
   TableRow,
   TextField,
   Typography,
+  useMediaQuery,
+  Theme,
 } from '@mui/material';
 import { format } from 'date-fns';
 import { useForm } from 'react-hook-form';
@@ -38,6 +40,7 @@ const ShareAccessPage = () => {
   }>({ rowId: '', table: '' });
   const spaceMembers = useFetchSpaceMembersList();
   const [submittingError, setSubmittingError] = useState<string>('');
+  const isMd = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
 
   const {
     register,
@@ -92,13 +95,17 @@ const ShareAccessPage = () => {
           width: '90%',
         }}
       >
-        <Typography>
+        <Typography sx={{ ...(isMd && { width: '90%' }) }}>
           {submittingError
             ? submittingError
             : ' Якщо користувач не зареєстрований, йому надійде лист на пошту для запрошення'}
         </Typography>
         <Box
-          sx={{ display: 'flex', gap: '10px' }}
+          sx={{
+            display: 'flex',
+            gap: '10px',
+            ...(isMd && { flexDirection: 'column', gap: 1 }),
+          }}
           component="form"
           noValidate
           onSubmit={handleSubmit(onSubmit)}
@@ -114,21 +121,44 @@ const ShareAccessPage = () => {
             disabled={isSubmitting}
             error={errors.email ? true : false}
             helperText={errors.email?.message}
-            sx={{ width: '50%' }}
+            sx={{ width: '90%', ...(isMd && { width: '80%' }) }}
           />
-          <Button type="submit" sx={{ height: '40px', mt: '15px' }}>
+          <Button
+            type="submit"
+            sx={{
+              height: '40px',
+              mt: '15px',
+              ...(isMd && { fontSize: '5x', width: '80%' }),
+            }}
+          >
             Додати до вашого простору
           </Button>
         </Box>
 
         <TableContainer sx={{ mt: '30px' }}>
-          <Typography>Додані користувачі до вашого простору</Typography>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <Typography sx={{ ...(isMd && { width: '90%' }) }}>
+            Додані користувачі до вашого простору
+          </Typography>
+          <Table
+            sx={{ minWidth: 650, ...(isMd && { minWidth: '90%' }) }}
+            aria-label="simple table"
+          >
             <TableHead>
               <TableRow>
-                <TableCell align="left">Email</TableCell>
-                <TableCell align="left">Дата додавання</TableCell>
+                <TableCell
+                  sx={{ ...(isMd && { display: 'none' }) }}
+                  align="left"
+                >
+                  Email
+                </TableCell>
+                <TableCell
+                  sx={{ ...(isMd && { display: 'none' }) }}
+                  align="left"
+                >
+                  Дата додавання
+                </TableCell>
                 <TableCell align="right"></TableCell>
+                {isMd && <TableCell align="right"></TableCell>}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -141,23 +171,40 @@ const ShareAccessPage = () => {
                     'dd.MM.yyyy HH:mm',
                   )}`;
                   return (
-                    <TableRow key={row.id}>
+                    <TableRow key={row.id} sx={{ width: '90%' }}>
                       <AlertDialog
                         openAlertRemove={openAlertRemove}
                         setOpenAlertRemove={setOpenAlertRemove}
                         userEmail={user?.email}
                       ></AlertDialog>
-                      <TableCell align="left">
+                      <TableCell
+                        align="left"
+                        sx={{
+                          ...(isMd && { fontSize: '10px', px: 0, width: 50 }),
+                        }}
+                      >
                         <Box sx={{ display: 'flex' }}>
                           {' '}
                           {row.email} <Status statusCode={row.status} />
                         </Box>
                       </TableCell>
-                      <TableCell align="left">{formatTime}</TableCell>
-                      <TableCell align="center">
+                      <TableCell
+                        sx={{ ...(isMd && { display: 'none' }) }}
+                        align="left"
+                      >
+                        {formatTime}
+                      </TableCell>
+                      <TableCell align="center" sx={{ px: 0 }}>
                         {row.email !== user?.email ? (
                           <Button
-                            sx={{ fontSize: '8px' }}
+                            sx={{
+                              fontSize: '8px',
+                              ...(isMd && {
+                                fontSize: '6px',
+                                minWidth: '40px',
+                                p: 0,
+                              }),
+                            }}
                             onClick={() =>
                               handleRemoveShare(row.id, 'userSpace')
                             }
@@ -165,7 +212,9 @@ const ShareAccessPage = () => {
                             Видалити
                           </Button>
                         ) : (
-                          <Typography>Owner</Typography>
+                          <Typography sx={{ ...(isMd && { fontSize: '8px' }) }}>
+                            Owner
+                          </Typography>
                         )}
                       </TableCell>
                     </TableRow>
@@ -177,13 +226,43 @@ const ShareAccessPage = () => {
 
         <TableContainer sx={{ mt: '30px' }}>
           <Typography>Простори до яких ви додані</Typography>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <Table
+            sx={{ minWidth: 650, ...(isMd && { minWidth: '90%' }) }}
+            aria-label="simple table"
+          >
             <TableHead>
               <TableRow>
-                <TableCell align="left">Ім`я</TableCell>
-                <TableCell align="left">Email</TableCell>
-                <TableCell align="left">Дата додавання</TableCell>
+                <TableCell
+                  sx={{
+                    ...(isMd && { display: 'none' }),
+                  }}
+                  align="left"
+                >
+                  Ім`я
+                </TableCell>
+                <TableCell
+                  sx={{
+                    ...(isMd && {
+                      fontSize: '10px',
+                      px: 0,
+                      width: 50,
+                      display: 'none',
+                    }),
+                  }}
+                  align="left"
+                >
+                  Email
+                </TableCell>
+                <TableCell
+                  sx={{
+                    ...(isMd && { display: 'none' }),
+                  }}
+                  align="left"
+                >
+                  Дата додавання
+                </TableCell>
                 <TableCell align="left"></TableCell>
+                {isMd && <TableCell align="right"></TableCell>}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -207,19 +286,43 @@ const ShareAccessPage = () => {
                         setOpenAlertRemove={setOpenAlertRemove}
                         userEmail={user?.email}
                       ></AlertDialog>
-                      <TableCell align="left">
+                      <TableCell
+                        sx={{
+                          ...(isMd && { display: 'none' }),
+                        }}
+                        align="left"
+                      >
                         {formatName(row.owner.firstName)}{' '}
                         {formatName(row.owner.lastName)}
                       </TableCell>
-                      <TableCell align="left">
+                      <TableCell
+                        sx={{
+                          ...(isMd && { fontSize: '10px', px: 0, width: 50 }),
+                        }}
+                        align="left"
+                      >
                         <Box sx={{ display: 'flex' }}>
                           {row.owner.email} <Status statusCode={row.status} />
                         </Box>
                       </TableCell>
-                      <TableCell align="left">{formatTime}</TableCell>
+                      <TableCell
+                        sx={{
+                          ...(isMd && { display: 'none' }),
+                        }}
+                        align="left"
+                      >
+                        {formatTime}
+                      </TableCell>
                       <TableCell align="center">
                         <Button
-                          sx={{ fontSize: '8px' }}
+                          sx={{
+                            fontSize: '8px',
+                            ...(isMd && {
+                              fontSize: '6px',
+                              minWidth: '40px',
+                              p: 0,
+                            }),
+                          }}
                           onClick={() =>
                             handleRemoveShare(row.id, 'otherSpace')
                           }

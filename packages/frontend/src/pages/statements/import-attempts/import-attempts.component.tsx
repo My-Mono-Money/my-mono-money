@@ -43,6 +43,7 @@ const ImportAttempts = () => {
     tokenId: '',
     importAttempt: '',
   });
+  const isMd = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
   const isXs = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
 
   const { mutate: mutateRetryImportAttempt } = useMutation({
@@ -298,10 +299,9 @@ const ImportAttempts = () => {
                     }}
                     sx={{
                       maxWidth: '150px',
-                      ...(isXs && {
-                        height: '30px',
-                        minWidth: '40px',
-                        padding: '7px',
+                       ...(isMd && {
+                        maxWidth: '50px',
+                        fontSize: '7px',
                       }),
                     }}
                   >
@@ -324,7 +324,7 @@ const ImportAttempts = () => {
                   sx={{
                     width: '25%',
                     float: 'left',
-                    ...(isXs && {
+                    ...(isMd && {
                       display: 'none',
                     }),
                   }}
@@ -372,7 +372,7 @@ const ImportAttempts = () => {
                     sx={{
                       width: '25%',
                       float: 'left',
-                      ...(isXs && {
+                      ...(isMd && {
                         display: 'none',
                       }),
                     }}
@@ -421,7 +421,7 @@ const ImportAttempts = () => {
                     <Button
                       sx={{
                         paddingX: 1,
-                        ...(isXs && {
+                        ...(isMd && {
                           fontSize: '7px',
                           height: '30px',
                           minWidth: '40px',
@@ -460,7 +460,7 @@ const ImportAttempts = () => {
         <React.Fragment key={anchor}>
           <Button
             sx={{
-              ...(isXs && {
+              ...(isMd && {
                 fontSize: '6px',
                 paddingX: '4px',
                 paddingY: '3px',
