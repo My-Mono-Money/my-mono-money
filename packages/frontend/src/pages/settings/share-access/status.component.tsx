@@ -2,7 +2,7 @@ import React from 'react';
 import PendingIcon from '@mui/icons-material/Pending';
 import CheckIcon from '@mui/icons-material/Check';
 import NotInterestedIcon from '@mui/icons-material/NotInterested';
-import { Typography } from '@mui/material';
+import { Typography, useMediaQuery, Theme } from '@mui/material';
 
 interface StatusProps {
   statusCode: string;
@@ -17,6 +17,7 @@ const status = [
 ];
 
 const Status: React.FC<StatusProps> = ({ statusCode }) => {
+  const isMd = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
   let num = 0;
   let color = '';
   if (statusCode === 'accept') {
@@ -42,6 +43,7 @@ const Status: React.FC<StatusProps> = ({ statusCode }) => {
         fontSize: '8px',
         ml: '10px',
         alignItems: 'center',
+        ...(isMd && { fontSize: '5px', gap: '2px' }),
       }}
     >
       {status[num].name} {status[num].icon}

@@ -11,6 +11,8 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  useMediaQuery,
+  Theme,
 } from '@mui/material';
 import InstructionAddToken from 'common/components/instructions/instruction-add-token.component';
 import { notify } from 'utils/notifications';
@@ -31,6 +33,7 @@ const AddNewToken: React.FC = () => {
   const [openInstruction, setOpenInstruction] = useState(false);
   const [submittingError, setSubmittingError] = useState<string>();
   const queryClient = useQueryClient();
+  const isMd = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
   const {
     register,
     handleSubmit,
@@ -80,6 +83,7 @@ const AddNewToken: React.FC = () => {
           mx: 'auto',
           width: '90%',
           height: '100%',
+          ...(isMd && { flexDirection: 'column' }),
         }}
       >
         <TextField
@@ -96,22 +100,43 @@ const AddNewToken: React.FC = () => {
             maxWidth: '230px',
           }}
         />
-        <Button
-          disabled={false}
-          size="large"
-          type="submit"
-          sx={{ height: '40px', mt: '15px' }}
-        >
-          Додати
-        </Button>{' '}
-        <Button
-          disabled={false}
-          size="large"
-          onClick={() => setOpenInstruction(!openInstruction)}
-          sx={{ height: '40px', mt: '15px' }}
-        >
-          Інструкція
-        </Button>
+        <Box>
+          <Button
+            disabled={false}
+            size="large"
+            type="submit"
+            sx={{
+              height: '40px',
+              mt: '15px',
+              ...(isMd && {
+                fontSize: '8px',
+                height: '20px',
+                width: '3vw',
+                mt: 0,
+              }),
+            }}
+          >
+            Додати
+          </Button>{' '}
+          <Button
+            disabled={false}
+            size="large"
+            onClick={() => setOpenInstruction(!openInstruction)}
+            sx={{
+              height: '40px',
+              mt: '15px',
+              ...(isMd && {
+                fontSize: '8px',
+                height: '20px',
+                width: '3vw',
+                mt: 0,
+              }),
+            }}
+          >
+            Інструкція
+          </Button>
+        </Box>
+
         {submittingError && (
           <Alert severity="warning">
             <AlertTitle sx={{ width: '200px' }}>Сталася помилка</AlertTitle>

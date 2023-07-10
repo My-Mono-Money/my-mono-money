@@ -51,13 +51,17 @@ const Header = () => {
   };
 
   const handleCopyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text).then(() => {
-      setCopied(true);
-      setTimeout(() => {
-        setAnchorElpopover(null);
-        setCopied(false);
-      }, 10000);
-    });
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(() => {
+        setCopied(true);
+        setTimeout(() => {
+          setAnchorElpopover(null);
+          setCopied(false);
+        }, 10000);
+      });
+    } else {
+      prompt('Скопіюйте пошту для зв`язку з нами', text);
+    }
   };
 
   return (
@@ -105,17 +109,13 @@ const Header = () => {
           alignItems: 'center',
           ...(isXs && {
             paddingRight: '10px',
+            owerflowX: 'hidden',
           }),
         }}
       >
         <Box
           sx={{
             mr: 4,
-            ...(isMd && {
-              position: 'absolute',
-              bottom: '70px',
-              right: '50px',
-            }),
           }}
         >
           <Button
@@ -125,11 +125,16 @@ const Header = () => {
             sx={{
               display: 'flex',
               gap: 1,
+              ...(isMd && { minWidth: '40px', p: 0, ml: 1 }),
             }}
           >
             {' '}
             {!isMd && 'Звʼязатися з нами '}
-            <FeedbackIcon />
+            <FeedbackIcon
+              sx={{
+                ...(isMd && { width: '10px' }),
+              }}
+            />
           </Button>
           <Popover
             id={id}
@@ -137,24 +142,40 @@ const Header = () => {
             anchorEl={anchorElpopover}
             onClose={handleClosePopover}
             anchorOrigin={{
-              vertical: !isMd ? 'bottom' : 'top',
-              horizontal: !isMd ? 'left' : 'right',
+              vertical: 'bottom',
+              horizontal: 'left',
             }}
             sx={{ position: 'absolute' }}
           >
-            <Box sx={{ display: 'flex', gap: 1, padding: 2 }}>
+            <Box
+              sx={{
+                display: 'flex',
+                gap: 1,
+                padding: 2,
+                ...(isMd && { flexDirection: 'column' }),
+              }}
+            >
               {' '}
               <Typography
                 sx={{
                   textDecoration: 'underline',
 
                   cursor: 'pointer',
+                  ...(isMd && { fontSize: '10px' }),
                 }}
                 onClick={() => handleCopyToClipboard(emailFeedback)}
               >
                 {emailFeedback}
               </Typography>
-              {copied && <Typography>Скопійовано</Typography>}
+              {copied && (
+                <Typography
+                  sx={{
+                    ...(isMd && { fontSize: '8px' }),
+                  }}
+                >
+                  Скопійовано
+                </Typography>
+              )}
             </Box>
             <Typography
               sx={{
@@ -174,7 +195,14 @@ const Header = () => {
             </Typography>
           </Popover>
         </Box>
-        <Typography variant="h6">
+        <Typography
+          variant="h6"
+          sx={{
+            ...(isXs && {
+              display: 'none',
+            }),
+          }}
+        >
           {user?.firstName} {user?.lastName}
         </Typography>
         <IconButton size="large" onClick={handleMenu} color="inherit">

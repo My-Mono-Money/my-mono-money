@@ -7,6 +7,8 @@ import {
   DialogContent,
   DialogTitle,
   Typography,
+  useMediaQuery,
+  Theme,
 } from '@mui/material';
 import { GridCloseIcon } from '@mui/x-data-grid';
 import { axiosPrivate } from 'api/axios';
@@ -80,12 +82,26 @@ const LogViewer: React.FC<LogViewerProps> = ({ logString }) => {
         'успішно завершено отримання всіх карт',
       );
       renamedLog = renamedLog.replace(/failed/g, 'помилка');
+      renamedLog = renamedLog.replace(/from/g, 'з');
+      renamedLog = renamedLog.replace(/to/g, 'по');
+      renamedLog = renamedLog.replace(/Jan/g, 'Січень');
+      renamedLog = renamedLog.replace(/Feb/g, 'Лютий');
+      renamedLog = renamedLog.replace(/Mar/g, 'Березень');
+      renamedLog = renamedLog.replace(/Apr/g, 'Квітень');
+      renamedLog = renamedLog.replace(/May/g, 'Травень');
+      renamedLog = renamedLog.replace(/Jun/g, 'Червень');
+      renamedLog = renamedLog.replace(/Jul/g, 'Липень');
+      renamedLog = renamedLog.replace(/Aug/g, 'Серпень');
+      renamedLog = renamedLog.replace(/Sep/g, 'Вересень');
+      renamedLog = renamedLog.replace(/Oct/g, 'Жовтень');
+      renamedLog = renamedLog.replace(/Nov/g, 'Листопад');
+      renamedLog = renamedLog.replace(/Dec/g, 'Грудень');
 
       return renamedLog;
     });
 
   const logsRef = useRef<HTMLDivElement>(null);
-
+  const isMd = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
   useEffect(() => {
     if (logsRef.current) {
       logsRef.current.scrollTop = logsRef.current.scrollHeight;
@@ -105,7 +121,12 @@ const LogViewer: React.FC<LogViewerProps> = ({ logString }) => {
           key={index}
           component="div"
           variant="body1"
-          sx={{ paddingX: '5px', paddingY: '1px', fontSize: '12px' }}
+          sx={{
+            paddingX: '5px',
+            paddingY: '1px',
+            fontSize: '12px',
+            ...(isMd && { fontSize: '6px' }),
+          }}
           gutterBottom
         >
           {log}
