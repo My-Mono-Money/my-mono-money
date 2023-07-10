@@ -22,11 +22,18 @@ import { RotatingLines } from 'react-loader-spinner';
 import './style.css';
 import LogImportAttemptsModal from './log-import-attempts.component';
 import { useMediaQuery } from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { axiosPrivate } from 'api/axios';
 
 type Anchor = 'top';
 
 const ImportAttempts = () => {
   const tokenList = useFetchTokenList();
+  const queryClient = useQueryClient();
   const [state, setState] = useState({
     top: false,
   });
@@ -37,6 +44,23 @@ const ImportAttempts = () => {
     importAttempt: '',
   });
   const isMd = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
+  const isXs = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
+
+  const { mutate: mutateRetryImportAttempt } = useMutation({
+    mutationFn: (tokenMonobank: string) =>
+      axiosPrivate.post(`/tokens/${tokenMonobank}/retry-import`),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['token-list']);
+      setTimeout(() => {
+        queryClient.invalidateQueries(['token-list']);
+      }, 2000);
+    },
+  });
+
+  const handleRetryImportAttempt = (token: string) => {
+    mutateRetryImportAttempt(token);
+  };
+
   const toggleDrawer =
     (anchor: Anchor, open: boolean) =>
     (event: React.KeyboardEvent | React.MouseEvent) => {
@@ -57,6 +81,9 @@ const ImportAttempts = () => {
         (importAttempt) => importAttempt.status === 'successful',
       ),
   );
+
+  const hideButton = isXs ? <ExpandLessIcon /> : 'Сховати';
+  const unfoldButton = isXs ? <ExpandMoreIcon /> : 'Детальніше';
 
   function tokenImportStatus(status: string) {
     switch (status) {
@@ -135,20 +162,27 @@ const ImportAttempts = () => {
         >
           <ListItemText
             sx={{
-              maxWidth: '33%',
+              maxWidth: '25%',
               display: 'flex',
               justifyContent: 'flex-start',
             }}
             primary="Імʼя токену"
           />
           <ListItemText
-            sx={{ maxWidth: '33%', display: 'flex', justifyContent: 'center' }}
+            sx={{
+              maxWidth: '25%',
+              display: 'flex',
+              justifyContent: 'center',
+            }}
           >
             Статус
           </ListItemText>
           <ListItemText
+            sx={{ maxWidth: '25%', display: 'flex', justifyContent: 'center' }}
+          ></ListItemText>
+          <ListItemText
             sx={{
-              maxWidth: '33%',
+              maxWidth: '25%',
               display: 'flex',
               justifyContent: 'flex-end',
             }}
@@ -200,7 +234,7 @@ const ImportAttempts = () => {
               >
                 <ListItemText
                   sx={{
-                    width: '33%',
+                    width: '25%',
                     display: 'flex',
                     justifyContent: 'flex-start',
                   }}
@@ -209,7 +243,7 @@ const ImportAttempts = () => {
                 <ListItemText
                   sx={{
                     display: 'flex',
-                    width: '33%',
+                    width: '25%',
                     color: tokenImportStatus(lastImportAttemptStatus).color,
                     justifyContent: 'center',
                     alignItems: 'center',
@@ -226,7 +260,32 @@ const ImportAttempts = () => {
                 </ListItemText>
                 <ListItemText
                   sx={{
-                    width: '33%',
+                    width: '25%',
+                    display: 'flex',
+                    justifyContent: 'right',
+                  }}
+                >
+                  {lastImportAttemptStatus ===
+                  ImportAttemptStatusType.Failed ? (
+                    <Button
+                      onClick={() => {
+                        handleRetryImportAttempt(token.token);
+                      }}
+                      sx={{
+                        ...(isXs && {
+                          height: '30px',
+                          minWidth: '40px',
+                          padding: '7px',
+                        }),
+                      }}
+                    >
+                      {isXs ? <RefreshIcon /> : 'Повторити спробу'}
+                    </Button>
+                  ) : null}
+                </ListItemText>
+                <ListItemText
+                  sx={{
+                    width: '25%',
                     display: 'flex',
                     justifyContent: 'flex-end',
                   }}
@@ -240,13 +299,13 @@ const ImportAttempts = () => {
                     }}
                     sx={{
                       maxWidth: '150px',
-                      ...(isMd && {
+                       ...(isMd && {
                         maxWidth: '50px',
                         fontSize: '7px',
                       }),
                     }}
                   >
-                    {openAccordionIndex === index ? 'Сховати' : 'Детальніше'}
+                    {openAccordionIndex === index ? hideButton : unfoldButton}
                   </Button>
                 </ListItemText>
               </ListItem>
@@ -364,6 +423,9 @@ const ImportAttempts = () => {
                         paddingX: 1,
                         ...(isMd && {
                           fontSize: '7px',
+                          height: '30px',
+                          minWidth: '40px',
+                          padding: '7px',
                         }),
                       }}
                       onClick={() =>
@@ -374,7 +436,7 @@ const ImportAttempts = () => {
                         })
                       }
                     >
-                      Подивитись логі
+                      {isXs ? <MoreHorizIcon /> : 'Подивитись логі'}
                     </Button>
                   </ListItemText>
                 </ListItem>
