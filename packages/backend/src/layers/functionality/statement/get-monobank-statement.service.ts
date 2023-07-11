@@ -15,6 +15,8 @@ import {
 import { FeatureName } from '~/storage/interfaces/create-feature-flags-dto.interface';
 import { isString } from 'class-validator';
 import { Account } from '~/storage/entities/account.entity';
+import { SendinblueIntegration } from '~/integration/sendinblue/sendinblue.integration';
+import { TokenService } from '../tokens/get-token.service';
 
 interface IGetStatement {
   tokenId: string;
@@ -67,6 +69,8 @@ export class GetMonobankStatementService {
     private featureFlagStorage: FeatureFlagStorage,
     private importAttemptStorage: ImportAttemptStorage,
     private userStorage: UserStorage,
+    private sendinblueIntegration: SendinblueIntegration,
+    private tokenService: TokenService,
   ) {}
 
   private async writeLog(
@@ -103,8 +107,8 @@ export class GetMonobankStatementService {
     ) {
       const delayTime = {
         0: standardDelay * 1,
-        1: standardDelay * 1,
-        2: standardDelay * 1,
+        1: standardDelay * 2,
+        2: standardDelay * 3,
       }[iteration];
       if (!delayTime) {
         throw new Error(result.data);
@@ -225,6 +229,7 @@ export class GetMonobankStatementService {
       .filter((account) => account.maskedPan.length > 0);
 
     try {
+      const transactionsByOneCard = {};
       const transactions = [];
       for (let i = 0; i < accountList.length; i++) {
         const accountTransactions = await this.handleImportForOneAccount(
@@ -235,6 +240,8 @@ export class GetMonobankStatementService {
         );
 
         transactions.push(...accountTransactions);
+        transactionsByOneCard[accountList[i].maskedPan.join(', ')] =
+          accountTransactions.length;
       }
 
       //If the webhook added a transaction, then we will not add a duplicate transaction
@@ -256,15 +263,36 @@ export class GetMonobankStatementService {
         transactions: filteredTransactions,
       });
 
+      if (!result) {
+        throw new Error(
+          'Error save to DB. But transaction count: ' + transactions.length,
+        );
+      }
       await this.writeLog(
         importAttemptId,
-        (result
-          ? ImportAttemptLogDescription.Successfully
-          : ImportAttemptLogDescription.Failed) + 'finished fetch all cards',
-        result
-          ? ImportAttemptStatusType.Successful
-          : ImportAttemptStatusType.Failed,
+        ImportAttemptLogDescription.Successfully + 'finished fetch all cards',
+        ImportAttemptStatusType.Successful,
       );
+      const userData = await this.tokenService.getTokenList({
+        email: spaceOwnerEmail,
+      });
+      let content = `Імпортовано карток: ${accountList.length}. Імпортовано транзакцій за всі місяці: ${transactions.length}. Кількість транзакцій по карткам: `;
+
+      for (let i = 0; i < accountList.length; i++) {
+        const cardName = accountList[i].maskedPan.join(', ');
+        const transactionCount = transactionsByOneCard[cardName];
+
+        content += `\Картка - ${cardName}, кількість транзакцій: ${transactionCount}. `;
+      }
+
+      await this.sendinblueIntegration.sendTransactionalEmail({
+        to: {
+          name: userData[0].monobankUserName,
+          email: spaceOwnerEmail,
+        },
+        subject: 'Імпорт карток успішно завершений',
+        content: content,
+      });
     } catch (error) {
       // write to logs with error status
       await this.writeLog(
@@ -273,6 +301,18 @@ export class GetMonobankStatementService {
         ` + errorStringOrArrayResult(error.message),
         ImportAttemptStatusType.Failed,
       );
+      const userData = await this.tokenService.getTokenList({
+        email: spaceOwnerEmail,
+      });
+      const frontendUrl = this.configService.get('app.frontendUrl');
+      await this.sendinblueIntegration.sendTransactionalEmail({
+        to: {
+          name: userData[0].monobankUserName,
+          email: spaceOwnerEmail,
+        },
+        subject: 'Помилка імпорту даних',
+        content: `Текст помилки: ${error.message}. Ви можете перейти по посиланю і знову запустити імпорт: <html><head></head><body><p>${frontendUrl}</p></body></html>`,
+      });
 
       await this.importAttemptStorage.removeFetchedMonthsCount(importAttemptId);
     }
