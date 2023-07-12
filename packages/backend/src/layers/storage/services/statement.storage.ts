@@ -62,7 +62,13 @@ export class StatementStorage {
   async saveStatement({ transactions }: ISaveStatement) {
     try {
       return await this.connection.transaction(async (manager) => {
-        return await manager.insert<Transaction>(Transaction, transactions);
+        const chunkSize = 1000;
+        const totalTransactions = transactions.length;
+
+        for (let i = 0; i < totalTransactions; i += chunkSize) {
+          const chunk = transactions.slice(i, i + chunkSize);
+          return await manager.insert<Transaction>(Transaction, chunk);
+        }
       });
     } catch (e) {
       handleStorageError(e);
