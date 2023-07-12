@@ -139,8 +139,8 @@ export const VerifyEmail: React.FC = () => {
               onClick={handleResendEmailClick}
               disabled={emailSendedCountDown}
               sx={{
-                ...(isXs && { fontSize: '10px' }),
                 ...(isMd && { fontSize: '13px' }),
+                ...(isXs && { fontSize: '10px' }),
               }}
             >
               Відправити лист знов
@@ -153,8 +153,8 @@ export const VerifyEmail: React.FC = () => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 width: '100%',
-                ...(isXs && { fontSize: '10px', pl: '10px' }),
                 ...(isMd && { fontSize: '15px', pl: '10px' }),
+                ...(isXs && { fontSize: '10px', pl: '10px' }),
               }}
             >
               {emailSendedCountDown && (
