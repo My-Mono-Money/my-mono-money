@@ -4,6 +4,8 @@ import {
   InputAdornment,
   TextField,
   TextFieldProps,
+  Theme,
+  useMediaQuery,
 } from '@mui/material';
 import React, { useState } from 'react';
 
@@ -16,6 +18,7 @@ const PasswordField: React.FC<TextFieldProps> = React.forwardRef(
     const [showPassword, setShowPassword] = useState<IShowPassword>({
       isShowingPassword: false,
     });
+    const isXs = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
 
     const handleClickShowPassword = () => {
       setShowPassword({
@@ -52,7 +55,7 @@ const PasswordField: React.FC<TextFieldProps> = React.forwardRef(
             </InputAdornment>
           ),
         }}
-        margin="normal"
+        margin={isXs ? 'dense' : 'normal'}
       />
     );
   },

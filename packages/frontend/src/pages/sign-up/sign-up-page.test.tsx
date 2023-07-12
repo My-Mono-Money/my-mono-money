@@ -5,6 +5,8 @@ import { MemoryRouter } from 'react-router-dom';
 import SignUp from './sign-up.page';
 import axios from 'axios';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ThemeProvider, createTheme } from '@mui/material';
+import mediaQuery from 'css-mediaquery';
 
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
@@ -38,13 +40,28 @@ const checkFormDisabling = async () => {
     expect(screen.getByText('Продовжити')).toBeEnabled();
   });
 };
+export const createMatchMedia =
+  (width: number) =>
+  (query: string): MediaQueryList => ({
+    matches: mediaQuery.match(query, { width }),
+    media: query,
+    onchange: null,
+    addListener: () => jest.fn(),
+    removeListener: () => jest.fn(),
+    addEventListener: jest.fn(),
+    removeEventListener: jest.fn(),
+    dispatchEvent: jest.fn(),
+  });
+const theme = createTheme();
 
 describe('Sign up page', () => {
   beforeEach(() => {
     render(
-      <QueryClientProvider client={queryClient}>
-        <SignUp />
-      </QueryClientProvider>,
+      <ThemeProvider theme={theme}>
+        <QueryClientProvider client={queryClient}>
+          <SignUp />
+        </QueryClientProvider>
+      </ThemeProvider>,
       { wrapper: MemoryRouter },
     );
   });
