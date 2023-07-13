@@ -11,7 +11,9 @@ import {
   Box,
   Button,
   TextField,
+  Theme,
   Typography,
+  useMediaQuery,
 } from '@mui/material';
 import { SignUpValidationSchema } from './sign-up.validation-schema';
 import PasswordField from 'common/components/password-field/password-field.component';
@@ -53,6 +55,8 @@ const SignUp: React.FC = () => {
   //register by invitation
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
+  const isMd = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
+  const isXs = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
   const invitedEmail = decodeURIComponent(
     searchParams.get('invitedEmail') || '',
   );
@@ -133,24 +137,48 @@ const SignUp: React.FC = () => {
         pt: `${invitedEmail ? '50px' : '100px'}`,
         mx: 'auto',
         width: '285px',
+        ...(isMd && { width: '220px' }),
+        ...(isXs && { pt: '30px' }),
       }}
     >
-      <Typography variant="h5" fontWeight={500}>
+      <Typography
+        variant="h5"
+        fontWeight={500}
+        sx={{
+          ...(isXs && { fontSize: '18px' }),
+        }}
+      >
         {invitedEmail
           ? 'Щоб продовжити, заповніть будь ласка наступні дані про себе'
           : 'Реєстрація'}
       </Typography>
       {submittingError && (
         <Alert severity="warning">
-          <AlertTitle>Сталася помилка</AlertTitle>
-          {submittingError}
+          <AlertTitle>
+            <Typography
+              sx={{
+                ...(isMd && { fontSize: '18px' }),
+                ...(isXs && { fontSize: '12px' }),
+              }}
+            >
+              Сталася помилка
+            </Typography>
+          </AlertTitle>
+          <Typography
+            sx={{
+              ...(isMd && { fontSize: '15px' }),
+              ...(isXs && { fontSize: '10px' }),
+            }}
+          >
+            {submittingError}
+          </Typography>
         </Alert>
       )}
       <TextField
         id="firstName"
         disabled={isSubmitting}
         label="Імʼя"
-        margin="normal"
+        margin={isXs ? 'dense' : 'normal'}
         color="primary"
         {...register('firstName')}
         error={errors.firstName ? true : false}
@@ -160,7 +188,7 @@ const SignUp: React.FC = () => {
         id="lastName"
         disabled={isSubmitting}
         label="Прізвище"
-        margin="normal"
+        margin={isXs ? 'dense' : 'normal'}
         {...register('lastName')}
         error={errors.lastName ? true : false}
         helperText={errors.lastName?.message}
@@ -169,7 +197,7 @@ const SignUp: React.FC = () => {
         id="email"
         disabled={isSubmitting || invitedEmail ? true : false}
         label="Пошта"
-        margin="normal"
+        margin={isXs ? 'dense' : 'normal'}
         type="email"
         {...register('email')}
         error={!invitedEmail && errors.email ? true : false}
@@ -188,7 +216,6 @@ const SignUp: React.FC = () => {
         disabled={isSubmitting}
         label="Повторіть пароль"
         type="password"
-        margin="normal"
         {...register('confirmPassword')}
         error={errors.confirmPassword ? true : false}
         helperText={errors.confirmPassword?.message}
@@ -200,13 +227,29 @@ const SignUp: React.FC = () => {
         sx={{
           display: 'flex',
           flexDirection: 'row',
-          p: 2,
+          justifyContent: 'space-between',
+          pt: 2,
         }}
       >
         {invitedEmail ? null : (
           <>
-            <Typography>Вже маєте аккаунт?</Typography>
-            <Typography pl={1}>
+            <Typography
+              sx={{
+                textAlign: 'center',
+                ...(isMd && { fontSize: '15px' }),
+                ...(isXs && { fontSize: '12px' }),
+              }}
+            >
+              Вже маєте аккаунт?
+            </Typography>
+            <Typography
+              pl={1}
+              sx={{
+                textAlign: 'center',
+                ...(isMd && { fontSize: '15px' }),
+                ...(isXs && { fontSize: '12px' }),
+              }}
+            >
               <Link to="/sign-in">Увійти</Link>
             </Typography>
           </>

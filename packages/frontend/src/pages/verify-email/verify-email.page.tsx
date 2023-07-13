@@ -1,4 +1,4 @@
-import { Box, Typography, Button } from '@mui/material';
+import { Box, Typography, Button, Theme, useMediaQuery } from '@mui/material';
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Countdown from 'react-countdown';
@@ -28,9 +28,18 @@ export const VerifyEmail: React.FC = () => {
       navigate('/sign-in');
     },
   });
+  const isMd = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
+  const isXs = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
 
   const emailText = (
-    <Typography variant="h6" component="span" color="violet">
+    <Typography
+      variant="h6"
+      component="span"
+      color="violet"
+      sx={{
+        ...(isXs && { fontSize: '15px' }),
+      }}
+    >
       {user.email}
     </Typography>
   );
@@ -52,17 +61,35 @@ export const VerifyEmail: React.FC = () => {
           pt: '100px',
           mx: 'auto',
           width: '500px',
+          ...(isXs && { width: '280px', pt: '30px' }),
+          ...(isMd && { width: '320px', pt: '50px' }),
         }}
       >
-        <Typography variant="h5" fontWeight={500}>
+        <Typography
+          variant="h5"
+          fontWeight={500}
+          sx={{
+            ...(isXs && { fontSize: '18px' }),
+          }}
+        >
           Дякуємо за реєстрацію, {user?.firstName} {user?.lastName}!
         </Typography>
 
-        <Typography sx={{ py: 2 }} variant="h6" fontWeight={400}>
+        <Typography
+          sx={{ py: 2, ...(isXs && { fontSize: '15px' }) }}
+          variant="h6"
+          fontWeight={400}
+        >
           На вашу пошту {emailText} було відправленно лист з посиланням.
         </Typography>
 
-        <Typography variant="h6" fontWeight={400}>
+        <Typography
+          variant="h6"
+          fontWeight={400}
+          sx={{
+            ...(isXs && { fontSize: '15px' }),
+          }}
+        >
           Перевірте будь ласка вашу пошту, та перейдіть за посиланням.
         </Typography>
 
@@ -74,7 +101,11 @@ export const VerifyEmail: React.FC = () => {
             pt: 5,
           }}
         >
-          <Typography>
+          <Typography
+            sx={{
+              ...(isXs && { fontSize: '10px' }),
+            }}
+          >
             <Link
               to="/sign-up"
               onClick={() => {
@@ -100,12 +131,17 @@ export const VerifyEmail: React.FC = () => {
               display: 'flex',
               flexDirection: 'column',
               width: '300px',
+              ...(isXs && { width: '200px' }),
             }}
           >
             <Button
               variant="outlined"
               onClick={handleResendEmailClick}
               disabled={emailSendedCountDown}
+              sx={{
+                ...(isMd && { fontSize: '13px' }),
+                ...(isXs && { fontSize: '10px' }),
+              }}
             >
               Відправити лист знов
             </Button>
@@ -117,6 +153,8 @@ export const VerifyEmail: React.FC = () => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 width: '100%',
+                ...(isMd && { fontSize: '15px', pl: '10px' }),
+                ...(isXs && { fontSize: '10px', pl: '10px' }),
               }}
             >
               {emailSendedCountDown && (

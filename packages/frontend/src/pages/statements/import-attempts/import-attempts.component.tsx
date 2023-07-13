@@ -299,7 +299,7 @@ const ImportAttempts = () => {
                     }}
                     sx={{
                       maxWidth: '150px',
-                       ...(isMd && {
+                      ...(isMd && {
                         maxWidth: '50px',
                         fontSize: '7px',
                       }),
