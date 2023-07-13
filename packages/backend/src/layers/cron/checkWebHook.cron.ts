@@ -9,7 +9,7 @@ export class CheckWebHookCron {
 
   @Cron(CronExpression.EVERY_MINUTE) //EVERY_DAY_AT_1AM for job. EVERY_MINUTE for testing
   async handleCron() {
-    this.logger.debug('Called every 60 seconds');
+    this.logger.debug('Called every 1 min');
     await this.queueIntegration.addToQueueCheckWebhook();
   }
 }
