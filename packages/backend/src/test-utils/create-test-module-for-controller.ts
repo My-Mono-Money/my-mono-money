@@ -33,6 +33,8 @@ export const createTestModuleForController = async (
       .useValue(createMock<Queue>())
       .overrideProvider(getQueueToken('statement'))
       .useValue(createMock<Queue>())
+      .overrideProvider(getQueueToken('webhook'))
+      .useValue(createMock<Queue>())
       .overrideProvider(SendinblueIntegration)
       .useValue(mockedSendInBlueIntegration)
       .useMocker((token) => {
