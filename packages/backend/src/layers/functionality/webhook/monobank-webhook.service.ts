@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { handleStorageError } from 'src/common/errors/utils/handle-storage-error';
 import { UserStorage } from 'src/layers/storage/services/user.storage';
 import { StatementStorage } from '~/storage/services/statement.storage';
+import { TokenStorage } from '~/storage/services/token.storage';
 
 interface IMonobankWebHookData {
   transactionInfo: {
@@ -31,6 +32,7 @@ export class MonobankWebHookService {
   constructor(
     private userStorage: UserStorage,
     private statementStorage: StatementStorage,
+    private tokenStorage: TokenStorage,
   ) {}
 
   async saveTransaction({ transactionInfo, hash }: IMonobankWebHookData) {
@@ -56,7 +58,12 @@ export class MonobankWebHookService {
 
   async checkWebHook({}) {
     try {
-      console.log('перевіряю цілісність інтеграції токенів ');
+      const allTokens = await this.tokenStorage.getAllTokens();
+      for (const token of allTokens) {
+        console.log(
+          `перевіряю цілісність інтеграції токена ${token.monobankUserName}`,
+        );
+      }
     } catch (e) {
       handleStorageError(e);
     }
