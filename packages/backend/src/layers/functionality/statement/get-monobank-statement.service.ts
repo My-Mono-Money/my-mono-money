@@ -273,9 +273,7 @@ export class GetMonobankStatementService {
         ImportAttemptLogDescription.Successfully + 'finished fetch all cards',
         ImportAttemptStatusType.Successful,
       );
-      const userData = await this.tokenService.getTokenList({
-        email: spaceOwnerEmail,
-      });
+      const user = await this.userStorage.getByEmail(spaceOwnerEmail);
       let content = `Імпортовано карток: ${accountList.length}. Імпортовано транзакцій за всі місяці: ${transactions.length}. Кількість транзакцій по карткам: `;
 
       for (let i = 0; i < accountList.length; i++) {
@@ -287,7 +285,7 @@ export class GetMonobankStatementService {
 
       await this.sendinblueIntegration.sendTransactionalEmail({
         to: {
-          name: userData[0].monobankUserName,
+          name: user.firstName + ' ' + user.lastName,
           email: spaceOwnerEmail,
         },
         subject: 'Імпорт карток успішно завершений',
@@ -301,13 +299,11 @@ export class GetMonobankStatementService {
         ` + errorStringOrArrayResult(error.message),
         ImportAttemptStatusType.Failed,
       );
-      const userData = await this.tokenService.getTokenList({
-        email: spaceOwnerEmail,
-      });
+      const user = await this.userStorage.getByEmail(spaceOwnerEmail);
       const frontendUrl = this.configService.get('app.frontendUrl');
       await this.sendinblueIntegration.sendTransactionalEmail({
         to: {
-          name: userData[0].monobankUserName,
+          name: user.firstName + ' ' + user.lastName,
           email: spaceOwnerEmail,
         },
         subject: 'Помилка імпорту даних',
