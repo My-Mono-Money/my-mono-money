@@ -16,7 +16,6 @@ import { FeatureName } from '~/storage/interfaces/create-feature-flags-dto.inter
 import { isString } from 'class-validator';
 import { Account } from '~/storage/entities/account.entity';
 import { SendinblueIntegration } from '~/integration/sendinblue/sendinblue.integration';
-import { TokenService } from '../tokens/get-token.service';
 
 interface IGetStatement {
   tokenId: string;
@@ -70,7 +69,6 @@ export class GetMonobankStatementService {
     private importAttemptStorage: ImportAttemptStorage,
     private userStorage: UserStorage,
     private sendinblueIntegration: SendinblueIntegration,
-    private tokenService: TokenService,
   ) {}
 
   private async writeLog(
