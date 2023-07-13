@@ -9,10 +9,9 @@ import { QueueIntegration } from './queue/queue.integration';
 @Module({
   imports: [
     BullModule.registerQueue(
-      {
-        name: 'email',
-      },
+      { name: 'email' },
       { name: 'statement' },
+      { name: 'webhook' },
     ),
     ConfigModule,
     HttpModule,

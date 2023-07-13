@@ -53,4 +53,12 @@ export class MonobankWebHookService {
       handleStorageError(e);
     }
   }
+
+  async checkWebHook({}) {
+    try {
+      console.log('перевіряю цілісність інтеграції токенів ');
+    } catch (e) {
+      handleStorageError(e);
+    }
+  }
 }

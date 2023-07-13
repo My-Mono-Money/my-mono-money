@@ -2,6 +2,7 @@ import { BullModule } from '@nestjs/bull';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ScheduleModule } from '@nestjs/schedule';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { appConfig } from './configs/app.config';
@@ -11,6 +12,7 @@ import { sendinblueConfig } from './configs/sendinblue.config';
 import { typeOrmConfig } from './configs/typeorm.config';
 import { DocsModule } from './docs/docs.module';
 import { ApiLayerModule } from './layers/api/api.module';
+import { CronLayerModule } from './layers/cron/cron-layer.module';
 
 @Module({
   imports: [
@@ -38,6 +40,8 @@ import { ApiLayerModule } from './layers/api/api.module';
         redis: configService.get('redis'),
       }),
     }),
+    ScheduleModule.forRoot(),
+    CronLayerModule,
     ApiLayerModule,
     DocsModule,
   ],
