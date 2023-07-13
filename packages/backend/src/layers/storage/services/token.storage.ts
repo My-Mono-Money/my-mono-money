@@ -95,4 +95,11 @@ export class TokenStorage {
       handleStorageError(e);
     }
   }
+  async getAllTokens() {
+    try {
+      return await this.connection.manager.find<MonobankToken>(MonobankToken);
+    } catch (e) {
+      handleStorageError(e);
+    }
+  }
 }

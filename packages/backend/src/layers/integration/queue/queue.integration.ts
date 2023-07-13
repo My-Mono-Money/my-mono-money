@@ -17,6 +17,7 @@ export class QueueIntegration {
   constructor(
     @InjectQueue('email') private readonly emailQueue: Queue,
     @InjectQueue('statement') private readonly statementQueue: Queue,
+    @InjectQueue('webhook') private readonly webHookQueue: Queue,
   ) {}
 
   async addToQueue({ email }: ISendTestEmailOptions) {
@@ -40,5 +41,9 @@ export class QueueIntegration {
       importAttemptId,
       spaceOwnerEmail,
     });
+  }
+  async addToQueueCheckWebhook() {
+    Logger.log(`Added to queue check webhook`);
+    await this.webHookQueue.add({});
   }
 }
