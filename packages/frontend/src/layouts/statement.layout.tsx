@@ -19,6 +19,7 @@ import SwitchingSpaces from '../common/switching-spaces/switching-spaces.compone
 import { useGlobalState } from '../global-state/use-global-state.hook';
 import FeedbackIcon from '@mui/icons-material/Feedback';
 import CloseIcon from '@mui/icons-material/Close';
+import PopupFailedIntegration from 'common/components/popup-failed-integration/popup-failed-integration';
 
 const Header = () => {
   const { user, clearToken } = useAuthState();
@@ -259,6 +260,7 @@ const StatementLayout: React.FC = () => {
     <Box>
       <Header />
       <PopupAddToken />
+      <PopupFailedIntegration />
       <Box
         id="under-header"
         sx={{
