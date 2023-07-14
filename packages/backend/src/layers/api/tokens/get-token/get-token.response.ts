@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { MonobankTokenImportAttempt } from '~/storage/entities/monobank-token-import-attempt.entity';
+import { LastWebhookValidationStatusType } from '~/storage/interfaces/create-monobank-token-dto.interface';
 
 class TokenItem {
   @ApiProperty()
@@ -10,6 +11,12 @@ class TokenItem {
 
   @ApiProperty()
   totalAccounts: number;
+
+  @ApiProperty()
+  lastSuccessfulWebhookValidationTime: Date;
+
+  @ApiProperty()
+  lastWebhookValidationStatus: LastWebhookValidationStatusType;
 
   @ApiProperty()
   createdAt: Date;
@@ -31,6 +38,8 @@ export class GetTokenResponse {
         token: 'u3_-for2akDnzxblQTF1NZK6GDeY-673aXgWZQa-wD5Y',
         monobankUserName: 'User Name',
         totalAccounts: 2,
+        lastSuccessfulWebhookValidationTime: '2023-07-14T11:15:00.954Z',
+        lastWebhookValidationStatus: 'active',
         createdAt: '2023-03-27 11:47:24.682',
         updatedAt: '2023-03-27 11:47:24.682',
         importAttempts: [
