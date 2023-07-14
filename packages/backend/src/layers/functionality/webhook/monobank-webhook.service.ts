@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { handleStorageError } from 'src/common/errors/utils/handle-storage-error';
 import { UserStorage } from 'src/layers/storage/services/user.storage';
+import { MonobankIntegration } from '~/integration/monobank/monobank.integration';
+import { SendinblueIntegration } from '~/integration/sendinblue/sendinblue.integration';
+import { LastWebhookValidationStatusType } from '~/storage/interfaces/create-monobank-token-dto.interface';
 import { StatementStorage } from '~/storage/services/statement.storage';
 import { TokenStorage } from '~/storage/services/token.storage';
 
@@ -33,6 +37,9 @@ export class MonobankWebHookService {
     private userStorage: UserStorage,
     private statementStorage: StatementStorage,
     private tokenStorage: TokenStorage,
+    private monobankIntegration: MonobankIntegration,
+    private configService: ConfigService,
+    private sendinblueIntegration: SendinblueIntegration,
   ) {}
 
   async saveTransaction({ transactionInfo, hash }: IMonobankWebHookData) {
@@ -59,10 +66,86 @@ export class MonobankWebHookService {
   async checkWebHook({}) {
     try {
       const allTokens = await this.tokenStorage.getAllTokens();
+      const backendUrl = this.configService.get('app.backendUrl');
+      const supportEmail = this.configService.get('app.supportEmail');
+      const frontendUrl = this.configService.get('app.frontendUrl');
       for (const token of allTokens) {
-        console.log(
-          `перевіряю цілісність інтеграції токена ${token.monobankUserName}`,
-        );
+        const { webHookUrl } = await this.monobankIntegration.getClientInfo({
+          token: token.token,
+        });
+        const user = await this.userStorage.getUserBySpace(token.space.id);
+
+        // webHookUrl =
+        //   'https://api.my-mono-money.app/v1/integration/monobankWebHook/ae261db144b38993965'; //uncomment this for testing correct webHookUrl on prodction enviroment
+        // webHookUrl = 'http://othersiteforwebhook.com/'; //for test error webhook link
+        // backendUrl = 'https://my-mono-money.app'; //uncomment this for testing imitated production environment
+
+        function checkCorrectWebHookUrk(webHookUrl: string) {
+          const localHostFind = backendUrl.includes('localhost');
+          const publicFind = 'my-mono-money';
+          const tryFindPublicUrl = webHookUrl.includes(publicFind);
+          if (webHookUrl && (localHostFind || tryFindPublicUrl)) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+        let isWebHookUrlCorrect = false;
+        if (!checkCorrectWebHookUrk(webHookUrl)) {
+          await this.monobankIntegration.setWebHook({
+            token: token.token,
+            email: user.email,
+          });
+
+          const { webHookUrl: trySetWebHookUrl } =
+            await this.monobankIntegration.getClientInfo({
+              token: token.token,
+            });
+
+          // trySetWebHookUrl = 'http://othersiteforwebhook.com/'; //for test error webhook reconnect link
+          // backendUrl = this.configService.get('app.backendUrl'); //for test imitated production environment
+          if (!trySetWebHookUrl || !checkCorrectWebHookUrk(trySetWebHookUrl)) {
+            isWebHookUrlCorrect = false;
+          } else {
+            isWebHookUrlCorrect = true;
+          }
+        } else {
+          isWebHookUrlCorrect = true;
+        }
+
+        await this.tokenStorage.updateInTokenWebHookStatus({
+          token: token.token,
+          dateUpdate: !isWebHookUrlCorrect ? null : new Date(Date.now()),
+          webHookStatus: !isWebHookUrlCorrect
+            ? LastWebhookValidationStatusType.Error
+            : LastWebhookValidationStatusType.Active,
+        });
+
+        if (!isWebHookUrlCorrect) {
+          await this.sendinblueIntegration.sendTransactionalEmail({
+            to: {
+              name: user.firstName + ' ' + user.lastName,
+              email: user.email,
+            },
+            subject: 'Автоматичне підтягування виписки не працює',
+            content: `У вас перестала працювати інтеграція з Monobank. Ви можете перейти по посиланю і знову підключити вебхук для інтеграції з Monobank: <html><head></head><body><p>${frontendUrl}</p></body></html>. Інакше наступні ваші транзакції підтягуватись не будуть`,
+          });
+
+          await this.sendinblueIntegration.sendTransactionalEmail({
+            to: {
+              name: 'Support My Mono Money',
+              email: supportEmail,
+            },
+            subject: 'Злетів вебхук у користувача',
+            content: `У користувача злетів вебхук. Допоміжні дані - Користувач: ${
+              user.email
+            }, ім'я: ${
+              user.firstName + ' ' + user.lastName
+            }, url вебхука який злетів: ${webHookUrl}, spaceId користувача: ${
+              token.space.id
+            }`,
+          });
+        }
       }
     } catch (e) {
       handleStorageError(e);

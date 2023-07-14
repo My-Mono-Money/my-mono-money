@@ -6,6 +6,7 @@ import { MonobankToken } from '../entities/monobank-token.entity';
 import { ICreateAccountDto } from '../interfaces/create-account-dto.interface';
 import { ICreateSpaceDto } from '../interfaces/create-space-dto.interface';
 import { UserStorage } from './user.storage';
+import { LastWebhookValidationStatusType } from '../interfaces/create-monobank-token-dto.interface';
 
 interface ISaveTokenWithAccountsDto {
   token: string;
@@ -16,6 +17,12 @@ interface ISaveTokenWithAccountsDto {
 
 interface IGetTokenList {
   email: string;
+}
+
+interface IUpdateWebHookStatusInToken {
+  token: string;
+  dateUpdate?: Date;
+  webHookStatus: LastWebhookValidationStatusType;
 }
 
 @Injectable()
@@ -97,7 +104,37 @@ export class TokenStorage {
   }
   async getAllTokens() {
     try {
-      return await this.connection.manager.find<MonobankToken>(MonobankToken);
+      return await this.connection.manager.find<MonobankToken>(MonobankToken, {
+        relations: ['space'],
+      });
+    } catch (e) {
+      handleStorageError(e);
+    }
+  }
+
+  async updateInTokenWebHookStatus({
+    token,
+    dateUpdate,
+    webHookStatus,
+  }: IUpdateWebHookStatusInToken) {
+    try {
+      const where = { token: token };
+      let updateData = {};
+      if (dateUpdate) {
+        updateData = {
+          lastSuccessfulWebhookValidationTime: dateUpdate,
+          lastWebhookValidationStatus: webHookStatus,
+        };
+      } else {
+        updateData = {
+          lastWebhookValidationStatus: webHookStatus,
+        };
+      }
+      return await this.connection.manager.update<MonobankToken>(
+        MonobankToken,
+        where,
+        updateData,
+      );
     } catch (e) {
       handleStorageError(e);
     }

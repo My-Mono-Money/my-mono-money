@@ -8,7 +8,10 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { ICreateMonobankTokenDto } from '../interfaces/create-monobank-token-dto.interface';
+import {
+  ICreateMonobankTokenDto,
+  LastWebhookValidationStatusType,
+} from '../interfaces/create-monobank-token-dto.interface';
 import { Space } from './space.entity';
 import { MonobankTokenImportAttempt } from './monobank-token-import-attempt.entity';
 
@@ -29,6 +32,16 @@ export class MonobankToken implements ICreateMonobankTokenDto {
 
   @Column()
   totalAccounts: number;
+
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  lastSuccessfulWebhookValidationTime: Date;
+
+  @Column({
+    type: 'enum',
+    enum: LastWebhookValidationStatusType,
+    default: LastWebhookValidationStatusType.Active,
+  })
+  lastWebhookValidationStatus: LastWebhookValidationStatusType;
 
   @CreateDateColumn()
   createdAt: Date;
