@@ -29,6 +29,9 @@ export class GetTokenController {
         token: item.token,
         monobankUserName: item.monobankUserName,
         totalAccounts: item.totalAccounts,
+        lastSuccessfulWebhookValidationTime:
+          item.lastSuccessfulWebhookValidationTime,
+        lastWebhookValidationStatus: item.lastWebhookValidationStatus,
         createdAt: item.createdAt,
         updatedAt: item.updatedAt,
         importAttempts: item.importAttempts.map((importAttempt) => ({
