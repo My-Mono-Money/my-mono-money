@@ -6,6 +6,11 @@ export enum ImportAttemptStatusType {
   Successful = 'successful',
 }
 
+export enum LastWebhookValidationStatusType {
+  Active = 'active',
+  Error = 'error',
+}
+
 export interface IImportAttempt {
   id: string;
   createdAt: string;
@@ -18,6 +23,8 @@ export interface ITokenItem {
   token: string;
   monobankUserName: string;
   totalAccounts: number;
+  lastSuccessfulWebhookValidationTime: Date;
+  lastWebhookValidationStatus: LastWebhookValidationStatusType;
   createdAt: string;
   updatedAt: string;
   importAttempts: IImportAttempt[];
