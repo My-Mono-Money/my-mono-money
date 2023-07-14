@@ -22,6 +22,7 @@ interface IGetStatement {
 interface IMonobankClientInfoResponse {
   accounts: ICreateAccountDto[];
   name: string;
+  webHookUrl: string;
 }
 
 @Injectable()

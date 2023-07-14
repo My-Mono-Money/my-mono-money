@@ -103,6 +103,18 @@ export class UserStorage {
     }
   }
 
+  async getUserBySpace(space: string) {
+    try {
+      return await this.connection.manager.findOne(User, {
+        where: {
+          ownSpace: space,
+        },
+      });
+    } catch (e) {
+      handleStorageError(e);
+    }
+  }
+
   async changeDefaultSpace(email: string, space: ICreateSpaceDto) {
     try {
       return await this.connection.transaction(async (manager) => {
