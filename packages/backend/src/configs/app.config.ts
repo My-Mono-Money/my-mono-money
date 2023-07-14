@@ -14,6 +14,7 @@ const createAppConfig: CreateAppConfig = () => ({
   monobankApiUrl: process.env.MONOBANK_API_URL,
   monobankRequestDelay: process.env.MONOBANK_REQUESTS_DELAY,
   supportEmail: process.env.SUPPORT_EMAIL,
+  backendUrl: process.env.BACKEND_URL,
 });
 
 export const appConfig = registerAs('app', createAppConfig);

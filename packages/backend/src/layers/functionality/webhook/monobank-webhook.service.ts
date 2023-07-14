@@ -66,22 +66,25 @@ export class MonobankWebHookService {
   async checkWebHook({}) {
     try {
       const allTokens = await this.tokenStorage.getAllTokens();
-      const envServerUrl = this.configService.get('app.backendAppDomain');
+      const backendUrl = this.configService.get('app.backendUrl');
       const supportEmail = this.configService.get('app.supportEmail');
       const frontendUrl = this.configService.get('app.frontendUrl');
       for (const token of allTokens) {
         const { webHookUrl } = await this.monobankIntegration.getClientInfo({
           token: token.token,
         });
-        // webHookUrl = 'http://othersiteforwebhook.com/'; //for test error webhook link
         const user = await this.userStorage.getUserBySpace(token.space.id);
 
+        // webHookUrl =
+        //   'https://api.my-mono-money.app/v1/integration/monobankWebHook/ae261db144b38993965'; //uncomment this for testing correct webHookUrl on prodction enviroment
+        // webHookUrl = 'http://othersiteforwebhook.com/'; //for test error webhook link
+        // backendUrl = 'https://my-mono-money.app'; //uncomment this for testing imitated production environment
+
         function checkCorrectWebHookUrk(webHookUrl: string) {
-          const localFind = 'ngrok-free';
+          const localHostFind = backendUrl.includes('localhost');
           const publicFind = 'my-mono-money';
-          const tryFindLocalUrl = webHookUrl.includes(localFind);
           const tryFindPublicUrl = webHookUrl.includes(publicFind);
-          if (webHookUrl && (tryFindLocalUrl || tryFindPublicUrl)) {
+          if (webHookUrl && (localHostFind || tryFindPublicUrl)) {
             return true;
           } else {
             return false;
@@ -99,8 +102,8 @@ export class MonobankWebHookService {
               token: token.token,
             });
 
-          // trySetWebHookUrl = 'http://othersiteforwebhook.com/'; //for test error webhook link
-
+          // trySetWebHookUrl = 'http://othersiteforwebhook.com/'; //for test error webhook reconnect link
+          // backendUrl = this.configService.get('app.backendUrl'); //for test imitated production environment
           if (!trySetWebHookUrl || !checkCorrectWebHookUrk(trySetWebHookUrl)) {
             isWebHookUrlCorrect = false;
           } else {
