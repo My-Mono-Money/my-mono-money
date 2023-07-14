@@ -241,24 +241,8 @@ export class GetMonobankStatementService {
         transactionsByOneCard[accountList[i].maskedPan.join(', ')] =
           accountTransactions.length;
       }
-
-      //If the webhook added a transaction, then we will not add a duplicate transaction
-      const space = await this.userStorage.getSpaceByEmail(spaceOwnerEmail);
-      const allStatments = await this.statementStorage.getAllStatements(
-        space.id,
-      );
-      function removeDuplicates(firstArray, secondArray) {
-        const uniqueIds = new Set(secondArray.map((obj) => obj.id));
-        const filteredArray = firstArray.filter(
-          (obj) => !uniqueIds.has(obj.id),
-        );
-        return filteredArray;
-      }
-      const filteredTransactions = removeDuplicates(transactions, allStatments);
-
-      //save full result to DB
       const result = await this.statementStorage.saveStatement({
-        transactions: filteredTransactions,
+        transactions,
       });
 
       if (!result) {
