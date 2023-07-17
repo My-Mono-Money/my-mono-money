@@ -7,7 +7,7 @@ export class CheckWebHookCron {
   constructor(private queueIntegration: QueueIntegration) {}
   private readonly logger = new Logger(CheckWebHookCron.name);
 
-  @Cron(CronExpression.EVERY_10_MINUTES) //EVERY_DAY_AT_1AM for job. EVERY_MINUTE for testing
+  @Cron(CronExpression.EVERY_DAY_AT_1AM) //EVERY_DAY_AT_1AM for job. EVERY_MINUTE for testing
   async handleCron() {
     this.logger.debug('Called every 5 min');
     await this.queueIntegration.addToQueueCheckWebhook();

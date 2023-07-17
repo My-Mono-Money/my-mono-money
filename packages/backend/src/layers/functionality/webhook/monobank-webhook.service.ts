@@ -75,12 +75,12 @@ export class MonobankWebHookService {
       }
       const standardDelay = this.configService.get('app.monobankRequestDelay');
       for (const token of allTokens) {
-        let { webHookUrl } = await this.monobankIntegration.getClientInfo({
+        const { webHookUrl } = await this.monobankIntegration.getClientInfo({
           token: token.token,
         });
         const user = await this.userStorage.getUserBySpace(token.space.id);
 
-        webHookUrl = ''; //for test error from localhost
+        // webHookUrl = ''; //for test error from localhost
         // webHookUrl =
         //   'https://api.my-mono-money.app/v1/integration/monobankWebHook/ae261db144b38993965'; //uncomment this for testing correct webHookUrl on prodction enviroment
         // webHookUrl = 'http://othersiteforwebhook.com/'; //for test error webhook link
@@ -117,18 +117,13 @@ export class MonobankWebHookService {
             const tokenData = await this.tokenStorage.getTokenByTokenValue(
               token.token,
             );
-            console.log(
-              'last normal import data',
-              tokenData.lastSuccessfulWebhookValidationTime,
-            );
+
             const startDate = Date.parse(
               tokenData.lastSuccessfulWebhookValidationTime.toString(),
             );
             const TOO_MANY_REQUESTS_ERROR = 'Too many requests';
             const dateNow = new Date();
             const transactions = [];
-            console.log('startDate', String(getTime(startDate)));
-            console.log('dateNow', String(getTime(dateNow)));
             const accountListFull =
               await this.statementStorage.getAccountByTokenId(token.id);
             const UAHCurrencyCode = 980;
@@ -142,7 +137,7 @@ export class MonobankWebHookService {
                 from: String(getTime(startDate)),
                 to: String(getTime(dateNow)),
               });
-              // result.data = 'unnown error';
+              // result.data = 'unnown error'; //for testing unknown server error
               if (Array.isArray(result.data)) {
                 console.log(
                   'imported count by 1 account: ',
@@ -159,10 +154,8 @@ export class MonobankWebHookService {
               } else {
                 if (result.data === TOO_MANY_REQUESTS_ERROR) {
                   i--;
-                  console.log('waiting 60s... ');
                   await delay(standardDelay);
                 } else {
-                  console.log('monobank error: ', result.data);
                   isWebHookUrlCorrect = false;
                   tryReipmortErrorMessage =
                     'Error reimport user statements, monobank error message: ' +
@@ -170,7 +163,6 @@ export class MonobankWebHookService {
                 }
               }
             }
-            console.log('transactions count: ', transactions.length);
             if (transactions.length > 0) {
               const trySaveToDB = await this.statementStorage.saveStatement({
                 transactions,
@@ -186,8 +178,6 @@ export class MonobankWebHookService {
             } else {
               isWebHookUrlCorrect = false;
             }
-
-            //...
           }
         } else {
           isWebHookUrlCorrect = true;
@@ -210,11 +200,10 @@ export class MonobankWebHookService {
             subject: 'Автоматичне підтягування виписки не працює',
             content: `У вас перестала працювати інтеграція з Monobank. Ви можете перейти по посиланю і знову підключити вебхук для інтеграції з Monobank: <html><head></head><body><p>${frontendUrl}</p></body></html>. Інакше наступні ваші транзакції підтягуватись не будуть`,
           });
-          //supportEmail
           await this.sendinblueIntegration.sendTransactionalEmail({
             to: {
               name: 'Support My Mono Money',
-              email: 'a.kononuik@gmail.com',
+              email: supportEmail,
             },
             subject: `Злетів вебхук у користувача: ${user.email}`,
             content: `У користувача злетів вебхук. Допоміжні дані - Користувач: ${
