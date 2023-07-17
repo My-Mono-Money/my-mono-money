@@ -9,9 +9,13 @@ import {
   TableRow,
   useMediaQuery,
   Theme,
+  Chip,
 } from '@mui/material';
 import { format } from 'date-fns';
-import { ITokenItem } from 'types/token-item.interface';
+import {
+  ITokenItem,
+  LastWebhookValidationStatusType,
+} from 'types/token-item.interface';
 import { useFetchTokenList } from 'api/useFetchTokenList';
 
 const ShowTokenList: React.FC = () => {
@@ -59,37 +63,52 @@ const ShowTokenList: React.FC = () => {
                         Токен
                       </TableCell>
                       <TableCell
-                        align="right"
+                        align="center"
                         sx={{
                           ...(isMd && {
                             fontSize: '1.5vw',
                             fontWeight: 'bold',
+                            lineHeight: 1.2,
                           }),
                         }}
                       >
                         Імʼя користувача
                       </TableCell>
                       <TableCell
-                        align="right"
+                        align="center"
                         sx={{
                           ...(isMd && {
                             fontSize: '1.5vw',
                             fontWeight: 'bold',
+                            lineHeight: 1.2,
                           }),
                         }}
                       >
                         Кількість рахунків
                       </TableCell>
                       <TableCell
-                        align="right"
+                        align="center"
                         sx={{
                           ...(isMd && {
                             fontSize: '1.5vw',
                             fontWeight: 'bold',
+                            lineHeight: 1.2,
                           }),
                         }}
                       >
                         Дата створення
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        sx={{
+                          ...(isMd && {
+                            fontSize: '1.5vw',
+                            fontWeight: 'bold',
+                            lineHeight: 1.2,
+                          }),
+                        }}
+                      >
+                        Статус
                       </TableCell>
                     </TableRow>
                   </TableHead>
@@ -114,7 +133,7 @@ const ShowTokenList: React.FC = () => {
                             {row.token}
                           </TableCell>
                           <TableCell
-                            align="left"
+                            align="center"
                             sx={{
                               ...(isMd && {
                                 fontSize: '1.5vw',
@@ -125,7 +144,7 @@ const ShowTokenList: React.FC = () => {
                             {row.monobankUserName}
                           </TableCell>
                           <TableCell
-                            align="left"
+                            align="center"
                             sx={{
                               ...(isMd && {
                                 fontSize: '1.5vw',
@@ -136,7 +155,7 @@ const ShowTokenList: React.FC = () => {
                             {row.totalAccounts}
                           </TableCell>
                           <TableCell
-                            align="right"
+                            align="center"
                             sx={{
                               ...(isMd && {
                                 fontSize: '1.5vw',
@@ -145,6 +164,24 @@ const ShowTokenList: React.FC = () => {
                             }}
                           >
                             {formatTime}
+                          </TableCell>
+                          <TableCell align="center">
+                            <Chip
+                              size={isMd ? 'small' : 'medium'}
+                              sx={{
+                                ...(isMd && {
+                                  height: '15px',
+                                  fontSize: '1.5vw',
+                                }),
+                              }}
+                              label={row.lastWebhookValidationStatus}
+                              color={
+                                row.lastWebhookValidationStatus ===
+                                LastWebhookValidationStatusType.Active
+                                  ? 'success'
+                                  : 'error'
+                              }
+                            />
                           </TableCell>
                         </TableRow>
                       );
