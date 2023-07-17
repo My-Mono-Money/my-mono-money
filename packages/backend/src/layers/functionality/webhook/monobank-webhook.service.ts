@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { getTime } from 'date-fns';
 import { handleStorageError } from 'src/common/errors/utils/handle-storage-error';
 import { UserStorage } from 'src/layers/storage/services/user.storage';
 import { MonobankIntegration } from '~/integration/monobank/monobank.integration';
@@ -69,12 +70,17 @@ export class MonobankWebHookService {
       const backendUrl = this.configService.get('app.backendUrl');
       const supportEmail = this.configService.get('app.supportEmail');
       const frontendUrl = this.configService.get('app.frontendUrl');
+      function delay(ms: number) {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+      }
+      const standardDelay = this.configService.get('app.monobankRequestDelay');
       for (const token of allTokens) {
         const { webHookUrl } = await this.monobankIntegration.getClientInfo({
           token: token.token,
         });
         const user = await this.userStorage.getUserBySpace(token.space.id);
 
+        // webHookUrl = ''; //for test error from localhost
         // webHookUrl =
         //   'https://api.my-mono-money.app/v1/integration/monobankWebHook/ae261db144b38993965'; //uncomment this for testing correct webHookUrl on prodction enviroment
         // webHookUrl = 'http://othersiteforwebhook.com/'; //for test error webhook link
@@ -91,6 +97,7 @@ export class MonobankWebHookService {
           }
         }
         let isWebHookUrlCorrect = false;
+        let tryReipmortErrorMessage = '';
         if (!checkCorrectWebHookUrk(webHookUrl)) {
           await this.monobankIntegration.setWebHook({
             token: token.token,
@@ -104,10 +111,73 @@ export class MonobankWebHookService {
 
           // trySetWebHookUrl = 'http://othersiteforwebhook.com/'; //for test error webhook reconnect link
           // backendUrl = this.configService.get('app.backendUrl'); //for test imitated production environment
-          if (!trySetWebHookUrl || !checkCorrectWebHookUrk(trySetWebHookUrl)) {
+          if (!checkCorrectWebHookUrk(trySetWebHookUrl)) {
             isWebHookUrlCorrect = false;
           } else {
-            isWebHookUrlCorrect = true;
+            const tokenData = await this.tokenStorage.getTokenByTokenValue(
+              token.token,
+            );
+
+            const startDate = Date.parse(
+              tokenData.lastSuccessfulWebhookValidationTime.toString(),
+            );
+            const TOO_MANY_REQUESTS_ERROR = 'Too many requests';
+            const dateNow = new Date();
+            const transactions = [];
+            const accountListFull =
+              await this.statementStorage.getAccountByTokenId(token.id);
+            const UAHCurrencyCode = 980;
+            const accountList = accountListFull
+              .filter((account) => account.currencyCode === UAHCurrencyCode)
+              .filter((account) => account.maskedPan.length > 0);
+            for (let i = 0; i < accountList.length; i++) {
+              const result = await this.monobankIntegration.getStatement({
+                token: accountList[i].token.token,
+                accountId: accountList[i].id,
+                from: String(getTime(startDate)),
+                to: String(getTime(dateNow)),
+              });
+              // result.data = 'unnown error'; //for testing unknown server error
+              if (Array.isArray(result.data)) {
+                console.log(
+                  'imported count by 1 account: ',
+                  result.data.length,
+                );
+                transactions.push(
+                  ...result.data.map((item) => ({
+                    ...item,
+                    account: {
+                      id: accountList[i].id,
+                    },
+                  })),
+                );
+              } else {
+                if (result.data === TOO_MANY_REQUESTS_ERROR) {
+                  i--;
+                  await delay(standardDelay);
+                } else {
+                  isWebHookUrlCorrect = false;
+                  tryReipmortErrorMessage =
+                    'Error reimport user statements, monobank error message: ' +
+                    result.data;
+                }
+              }
+            }
+            if (transactions.length > 0) {
+              const trySaveToDB = await this.statementStorage.saveStatement({
+                transactions,
+              });
+              if (trySaveToDB) {
+                isWebHookUrlCorrect = true;
+              } else {
+                isWebHookUrlCorrect = false;
+                tryReipmortErrorMessage = 'Error save to DB after reimport.';
+              }
+            } else if (!tryReipmortErrorMessage && transactions.length === 0) {
+              isWebHookUrlCorrect = true;
+            } else {
+              isWebHookUrlCorrect = false;
+            }
           }
         } else {
           isWebHookUrlCorrect = true;
@@ -130,20 +200,19 @@ export class MonobankWebHookService {
             subject: 'Автоматичне підтягування виписки не працює',
             content: `У вас перестала працювати інтеграція з Monobank. Ви можете перейти по посиланю і знову підключити вебхук для інтеграції з Monobank: <html><head></head><body><p>${frontendUrl}</p></body></html>. Інакше наступні ваші транзакції підтягуватись не будуть`,
           });
-
           await this.sendinblueIntegration.sendTransactionalEmail({
             to: {
               name: 'Support My Mono Money',
               email: supportEmail,
             },
-            subject: 'Злетів вебхук у користувача',
+            subject: `Злетів вебхук у користувача: ${user.email}`,
             content: `У користувача злетів вебхук. Допоміжні дані - Користувач: ${
               user.email
             }, ім'я: ${
               user.firstName + ' ' + user.lastName
             }, url вебхука який злетів: ${webHookUrl}, spaceId користувача: ${
               token.space.id
-            }`,
+            }. ${tryReipmortErrorMessage ? tryReipmortErrorMessage : ''}`,
           });
         }
       }
