@@ -61,7 +61,7 @@
   },
   "devDependencies": {
     "@golevelup/ts-jest": "^0.3.7",
-    "@nestjs/cli": "^9.5.0",
+    "@nestjs/cli": "^10.1.9",
     "@nestjs/schematics": "^10.0.1",
     "@nestjs/testing": "^9.4.2",
     "@types/bcrypt": "^5.0.0",
