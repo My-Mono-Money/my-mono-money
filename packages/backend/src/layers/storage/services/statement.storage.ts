@@ -67,7 +67,7 @@ export class StatementStorage {
 
         for (let i = 0; i < totalTransactions; i += chunkSize) {
           const chunk = transactions.slice(i, i + chunkSize);
-          return await manager.insert<Transaction>(Transaction, chunk);
+          return await manager.upsert<Transaction>(Transaction, chunk, ['id']);
         }
       });
     } catch (e) {
