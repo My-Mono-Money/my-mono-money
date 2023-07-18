@@ -49,18 +49,27 @@ export class GetFilteredStatementService {
     const space = await this.userStorage.getSpaceByEmail(spaceOwnerEmail);
     const [, offset] = period.split(':');
     const numberOffset = offset ? -Number(offset) : 0;
+
     const timestampList = (period: string) => {
       if (period.startsWith('day')) {
+        const from = startOfDay(subDays(day, numberOffset));
+        const to = startOfDay(subDays(day, numberOffset - 1));
         return {
-          from: getUnixTime(subDays(day, numberOffset)),
-          to: getUnixTime(subDays(day, numberOffset - 1)),
+          from: getUnixTime(from),
+          to: getUnixTime(to),
         };
       }
 
       if (period.startsWith('week')) {
+        const from = startOfWeek(subWeeks(week, numberOffset), {
+          weekStartsOn: 1,
+        });
+        const to = startOfWeek(subWeeks(week, numberOffset - 1), {
+          weekStartsOn: 1,
+        });
         return {
-          from: getUnixTime(subWeeks(week, numberOffset)),
-          to: getUnixTime(subWeeks(week, numberOffset - 1)),
+          from: getUnixTime(from),
+          to: getUnixTime(to),
         };
       }
 
