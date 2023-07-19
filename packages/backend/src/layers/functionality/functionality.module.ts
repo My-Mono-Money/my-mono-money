@@ -29,6 +29,7 @@ import { RemoveMemberService } from './space/remove-member.service.ts/remove-mem
 import { ChangeDefaultUserSpaceService } from './space/change-default-user-space.service.ts/change-default-user-space.service';
 import { RetryImportService } from './tokens/retry-import.service';
 import { ImportAttemptService } from './tokens/import-attempt.service';
+import { DeleteTokenService } from './tokens/delete-token.service';
 @Module({
   imports: [
     StorageModule,
@@ -69,6 +70,7 @@ import { ImportAttemptService } from './tokens/import-attempt.service';
     GetMonobankStatementService,
     GetFilteredStatementService,
     RetryImportService,
+    DeleteTokenService,
   ],
   exports: [
     SignUpService,
@@ -93,6 +95,7 @@ import { ImportAttemptService } from './tokens/import-attempt.service';
     GetFilteredStatementService,
     ResendVerificationEmailService,
     RetryImportService,
+    DeleteTokenService,
   ],
 })
 export class FunctionalityModule {}

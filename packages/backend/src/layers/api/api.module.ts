@@ -20,6 +20,7 @@ import { ChangeDefaultUserSpaceController } from './space/change-default-user-sp
 import { RetryImportController } from './tokens/retry-import/retry-import.controller';
 import { GetImportAttemptController } from './tokens/get-import-attempt-log/get-import-attempt.controller';
 import { RejectInviteController } from './invites/reject-invite/reject-invite.controller';
+import { DeleteTokenController } from './tokens/delete-token/delete-token.controller';
 
 @Module({
   imports: [FunctionalityModule, ConfigModule],
@@ -43,6 +44,7 @@ import { RejectInviteController } from './invites/reject-invite/reject-invite.co
     RemoveMemberController,
     ChangeDefaultUserSpaceController,
     RetryImportController,
+    DeleteTokenController,
   ],
 })
 export class ApiLayerModule {}

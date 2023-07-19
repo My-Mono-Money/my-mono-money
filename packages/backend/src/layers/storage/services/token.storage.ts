@@ -1,12 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { handleStorageError } from 'src/common/errors/utils/handle-storage-error';
-import { Connection } from 'typeorm';
+import { Connection, getRepository } from 'typeorm';
 import { Account } from '../entities/account.entity';
 import { MonobankToken } from '../entities/monobank-token.entity';
 import { ICreateAccountDto } from '../interfaces/create-account-dto.interface';
 import { ICreateSpaceDto } from '../interfaces/create-space-dto.interface';
 import { UserStorage } from './user.storage';
 import { LastWebhookValidationStatusType } from '../interfaces/create-monobank-token-dto.interface';
+import { MonobankTokenImportAttempt } from '../entities/monobank-token-import-attempt.entity';
+import { Transaction } from '../entities/transaction.entity';
 
 interface ISaveTokenWithAccountsDto {
   token: string;
@@ -135,6 +137,34 @@ export class TokenStorage {
         where,
         updateData,
       );
+    } catch (e) {
+      handleStorageError(e);
+    }
+  }
+
+  async deleteToken(tokenId: string) {
+    try {
+      const monobankTokenRepository = getRepository(MonobankToken);
+      const accountRepository = getRepository(Account);
+      const transactionRepository = getRepository(Transaction);
+      const importAttemptRepository = getRepository(MonobankTokenImportAttempt);
+      const token = await monobankTokenRepository.findOne(tokenId);
+
+      if (token) {
+        await importAttemptRepository.delete({ token });
+
+        const accounts = await accountRepository.find({ token });
+
+        for (const account of accounts) {
+          await transactionRepository.delete({ account });
+        }
+
+        await accountRepository.delete({ token });
+
+        await monobankTokenRepository.delete(tokenId);
+      } else {
+        handleStorageError(new Error('cannot find token error'));
+      }
     } catch (e) {
       handleStorageError(e);
     }
