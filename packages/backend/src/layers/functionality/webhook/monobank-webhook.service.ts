@@ -5,7 +5,9 @@ import { handleStorageError } from 'src/common/errors/utils/handle-storage-error
 import { UserStorage } from 'src/layers/storage/services/user.storage';
 import { MonobankIntegration } from '~/integration/monobank/monobank.integration';
 import { SendinblueIntegration } from '~/integration/sendinblue/sendinblue.integration';
+import { FeatureName } from '~/storage/interfaces/create-feature-flags-dto.interface';
 import { LastWebhookValidationStatusType } from '~/storage/interfaces/create-monobank-token-dto.interface';
+import { FeatureFlagStorage } from '~/storage/services/feature-flag.storage';
 import { StatementStorage } from '~/storage/services/statement.storage';
 import { TokenStorage } from '~/storage/services/token.storage';
 
@@ -41,6 +43,7 @@ export class MonobankWebHookService {
     private monobankIntegration: MonobankIntegration,
     private configService: ConfigService,
     private sendinblueIntegration: SendinblueIntegration,
+    private featureFlagStorage: FeatureFlagStorage,
   ) {}
 
   async saveTransaction({ transactionInfo, hash }: IMonobankWebHookData) {
@@ -70,8 +73,13 @@ export class MonobankWebHookService {
       const backendUrl = this.configService.get('app.backendUrl');
       const supportEmail = this.configService.get('app.supportEmail');
       const frontendUrl = this.configService.get('app.frontendUrl');
+      const featureFlags = await this.featureFlagStorage.getFeatureFlags();
       function delay(ms: number) {
         return new Promise((resolve) => setTimeout(resolve, ms));
+      }
+
+      if (!featureFlags[FeatureName.verifyMonobankIntegration]) {
+        return;
       }
       const standardDelay = this.configService.get('app.monobankRequestDelay');
       for (const token of allTokens) {
@@ -88,7 +96,7 @@ export class MonobankWebHookService {
 
         function checkCorrectWebHookUrk(webHookUrl: string) {
           const localHostFind = backendUrl.includes('localhost');
-          const publicFind = 'my-mono-money';
+          const publicFind = 'api.my-mono-money';
           const tryFindPublicUrl = webHookUrl.includes(publicFind);
           if (webHookUrl && (localHostFind || tryFindPublicUrl)) {
             return true;
