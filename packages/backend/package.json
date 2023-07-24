@@ -25,7 +25,7 @@
     "typeorm": "ts-node -r tsconfig-paths/register -r dotenv-expand/config ./node_modules/typeorm/cli -f src/typeorm-cli.config.ts"
   },
   "dependencies": {
-    "@nestjs/axios": "^2.0.0",
+    "@nestjs/axios": "^3.0.0",
     "@nestjs/bull": "^10.0.1",
     "@nestjs/common": "^9.4.2",
     "@nestjs/config": "^3.0.0",
