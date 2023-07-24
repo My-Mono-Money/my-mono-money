@@ -60,7 +60,7 @@
     "typeorm-naming-strategies": "^4.1.0"
   },
   "devDependencies": {
-    "@golevelup/ts-jest": "^0.3.7",
+    "@golevelup/ts-jest": "^0.4.0",
     "@nestjs/cli": "^10.1.9",
     "@nestjs/schematics": "^10.0.1",
     "@nestjs/testing": "^9.4.2",
