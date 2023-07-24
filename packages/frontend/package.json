@@ -99,6 +99,6 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.29.4",
-    "prettier": "2.8.8"
+    "prettier": "3.0.0"
   }
 }
