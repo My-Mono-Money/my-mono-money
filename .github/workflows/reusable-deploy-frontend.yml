@@ -12,7 +12,7 @@ on:
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
-    environment: '${{ inputs.environment }}'
+    environment: "${{ inputs.environment }}"
     steps:
       # checkout repo
       - uses: actions/checkout@v2
@@ -22,21 +22,15 @@ jobs:
       # start test
       - run: yarn test:frontend:coverage
         name: Run tests
-      # publish coverage
-      - uses: codecov/codecov-action@v2
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: packages/frontend/coverage/cobertura-coverage.xml
-          flags: frontend
       # build step
       - run: yarn build:frontend
         env:
-          REACT_APP_BACKEND_URL: '${{ secrets.BACKEND_URL }}'
+          REACT_APP_BACKEND_URL: "${{ secrets.BACKEND_URL }}"
       # deploy step
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_MY_MONO_MONEY }}'
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_MY_MONO_MONEY }}"
           channelId: live
           projectId: my-mono-money
-          target: '${{ inputs.target }}'
+          target: "${{ inputs.target }}"
           entryPoint: packages/frontend
