@@ -96,7 +96,7 @@
     "@types/css-mediaquery": "^0.1.1",
     "css-mediaquery": "^0.1.2",
     "eslint": "^8.45.0",
-    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.29.4",
     "prettier": "2.8.8"
